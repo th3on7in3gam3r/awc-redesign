@@ -5848,6 +5848,13 @@ app.post('/api/staff/holds/:id/decline', auth, requireStaff, async (req, res) =>
 export { createNotification, logAudit };
 
 
-app.listen(PORT, '0.0.0.0', () => {
-    console.log(`Server running on port ${PORT} (0.0.0.0)`);
-});
+
+// Export the app for Vercel serverless function
+export default app;
+
+// Only start the server if not in Vercel serverless environment
+if (process.env.VERCEL !== '1') {
+    app.listen(PORT, '0.0.0.0', () => {
+        console.log(`Server running on port ${PORT} (0.0.0.0)`);
+    });
+}
