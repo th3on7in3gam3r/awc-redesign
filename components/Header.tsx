@@ -12,7 +12,6 @@ const Header: React.FC = () => {
     { path: '/sermons', label: 'Sermons' },
     { path: '/events', label: 'Events' },
     { path: '/community', label: 'Community' },
-    { path: '/connect', label: 'Connect' },
   ];
 
   const leftNavItems = navItems.slice(0, 3);

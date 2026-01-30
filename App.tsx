@@ -13,7 +13,6 @@ import Ministries from './src/pages/public/Ministries';
 import Sermons from './src/pages/public/Sermons';
 import Community from './src/pages/public/Community';
 import Events from './src/pages/public/Events';
-import Connect from './src/pages/public/Connect';
 import Visit from './src/pages/public/Visit';
 
 // Auth Pages
@@ -68,7 +67,6 @@ const App: React.FC = () => {
             <Route path="/sermons" element={<Sermons />} />
             <Route path="/events" element={<Events />} />
             <Route path="/community" element={<Community />} />
-            <Route path="/connect" element={<Connect />} />
             <Route path="/visit" element={<Visit />} />
           </Route>
 

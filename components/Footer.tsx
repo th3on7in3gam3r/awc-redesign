@@ -33,7 +33,6 @@ const Footer: React.FC = () => {
                         <ul className="text-xs space-y-3 text-gray-400">
                             <li><Link to="/about" className="hover:text-white transition-colors cursor-pointer">Our Beliefs</Link></li>
                             <li><Link to="/sermons" className="hover:text-white transition-colors cursor-pointer">Digital Sermons</Link></li>
-                            <li><Link to="/connect" className="hover:text-white transition-colors cursor-pointer">Request Prayer</Link></li>
                             <li><Link to="/ministries" className="hover:text-white transition-colors cursor-pointer">Leadership Team</Link></li>
                         </ul>
                     </div>
