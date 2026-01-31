@@ -1,13 +1,11 @@
 import pg from 'pg';
 import dotenv from 'dotenv';
+import prisma from './lib/prisma.mjs';
 
-import { fileURLToPath } from 'url';
-import { dirname, join } from 'path';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
-dotenv.config({ path: join(__dirname, '.env') });
+// Load .env file only in development (Vercel provides env vars automatically)
+if (process.env.NODE_ENV !== 'production' && !process.env.VERCEL) {
+    dotenv.config();
+}
 
 const { Pool } = pg;
 
@@ -20,8 +18,12 @@ const pool = new Pool({
 
 pool.on('error', (err) => {
     console.error('Unexpected error on idle client', err);
-    process.exit(-1);
+    // Don't exit in serverless environment
+    if (!process.env.VERCEL) {
+        process.exit(-1);
+    }
 });
 
 export const query = (text, params) => pool.query(text, params);
+export { prisma };
 export default pool;
