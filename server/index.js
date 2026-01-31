@@ -1,7 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
-import pool, { query } from './db.mjs';
+import pool, { query, prisma } from './db.mjs';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { auth } from './middleware/auth.js';
@@ -2176,66 +2176,67 @@ app.post('/api/checkin/guest', async (req, res) => {
 app.get('/api/sermons', async (req, res) => {
     try {
         const { published, search, type, series, speaker, year } = req.query;
-        // Safely check if user is admin - handle both authenticated and unauthenticated requests
         const isAdmin = req.user && (req.user.role === 'admin' || req.user.role === 'pastor');
 
-        let sql = `SELECT * FROM sermons WHERE 1 = 1`;
-        const params = [];
-        let paramCount = 1;
+        // Build Prisma where clause
+        const where = {};
 
-        // Filter by published status (non-admin users only see published)
+        // Filter by published status
         if (!isAdmin || published === 'true') {
-            sql += ` AND is_published = true`;
+            where.is_published = true;
         } else if (published === 'false') {
-            sql += ` AND is_published = false`;
+            where.is_published = false;
         }
 
         // Search filter
         if (search) {
-            sql += ` AND(title ILIKE $${paramCount} OR scripture ILIKE $${paramCount} OR speaker ILIKE $${paramCount})`;
-            params.push(`% ${search}% `);
-            paramCount++;
+            where.OR = [
+                { title: { contains: search, mode: 'insensitive' } },
+                { scripture: { contains: search, mode: 'insensitive' } },
+                { speaker: { contains: search, mode: 'insensitive' } }
+            ];
         }
 
         // Type filter
         if (type && type !== 'all') {
-            sql += ` AND type = $${paramCount} `;
-            params.push(type);
-            paramCount++;
+            where.type = type;
         }
 
         // Series filter
         if (series && series !== 'all') {
-            sql += ` AND series = $${paramCount} `;
-            params.push(series);
-            paramCount++;
+            where.series = series;
         }
 
         // Speaker filter
         if (speaker && speaker !== 'all') {
-            sql += ` AND speaker = $${paramCount} `;
-            params.push(speaker);
-            paramCount++;
+            where.speaker = speaker;
         }
 
         // Year filter
         if (year && year !== 'all') {
-            sql += ` AND EXTRACT(YEAR FROM preached_at) = $${paramCount} `;
-            params.push(parseInt(year));
-            paramCount++;
+            const yearInt = parseInt(year);
+            where.preached_at = {
+                gte: new Date(`${yearInt}-01-01`),
+                lt: new Date(`${yearInt + 1}-01-01`)
+            };
         }
 
-        sql += ` ORDER BY preached_at DESC`;
+        const sermons = await prisma.sermons.findMany({
+            where,
+            orderBy: { preached_at: 'desc' }
+        });
 
-        const result = await query(sql, params);
-        res.json(result.rows);
-    } catch (err) {
-        console.error(err);
-        console.error('Sermons API Error:', err.message, err.stack); res.status(500).json([]);
+        return res.status(200).json(sermons);
+    } catch (error) {
+        console.error('❌ Sermons API Error:', error);
+        return res.status(500).json({
+            error: 'Failed to fetch sermons',
+            message: error.message
+        });
     }
 });
 
-// GET /api/sermons/:id - Get single sermon
+
 app.get('/api/sermons/:id', async (req, res) => {
     try {
         const { id } = req.params;
