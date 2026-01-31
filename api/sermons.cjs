@@ -1,6 +1,6 @@
-import { prisma } from './_prisma.js';
+const { prisma } = require('./_prisma.cjs');
 
-export default async function handler(req, res) {
+module.exports = async function handler(req, res) {
   try {
     console.log('🔍 DATABASE_URL exists:', !!process.env.DATABASE_URL);
     console.log('🔍 Prisma client available:', !!prisma);
@@ -55,13 +55,13 @@ export default async function handler(req, res) {
       orderBy: { preached_at: 'desc' }
     });
 
-    return res.status(200).json(sermons);
+    res.status(200).json(sermons);
   } catch (error) {
     console.error('❌ Sermons API Error:', error);
-    return res.status(500).json({
+    res.status(500).json({
       error: 'SERMONS_API_ERROR',
       message: error.message,
       stack: process.env.NODE_ENV === 'development' ? error.stack : undefined
     });
   }
-}
+};
