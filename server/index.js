@@ -2231,7 +2231,7 @@ app.get('/api/sermons', async (req, res) => {
         res.json(result.rows);
     } catch (err) {
         console.error(err);
-        res.status(500).json({ message: 'Error fetching sermons' });
+        console.error('Sermons API Error:', err.message, err.stack); res.status(500).json([]);
     }
 });
 
