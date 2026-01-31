@@ -35,16 +35,15 @@ const Sermons: React.FC = () => {
       if (videos.length > 0) {
         setYoutubeVideos(videos);
         setUseYouTube(true);
-        setLoading(false);
       } else {
-        // Fallback to database if YouTube fails
         setUseYouTube(false);
-        fetchDatabaseSermons();
       }
     }).catch(() => {
       setUseYouTube(false);
-      fetchDatabaseSermons();
     });
+
+    // Always fetch database sermons for the "Recent Messages" section
+    fetchDatabaseSermons();
   }, []);
 
   const fetchDatabaseSermons = () => {
