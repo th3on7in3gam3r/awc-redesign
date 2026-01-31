@@ -3,7 +3,7 @@ const { PrismaClient } = require("@prisma/client");
 const globalForPrisma = globalThis;
 
 const prisma =
-  globalForPrisma.prisma ||
+  globalForPrisma.prisma ??
   new PrismaClient();
 
 if (process.env.NODE_ENV !== "production") {
@@ -11,3 +11,4 @@ if (process.env.NODE_ENV !== "production") {
 }
 
 module.exports = { prisma };
+module.exports.default = prisma;
