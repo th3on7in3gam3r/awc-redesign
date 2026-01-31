@@ -2175,6 +2175,9 @@ app.post('/api/checkin/guest', async (req, res) => {
 // GET /api/sermons - Get all sermons with filtering
 app.get('/api/sermons', async (req, res) => {
     try {
+        console.log("🔍 DATABASE_URL exists:", !!process.env.DATABASE_URL);
+        console.log("🔍 Prisma client available:", !!prisma);
+        
         const { published, search, type, series, speaker, year } = req.query;
         const isAdmin = req.user && (req.user.role === 'admin' || req.user.role === 'pastor');
 

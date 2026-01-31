@@ -1,6 +1,6 @@
 import pg from 'pg';
 import dotenv from 'dotenv';
-import prisma from './lib/prisma.mjs';
+import { prisma } from './lib/prisma.js';
 
 // Load .env file only in development (Vercel provides env vars automatically)
 if (process.env.NODE_ENV !== 'production' && !process.env.VERCEL) {
