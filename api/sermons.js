@@ -1,4 +1,4 @@
-import { prisma } from '../server/lib/prisma.js';
+import { prisma } from './_prisma.js';
 
 export default async function handler(req, res) {
   try {
@@ -6,16 +6,15 @@ export default async function handler(req, res) {
     console.log('🔍 Prisma client available:', !!prisma);
 
     const { published, search, type, series, speaker, year } = req.query;
-    const isAdmin = req.user && (req.user.role === 'admin' || req.user.role === 'pastor');
 
     // Build Prisma where clause
     const where = {};
 
-    // Filter by published status
-    if (!isAdmin || published === 'true') {
-      where.is_published = true;
-    } else if (published === 'false') {
+    // Filter by published status (default to published only)
+    if (published === 'false') {
       where.is_published = false;
+    } else {
+      where.is_published = true;
     }
 
     // Search filter
@@ -61,7 +60,8 @@ export default async function handler(req, res) {
     console.error('❌ Sermons API Error:', error);
     return res.status(500).json({
       error: 'SERMONS_API_ERROR',
-      message: error.message
+      message: error.message,
+      stack: process.env.NODE_ENV === 'development' ? error.stack : undefined
     });
   }
 }
