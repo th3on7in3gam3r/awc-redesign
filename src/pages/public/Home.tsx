@@ -12,11 +12,11 @@ const Home: React.FC = () => {
   const playlist = [
     {
       title: "Everybody Is Somebody",
-      url: "https://anointedworshipcenter.com/music/Everybody_Is_Somebody.mp3"
+      url: "/music/everybody-is-somebody.mp3"
     },
     {
       title: "Reign in This House",
-      url: "https://anointedworshipcenter.com/music/Reign_in_This_House_2.mp3"
+      url: "/music/reign-in-this-house.mp3"
     }
   ];
 
