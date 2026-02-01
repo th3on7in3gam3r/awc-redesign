@@ -41,32 +41,46 @@ export const SERMONS: Sermon[] = [
 
 export const MINISTRIES: Ministry[] = [
   {
-    id: "youth",
-    name: "Youth Empowerment",
-    description: "Equipping the next generation with faith, purpose, and community.",
-    icon: "fa-solid fa-child-reaching",
-    imageUrl: "https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&q=80&w=800",
+    id: "men",
+    name: "Men's Ministry",
+    description: "Building brotherhood, faith, and leadership. Stronger together in Christ through accountability, discipleship, and service.",
+    icon: "fa-solid fa-shield-halved",
+    imageUrl: "/images/mens-ministry-1.jpg",
   },
   {
-    id: "outreach",
-    name: "Community Outreach",
-    description: "Sharing the love of Christ beyond our four walls through service.",
-    icon: "fa-solid fa-handshake-angle",
-    imageUrl: "https://images.unsplash.com/photo-1469571483333-24322989cc0c?auto=format&fit=crop&q=80&w=800",
+    id: "women",
+    name: "Women's Ministry",
+    description: "Empowering women to walk in faith, strength, and purpose. Sisters united in Christ's love and service.",
+    icon: "fa-solid fa-hands-praying",
+    imageUrl: "/images/womens-ministry.png",
+  },
+  {
+    id: "youth",
+    name: "Youth Ministry",
+    description: "Equipping the next generation with faith, purpose, and community through dynamic worship and biblical teaching.",
+    icon: "fa-solid fa-child-reaching",
+    imageUrl: "/images/youth-ministry.png",
+  },
+  {
+    id: "children",
+    name: "Children's Ministry",
+    description: "Nurturing young hearts to grow in faith, love, and joy through engaging lessons and activities.",
+    icon: "fa-solid fa-children",
+    imageUrl: "/images/children-ministry.png",
   },
   {
     id: "worship",
     name: "Worship Arts",
-    description: "Ushering in the presence of God through music, dance, and creative media.",
+    description: "Ushering in the presence of God through music, dance, and creative expression that glorifies His name.",
     icon: "fa-solid fa-music",
-    imageUrl: "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&q=80&w=800",
+    imageUrl: "/images/worship-arts.png",
   },
   {
-    id: "education",
-    name: "Faith Academy",
-    description: "Deepening your theological understanding through systematic Bible study.",
-    icon: "fa-solid fa-book-bible",
-    imageUrl: "https://images.unsplash.com/photo-1504052434569-70ad5836ab65?auto=format&fit=crop&q=80&w=800",
+    id: "outreach",
+    name: "Community Outreach",
+    description: "Sharing the love of Christ beyond our four walls through service, compassion, and practical ministry.",
+    icon: "fa-solid fa-handshake-angle",
+    imageUrl: "https://images.unsplash.com/photo-1469571483333-24322989cc0c?auto=format&fit=crop&q=80&w=800",
   }
 ];
 

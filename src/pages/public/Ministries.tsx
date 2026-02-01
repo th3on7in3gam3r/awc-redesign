@@ -206,37 +206,62 @@ const Ministries: React.FC = () => {
           </div>
         </div>
 
-        {/* 3. Core Ministries Section (MOVED DOWN) */}
+        {/* 3. Core Ministries Section (REDESIGNED) */}
         <div className="mb-32">
           <div className="flex items-center gap-6 mb-12">
             <h2 className="text-4xl font-bold text-church-burgundy serif">Core Ministries</h2>
             <div className="h-[1px] flex-1 bg-gradient-to-r from-church-gold/40 to-transparent"></div>
           </div>
-          <div className="grid md:grid-cols-2 gap-8">
+
+          {/* 3-Column Grid for Ministries */}
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {MINISTRIES.map((ministry) => (
               <div
                 key={ministry.id}
-                className="group relative bg-white rounded-[3rem] overflow-hidden shadow-2xl border border-gray-100 h-[450px] cursor-pointer hover:-translate-y-2 transition-all duration-700"
+                className="group relative bg-white rounded-[2.5rem] overflow-hidden shadow-2xl border border-gray-100 cursor-pointer transition-all duration-700 hover:-translate-y-4 hover:shadow-[0_20px_60px_rgba(139,0,0,0.3)]"
                 onClick={() => setSelectedMinistry(ministry)}
               >
-                {ministry.imageUrl && (
-                  <img src={ministry.imageUrl} className="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110" alt={ministry.name} />
-                )}
-                <div className="absolute inset-0 bg-gradient-to-t from-church-burgundy via-church-burgundy/60 to-transparent transition-all duration-500"></div>
+                {/* Image Container - Full Height */}
+                <div className="aspect-[4/5] overflow-hidden relative">
+                  {ministry.imageUrl && (
+                    <img
+                      src={ministry.imageUrl}
+                      className="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
+                      alt={ministry.name}
+                    />
+                  )}
 
-                <div className="absolute bottom-0 left-0 p-10 w-full">
-                  <div className="w-14 h-14 bg-church-gold rounded-2xl flex items-center justify-center text-white text-xl mb-6 shadow-xl transform -rotate-3 group-hover:rotate-0 transition-transform duration-500">
+                  {/* Gradient Overlay - Stronger at bottom */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent opacity-80 group-hover:opacity-90 transition-opacity duration-500"></div>
+
+                  {/* Accent Glow Effect */}
+                  <div className="absolute inset-0 bg-gradient-to-tr from-church-gold/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
+                </div>
+
+                {/* Content Overlay - Positioned at bottom */}
+                <div className="absolute bottom-0 left-0 right-0 p-8">
+                  {/* Icon Badge */}
+                  <div className="w-16 h-16 bg-church-gold rounded-2xl flex items-center justify-center text-white text-2xl mb-5 shadow-2xl transform group-hover:rotate-6 group-hover:scale-110 transition-all duration-500">
                     {ministry.icon && <i className={ministry.icon}></i>}
                   </div>
-                  <h3 className="text-3xl font-bold text-white mb-3 serif tracking-tight">{ministry.name}</h3>
-                  <p className="text-gray-300 text-sm opacity-0 group-hover:opacity-100 transition-all duration-700 translate-y-4 group-hover:translate-y-0 max-w-sm line-clamp-2">
+
+                  {/* Ministry Name */}
+                  <h3 className="text-3xl font-bold text-white mb-3 serif tracking-tight leading-tight">
+                    {ministry.name}
+                  </h3>
+
+                  {/* Description - Slides up on hover */}
+                  <p className="text-gray-200 text-sm leading-relaxed mb-5 opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-700 delay-100 line-clamp-3">
                     {ministry.description}
                   </p>
-                  <div className="mt-6 flex items-center gap-4">
-                    <span className="h-[1px] w-12 bg-church-gold/50"></span>
-                    <button className="text-church-gold font-black uppercase tracking-[0.3em] text-[10px]">
+
+                  {/* CTA Button */}
+                  <div className="flex items-center gap-3 opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-700 delay-200">
+                    <div className="h-[2px] w-12 bg-church-gold"></div>
+                    <span className="text-church-gold font-black uppercase tracking-[0.3em] text-[10px]">
                       Learn More
-                    </button>
+                    </span>
+                    <i className="fa-solid fa-arrow-right text-church-gold text-xs group-hover:translate-x-1 transition-transform"></i>
                   </div>
                 </div>
               </div>
