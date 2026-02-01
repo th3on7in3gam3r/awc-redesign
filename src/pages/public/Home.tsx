@@ -90,66 +90,183 @@ const Home: React.FC = () => {
 
   return (
     <div className="flex flex-col w-full">
-      {/* Hero Section */}
-      <section className="relative h-screen min-h-[700px] flex items-center overflow-hidden pt-20">
-        <div className="absolute inset-0 z-0">
+      {/* Hero Section - Mobile Optimized */}
+      <section className="relative h-screen min-h-[700px] flex items-center overflow-hidden pt-20 bg-[#1a0509]">
+        {/* Background Gradient & Effects */}
+        <div className="absolute inset-0 z-0 bg-gradient-to-br from-[#4a0d18] via-[#2a080d] to-black"></div>
+        <div className="absolute inset-0 z-0 bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-church-gold/20 via-transparent to-transparent opacity-60"></div>
+        <div className="absolute inset-0 z-0 opacity-20 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')]"></div>
+
+        {/* Pastor & First Lady Image */}
+        {/* Mobile: Pushed slightly lower + Stronger Mask */}
+        {/* Desktop: Standard positioning */}
+        <div className={`absolute bottom-0 right-0 z-10 h-[50vh] sm:h-[65vh] md:h-[90vh] w-full md:w-auto flex justify-end items-end transition-all duration-1000 delay-300 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`}>
+          {/* Divine Light Effect - Strong Backlight (Desktop/Tablet Only) */}
+          <div className="hidden md:block absolute top-[20%] right-[-10%] md:right-[10%] w-[400px] h-[400px] md:w-[800px] md:h-[800px] bg-church-gold/30 rounded-full blur-[100px] animate-pulse-slow"></div>
+
           <img
-            src="/images/home-hero.jpg"
-            className="w-full h-full object-cover"
-            style={{ objectPosition: '40% center' }}
-            alt="AWC Leadership"
+            src="/images/pastors-hero-transparent.png"
+            alt="Pastor & First Lady"
+            className="h-full w-auto object-contain object-bottom drop-shadow-2xl relative z-10"
+            style={{ filter: 'drop-shadow(0 0 40px rgba(0,0,0,0.5))' }}
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-black/15 via-transparent to-black/10"></div>
+
+          {/* Divine Light Effect - FOREGROUND HIT (Desktop/Tablet Only) */}
+          {/* A soft white glow that blends onto the subjects as if light is hitting them */}
+          <div className="hidden md:block absolute top-0 right-0 w-full h-full z-20 pointer-events-none mix-blend-soft-light bg-gradient-to-tr from-transparent via-transparent to-white/40 md:to-white/20"></div>
+          <div className="hidden md:block absolute top-[10%] right-[10%] w-[300px] h-[300px] bg-church-gold/20 rounded-full blur-[80px] z-20 mix-blend-screen pointer-events-none"></div>
+
+          {/* Gradient Overlay Key for readability */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black via-black/80 to-transparent md:hidden h-full z-20"></div>
+          <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-transparent to-transparent md:hidden z-20"></div>
         </div>
 
-        <div className="container mx-auto px-6 relative z-10 flex flex-col md:flex-row items-center justify-center h-full">
-          <div className={`w-full flex justify-center transition-all duration-1000 transform ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-12 opacity-0'}`}>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center mt-[280px] sm:mt-[400px] md:mt-[500px] lg:mt-[630px]">
-              <button className="bg-church-gold hover:bg-white text-white hover:text-church-burgundy px-10 py-4 rounded-full font-bold uppercase tracking-widest text-xs transition-all duration-300">
-                Plan Your Visit →
-              </button>
-              <button className="bg-white/10 backdrop-blur-md border border-white/30 text-white hover:bg-white hover:text-church-burgundy px-10 py-4 rounded-full font-bold uppercase tracking-widest text-xs transition-all duration-300">
+        {/* Content Container */}
+        {/* Mobile: Align top to avoid image overlap */}
+        <div className="container mx-auto px-6 relative z-20 h-full flex flex-col justify-start md:justify-center pt-10 md:pt-0">
+          <div className="max-w-3xl mt-12 md:mt-0">
+            {/* Animated Welcome Badge */}
+            <div className={`transition-all duration-700 delay-100 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}`}>
+              <div className="inline-flex items-center gap-3 bg-white/5 backdrop-blur-md border border-white/10 rounded-full px-4 py-1.5 md:px-5 md:py-2 mb-6 sm:mb-8">
+                <div className="w-1.5 h-1.5 md:w-2 md:h-2 bg-church-gold rounded-full animate-pulse"></div>
+                <span className="text-white text-[9px] sm:text-xs font-bold uppercase tracking-widest">Welcome to Anointed Worship Center</span>
+              </div>
+            </div>
+
+            {/* Main Heading */}
+            <h1 className={`text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black text-white mb-6 leading-[0.9] md:leading-tight transition-all duration-700 delay-200 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}`}>
+              Where <span className="text-transparent bg-clip-text bg-gradient-to-r from-church-gold to-yellow-200">Everybody</span>
+              <br />
+              Is <span className="text-transparent bg-clip-text bg-gradient-to-r from-church-gold to-yellow-200">Somebody</span>
+            </h1>
+
+            {/* Subtitle */}
+            <p className={`text-base sm:text-xl md:text-2xl text-white/80 font-light mb-8 md:mb-10 max-w-sm md:max-w-2xl leading-relaxed transition-all duration-700 delay-300 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}`}>
+              A vibrant community of faith in Grace City. Join us as we grow together in the radical love of Christ.
+            </p>
+
+            {/* CTA Buttons */}
+            <div className={`flex flex-col sm:flex-row gap-4 mb-8 md:mb-16 transition-all duration-700 delay-400 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}`}>
+              <Link
+                to="/about"
+                className="group bg-church-gold hover:bg-white text-white hover:text-church-burgundy px-8 py-3 md:py-4 rounded-full font-bold uppercase tracking-widest text-[10px] md:text-xs transition-all duration-300 shadow-lg hover:shadow-church-gold/50 flex items-center justify-center gap-3"
+              >
+                Plan Your Visit
+                <i className="fa-solid fa-arrow-right text-[10px] group-hover:translate-x-1 transition-transform"></i>
+              </Link>
+              <button
+                onClick={() => {
+                  const sermonSection = document.getElementById('sermons-section');
+                  if (sermonSection) {
+                    sermonSection.scrollIntoView({ behavior: 'smooth' });
+                  } else {
+                    window.location.href = '/sermons';
+                  }
+                }}
+                className="group bg-white/5 backdrop-blur-sm border border-white/20 text-white hover:bg-white hover:text-church-burgundy px-8 py-3 md:py-4 rounded-full font-bold uppercase tracking-widest text-[10px] md:text-xs transition-all duration-300 flex items-center justify-center gap-3 hover:shadow-lg"
+              >
+                <i className="fa-solid fa-play text-[10px]"></i>
                 Watch Sermons
+              </button>
+            </div>
+
+            {/* Quick Stats - Vertically stacked on mobile to save width */}
+            <div className={`flex md:grid md:grid-cols-3 gap-6 md:gap-6 max-w-lg transition-all duration-700 delay-500 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}`}>
+              <div className="text-left">
+                <div className="text-xl md:text-4xl font-black text-church-gold mb-1">20+</div>
+                <div className="text-white/40 text-[9px] md:text-xs uppercase tracking-wider">Years</div>
+              </div>
+              <div className="text-left">
+                <div className="text-xl md:text-4xl font-black text-church-gold mb-1">500+</div>
+                <div className="text-white/40 text-[9px] md:text-xs uppercase tracking-wider">Members</div>
+              </div>
+              <div className="text-left hidden xs:block">
+                <div className="text-xl md:text-4xl font-black text-church-gold mb-1">30+</div>
+                <div className="text-white/40 text-[9px] md:text-xs uppercase tracking-wider">Ministries</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Bottom Service Times & Music Player Bar */}
+        {/* Mobile: Pushed slightly up from very bottom, reduced padding */}
+        {/* Bottom Service Times & Music Player Bar - Centered & Slim */}
+        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 w-full max-w-6xl px-4 z-30">
+          <div className="bg-black/60 backdrop-blur-xl rounded-full py-2 px-4 md:px-8 flex flex-col md:flex-row items-center justify-between gap-4 border border-white/10 shadow-2xl">
+
+            {/* Service Times - Compact */}
+            <div className="flex items-center gap-6 md:gap-12 w-full md:w-auto justify-center md:justify-start">
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 bg-church-gold/20 rounded-full flex items-center justify-center">
+                  <i className="fa-solid fa-calendar-day text-church-gold text-xs"></i>
+                </div>
+                <div className="flex flex-col">
+                  <span className="text-[9px] font-bold text-church-gold uppercase tracking-widest">Sun</span>
+                  <span className="text-white text-xs font-bold">10 AM</span>
+                </div>
+              </div>
+              <div className="w-px h-6 bg-white/10 hidden md:block"></div>
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 bg-church-gold/20 rounded-full flex items-center justify-center">
+                  <i className="fa-solid fa-book-bible text-church-gold text-xs"></i>
+                </div>
+                <div className="flex flex-col">
+                  <span className="text-[9px] font-bold text-church-gold uppercase tracking-widest">Wed</span>
+                  <span className="text-white text-xs font-bold">7 PM</span>
+                </div>
+              </div>
+            </div>
+
+            {/* New: Useful Link in the Gap (Get Directions) */}
+            <a href="https://maps.google.com" target="_blank" rel="noopener noreferrer" className="hidden lg:flex items-center gap-3 group">
+              <div className="w-8 h-8 rounded-full border border-white/20 flex items-center justify-center group-hover:bg-white group-hover:text-church-burgundy transition-all">
+                <i className="fa-solid fa-location-dot text-white text-xs group-hover:text-church-burgundy"></i>
+              </div>
+              <span className="text-[10px] font-bold text-white uppercase tracking-widest group-hover:text-church-gold transition-colors">Get Directions</span>
+            </a>
+
+            {/* Music Player - Slimmer & Modern */}
+            <div className="flex items-center gap-4 bg-white/5 rounded-full px-5 py-1.5 border border-white/10 w-full md:w-auto justify-center">
+              <button
+                onClick={togglePlay}
+                className={`w-8 h-8 rounded-full flex items-center justify-center transition-all shadow-md ${isPlaying ? 'bg-white text-church-burgundy' : 'bg-church-gold text-white'}`}
+              >
+                <i className={`fa-solid ${isPlaying ? 'fa-pause' : 'fa-play'} text-[10px]`}></i>
+              </button>
+
+              <div className="flex flex-col min-w-[120px]">
+                <span className="text-[10px] font-bold text-white uppercase tracking-wider truncate max-w-[120px]">
+                  {playlist[currentTrack].title}
+                </span>
+                {/* Tiny Audio Bars */}
+                <div className="flex items-center gap-0.5 h-2">
+                  {isPlaying ? (
+                    <>
+                      <div className="w-0.5 h-1.5 bg-church-gold animate-[bounce_1s_infinite]"></div>
+                      <div className="w-0.5 h-2.5 bg-church-gold animate-[bounce_1.2s_infinite]"></div>
+                      <div className="w-0.5 h-1 bg-church-gold animate-[bounce_0.8s_infinite]"></div>
+                      <span className="text-[8px] text-white/50 font-normal ml-1">Now Playing</span>
+                    </>
+                  ) : (
+                    <span className="text-[8px] text-white/40 font-normal">Paused</span>
+                  )}
+                </div>
+              </div>
+
+              <button
+                onClick={nextTrack}
+                className="w-6 h-6 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center transition-all"
+              >
+                <i className="fa-solid fa-forward text-[8px] text-white"></i>
               </button>
             </div>
           </div>
         </div>
 
-        {/* Bottom Stats Bar */}
-        <div className="absolute bottom-10 left-1/2 -translate-x-1/2 w-full max-w-4xl px-6">
-          <div className="bg-black/40 backdrop-blur-xl rounded-full p-4 flex flex-col md:flex-row items-center justify-between border border-white/10">
-            <div className="flex gap-8 px-6">
-              <div className="flex flex-col items-center md:items-start">
-                <span className="text-[8px] font-bold text-church-gold uppercase tracking-widest mb-1">Sundays</span>
-                <span className="text-white text-xs font-bold">10:00 AM <span className="text-white/40 font-normal">| MORNING WORSHIP</span></span>
-              </div>
-              <div className="flex flex-col items-center md:items-start">
-                <span className="text-[8px] font-bold text-church-gold uppercase tracking-widest mb-1">Wednesdays</span>
-                <span className="text-white text-xs font-bold">7:00 PM <span className="text-white/40 font-normal">| BIBLE STUDY</span></span>
-              </div>
-            </div>
-            <div className="flex items-center gap-4 bg-white/5 rounded-full px-6 py-2 mt-4 md:mt-0">
-              <button
-                onClick={togglePlay}
-                className={`w-8 h-8 rounded-full flex items-center justify-center transition-all ${isPlaying ? 'bg-white text-church-burgundy' : 'bg-church-gold text-white'}`}
-              >
-                <i className={`fa-solid ${isPlaying ? 'fa-pause' : 'fa-play'} text-[10px]`}></i>
-              </button>
-              <div className="flex flex-col">
-                <span className="text-[10px] font-bold text-white uppercase tracking-widest">
-                  {playlist[currentTrack].title}
-                </span>
-                <span className="text-[8px] text-white/30 font-normal italic">
-                  {isPlaying ? 'NOW PLAYING' : 'PAUSED'}
-                </span>
-              </div>
-              <button
-                onClick={nextTrack}
-                className="w-6 h-6 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center transition-all ml-2"
-              >
-                <i className="fa-solid fa-forward text-[8px] text-white"></i>
-              </button>
-            </div>
+        {/* Scroll Indicator */}
+        <div className="absolute bottom-32 left-1/2 -translate-x-1/2 animate-bounce hidden lg:block z-30">
+          <div className="w-6 h-10 border-2 border-white/30 rounded-full flex items-start justify-center p-2">
+            <div className="w-1 h-2 bg-white/50 rounded-full"></div>
           </div>
         </div>
 
@@ -166,6 +283,8 @@ const Home: React.FC = () => {
           }}
         />
       </section>
+
+
 
       {/* Legacy Section */}
       <section className="py-24 bg-white">
@@ -238,7 +357,7 @@ const Home: React.FC = () => {
       </section>
 
       {/* Recent Messages Section */}
-      <section className="py-24 bg-white">
+      <section id="sermons-section" className="py-24 bg-white">
         <div className="max-w-7xl mx-auto px-6">
           <div className="flex justify-between items-end mb-16">
             <div>

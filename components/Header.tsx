@@ -1,10 +1,26 @@
-import React, { useState } from 'react';
-import { NavLink, Link, useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { NavLink, Link, useNavigate, useLocation } from 'react-router-dom';
 
 const Header: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
   const logoUrl = "https://anointedworshipcenter.com/logo.png";
+
+  const isHome = location.pathname === '/';
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 50);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const navClasses = `fixed top-0 left-0 right-0 z-50 py-4 transition-all duration-300 ${isHome && !isScrolled ? 'bg-transparent' : 'bg-church-burgundy shadow-lg'
+    }`;
 
   const navItems = [
     { path: '/', label: 'Home' },
@@ -18,7 +34,7 @@ const Header: React.FC = () => {
   const rightNavItems = navItems.slice(3);
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-church-burgundy text-white py-4">
+    <nav className={navClasses}>
       <div className="max-w-7xl mx-auto px-6">
         <div className="flex items-center justify-between h-20">
           {/* PC Navigation Left */}
