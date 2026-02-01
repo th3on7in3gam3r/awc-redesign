@@ -150,136 +150,192 @@ const Ministries: React.FC = () => {
   }
 
   return (
-    <div className="pt-52 pb-20 bg-gray-50 min-h-screen">
-      <div className="max-w-7xl mx-auto px-4">
-        {/* Page Title */}
-        <div className="text-center mb-24">
-          <span className="text-church-gold font-bold tracking-[0.4em] uppercase text-xs mb-4 block animate-fade-in">Service & Stewardship</span>
-          <h1 className="text-6xl font-bold text-church-burgundy mb-6 serif leading-tight">Our Ministries & Leaders</h1>
-          <p className="text-xl text-slate-500 max-w-2xl mx-auto font-light leading-relaxed">
-            Discover the heart behind our mission and the hands that lead the way at Anointed Worship Center.
-          </p>
-        </div>
+    <div className="bg-gray-50 min-h-screen">
+      {/* MODERN HERO SECTION */}
+      <section className="relative h-[70vh] min-h-[600px] flex items-center justify-center overflow-hidden bg-church-burgundy">
+        {/* Background Pattern */}
+        <div className="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')]"></div>
 
-        {/* 1. Pastoral Leadership Section */}
-        <div className="mb-32">
-          <div className="flex items-center gap-6 mb-12">
-            <h2 className="text-4xl font-bold text-church-burgundy serif">Pastoral Leadership</h2>
-            <div className="h-[1px] flex-1 bg-gradient-to-r from-church-gold/40 to-transparent"></div>
-          </div>
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {LEADER_TEAM.map((leader, i) => (
-              <div key={i} className="group bg-white rounded-[2.5rem] overflow-hidden shadow-xl border border-gray-100 transition-all duration-500 hover:-translate-y-3">
-                <div className="aspect-[3/4] overflow-hidden relative">
-                  <img src={leader.imageUrl} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" alt={leader.name} />
-                  <div className="absolute inset-0 bg-gradient-to-t from-church-burgundy via-transparent to-transparent opacity-60"></div>
-                  <div className="absolute bottom-6 left-6 right-6">
-                    <p className="text-church-gold font-black uppercase tracking-[0.2em] text-[9px] mb-1">{leader.role}</p>
-                    <h3 className="text-white text-xl font-bold serif leading-tight">{leader.name}</h3>
-                  </div>
-                </div>
-                <div className="p-6">
-                  <p className="text-slate-500 text-sm leading-relaxed">{leader.bio}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
+        {/* Gradient Overlays */}
+        <div className="absolute inset-0 bg-gradient-to-br from-church-burgundy via-church-burgundy/95 to-black/80"></div>
+        <div className="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-church-gold/20 to-transparent"></div>
 
-        {/* 2. Ministry Leaders Section (MOVED UP) */}
-        <div className="mb-32">
-          <div className="flex items-center gap-6 mb-12">
-            <h2 className="text-4xl font-bold text-church-burgundy serif">Ministry Leaders</h2>
-            <div className="h-[1px] flex-1 bg-gradient-to-r from-church-gold/40 to-transparent"></div>
-          </div>
-          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-y-12 gap-x-6">
-            {MINISTRY_TEAM.map((member, i) => (
-              <div key={i} className="text-center group">
-                <div className="relative mb-4 mx-auto w-24 h-24 lg:w-32 lg:h-32">
-                  <div className="absolute inset-0 rounded-full bg-church-gold scale-0 group-hover:scale-110 transition-transform duration-500 opacity-20"></div>
-                  <img src={member.imageUrl} className="w-full h-full object-cover rounded-full border-4 border-white shadow-xl relative z-10" alt={member.name} />
-                </div>
-                <h4 className="text-church-burgundy font-bold text-[13px] leading-tight px-2">{member.name}</h4>
-                <p className="text-church-gold font-black uppercase tracking-widest text-[8px] mt-2 block opacity-80">{member.role}</p>
-              </div>
-            ))}
-          </div>
-        </div>
+        {/* Floating Shapes */}
+        <div className="absolute top-20 right-20 w-64 h-64 bg-church-gold/10 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute bottom-20 left-20 w-96 h-96 bg-white/5 rounded-full blur-3xl"></div>
 
-        {/* 3. Core Ministries Section (REDESIGNED) */}
-        <div className="mb-32">
-          <div className="flex items-center gap-6 mb-12">
-            <h2 className="text-4xl font-bold text-church-burgundy serif">Core Ministries</h2>
-            <div className="h-[1px] flex-1 bg-gradient-to-r from-church-gold/40 to-transparent"></div>
-          </div>
+        {/* Content */}
+        <div className="container mx-auto px-6 relative z-10 text-center">
+          <div className="max-w-4xl mx-auto">
+            {/* Badge */}
+            <div className="inline-flex items-center gap-3 bg-white/10 backdrop-blur-md border border-white/20 rounded-full px-6 py-2 mb-8">
+              <div className="w-2 h-2 bg-church-gold rounded-full animate-pulse"></div>
+              <span className="text-white text-xs font-bold uppercase tracking-widest">Discover Your Purpose</span>
+            </div>
 
-          {/* 3-Column Grid for Ministries */}
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {MINISTRIES.map((ministry) => (
-              <div
-                key={ministry.id}
-                className="group relative bg-white rounded-[2.5rem] overflow-hidden shadow-2xl border border-gray-100 cursor-pointer transition-all duration-700 hover:-translate-y-4 hover:shadow-[0_20px_60px_rgba(139,0,0,0.3)]"
-                onClick={() => setSelectedMinistry(ministry)}
-              >
-                {/* Image Container - Full Height */}
-                <div className="aspect-[4/5] overflow-hidden relative">
-                  {ministry.imageUrl && (
-                    <img
-                      src={ministry.imageUrl}
-                      className="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
-                      alt={ministry.name}
-                    />
-                  )}
+            {/* Main Heading */}
+            <h1 className="text-6xl md:text-7xl lg:text-8xl font-black text-white mb-8 leading-tight">
+              Our <span className="text-transparent bg-clip-text bg-gradient-to-r from-church-gold to-yellow-200">Ministries</span>
+            </h1>
 
-                  {/* Gradient Overlay - Stronger at bottom */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent opacity-80 group-hover:opacity-90 transition-opacity duration-500"></div>
-
-                  {/* Accent Glow Effect */}
-                  <div className="absolute inset-0 bg-gradient-to-tr from-church-gold/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
-                </div>
-
-                {/* Content Overlay - Positioned at bottom */}
-                <div className="absolute bottom-0 left-0 right-0 p-8">
-                  {/* Icon Badge */}
-                  <div className="w-16 h-16 bg-church-gold rounded-2xl flex items-center justify-center text-white text-2xl mb-5 shadow-2xl transform group-hover:rotate-6 group-hover:scale-110 transition-all duration-500">
-                    {ministry.icon && <i className={ministry.icon}></i>}
-                  </div>
-
-                  {/* Ministry Name */}
-                  <h3 className="text-3xl font-bold text-white mb-3 serif tracking-tight leading-tight">
-                    {ministry.name}
-                  </h3>
-
-                  {/* Description - Slides up on hover */}
-                  <p className="text-gray-200 text-sm leading-relaxed mb-5 opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-700 delay-100 line-clamp-3">
-                    {ministry.description}
-                  </p>
-
-                  {/* CTA Button */}
-                  <div className="flex items-center gap-3 opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-700 delay-200">
-                    <div className="h-[2px] w-12 bg-church-gold"></div>
-                    <span className="text-church-gold font-black uppercase tracking-[0.3em] text-[10px]">
-                      Learn More
-                    </span>
-                    <i className="fa-solid fa-arrow-right text-church-gold text-xs group-hover:translate-x-1 transition-transform"></i>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Help Finding Ministry CTA */}
-        <div className="mt-32 bg-church-burgundy rounded-[4rem] p-16 md:p-24 relative overflow-hidden shadow-2xl">
-          <div className="absolute top-0 right-0 w-1/3 h-full bg-church-gold/5 -skew-x-12 translate-x-1/2"></div>
-          <div className="relative z-10 text-center max-w-3xl mx-auto">
-            <h2 className="text-white text-4xl md:text-5xl font-bold mb-8 serif">Discover Your Giftedness</h2>
-            <p className="text-gray-400 text-lg mb-12 font-light leading-relaxed">
-              Every member has a unique part to play in the body of Christ. Let us help you find yours.
+            {/* Subtitle */}
+            <p className="text-xl md:text-2xl text-white/80 font-light mb-12 max-w-3xl mx-auto leading-relaxed">
+              Every member has a unique calling. Find where you belong and make an eternal impact in the Kingdom.
             </p>
-            <button className="bg-church-gold hover:bg-white text-white hover:text-church-burgundy px-12 py-5 rounded-full font-black uppercase tracking-[0.2em] text-xs transition-all duration-500">
-              Spiritual Gifts Assessment
-            </button>
+
+            {/* CTA Buttons */}
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <button className="bg-church-gold hover:bg-white text-white hover:text-church-burgundy px-10 py-4 rounded-full font-bold uppercase tracking-widest text-xs transition-all duration-300 shadow-lg hover:shadow-church-gold/50">
+                Explore Ministries
+              </button>
+              <button className="bg-white/10 backdrop-blur-sm border border-white/20 text-white hover:bg-white hover:text-church-burgundy px-10 py-4 rounded-full font-bold uppercase tracking-widest text-xs transition-all duration-300">
+                Contact Us
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* Scroll Indicator */}
+        <div className="absolute bottom-10 left-1/2 -translate-x-1/2 animate-bounce">
+          <div className="w-6 h-10 border-2 border-white/30 rounded-full flex items-start justify-center p-2">
+            <div className="w-1 h-2 bg-white/50 rounded-full"></div>
+          </div>
+        </div>
+      </section>
+
+      {/* MAIN CONTENT */}
+      <div className="pt-20 pb-20">
+        <div className="max-w-7xl mx-auto px-4">
+
+          {/* Core Ministries Section */}
+          <div className="mb-32">
+            <div className="text-center mb-16">
+              <span className="text-church-gold font-black tracking-[0.4em] uppercase text-xs mb-4 block">Get Involved</span>
+              <h2 className="text-5xl md:text-6xl font-bold text-church-burgundy serif mb-6">Core Ministries</h2>
+              <p className="text-xl text-slate-500 max-w-2xl mx-auto font-light">
+                Discover where your gifts and passions can make a difference in our community.
+              </p>
+            </div>
+
+            {/* 3-Column Grid for Ministries */}
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {MINISTRIES.map((ministry) => (
+                <div
+                  key={ministry.id}
+                  className="group relative bg-white rounded-[2.5rem] overflow-hidden shadow-2xl border border-gray-100 cursor-pointer transition-all duration-700 hover:-translate-y-4 hover:shadow-[0_20px_60px_rgba(139,0,0,0.3)]"
+                  onClick={() => setSelectedMinistry(ministry)}
+                >
+                  {/* Image Container - Full Height */}
+                  <div className="aspect-[4/5] overflow-hidden relative">
+                    {ministry.imageUrl && (
+                      <img
+                        src={ministry.imageUrl}
+                        className="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
+                        alt={ministry.name}
+                      />
+                    )}
+
+                    {/* Gradient Overlay - Stronger at bottom */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent opacity-80 group-hover:opacity-90 transition-opacity duration-500"></div>
+
+                    {/* Accent Glow Effect */}
+                    <div className="absolute inset-0 bg-gradient-to-tr from-church-gold/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
+                  </div>
+
+                  {/* Content Overlay - Positioned at bottom */}
+                  <div className="absolute bottom-0 left-0 right-0 p-8">
+                    {/* Icon Badge */}
+                    <div className="w-16 h-16 bg-church-gold rounded-2xl flex items-center justify-center text-white text-2xl mb-5 shadow-2xl transform group-hover:rotate-6 group-hover:scale-110 transition-all duration-500">
+                      {ministry.icon && <i className={ministry.icon}></i>}
+                    </div>
+
+                    {/* Ministry Name */}
+                    <h3 className="text-3xl font-bold text-white mb-3 serif tracking-tight leading-tight">
+                      {ministry.name}
+                    </h3>
+
+                    {/* Description - Slides up on hover */}
+                    <p className="text-gray-200 text-sm leading-relaxed mb-5 opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-700 delay-100 line-clamp-3">
+                      {ministry.description}
+                    </p>
+
+                    {/* CTA Button */}
+                    <div className="flex items-center gap-3 opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-700 delay-200">
+                      <div className="h-[2px] w-12 bg-church-gold"></div>
+                      <span className="text-church-gold font-black uppercase tracking-[0.3em] text-[10px]">
+                        Learn More
+                      </span>
+                      <i className="fa-solid fa-arrow-right text-church-gold text-xs group-hover:translate-x-1 transition-transform"></i>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Pastoral Leadership Section */}
+          <div className="mb-32">
+            <div className="text-center mb-16">
+              <span className="text-church-gold font-black tracking-[0.4em] uppercase text-xs mb-4 block">Our Leaders</span>
+              <h2 className="text-5xl md:text-6xl font-bold text-church-burgundy serif mb-6">Pastoral Leadership</h2>
+              <p className="text-xl text-slate-500 max-w-2xl mx-auto font-light">
+                Meet the shepherds guiding our spiritual journey with wisdom and compassion.
+              </p>
+            </div>
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+              {LEADER_TEAM.map((leader, i) => (
+                <div key={i} className="group bg-white rounded-[2.5rem] overflow-hidden shadow-xl border border-gray-100 transition-all duration-500 hover:-translate-y-3">
+                  <div className="aspect-[3/4] overflow-hidden relative">
+                    <img src={leader.imageUrl} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" alt={leader.name} />
+                    <div className="absolute inset-0 bg-gradient-to-t from-church-burgundy via-transparent to-transparent opacity-60"></div>
+                    <div className="absolute bottom-6 left-6 right-6">
+                      <p className="text-church-gold font-black uppercase tracking-[0.2em] text-[9px] mb-1">{leader.role}</p>
+                      <h3 className="text-white text-xl font-bold serif leading-tight">{leader.name}</h3>
+                    </div>
+                  </div>
+                  <div className="p-6">
+                    <p className="text-slate-500 text-sm leading-relaxed">{leader.bio}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Ministry Leaders Section */}
+          <div className="mb-32">
+            <div className="text-center mb-16">
+              <span className="text-church-gold font-black tracking-[0.4em] uppercase text-xs mb-4 block">Our Team</span>
+              <h2 className="text-5xl md:text-6xl font-bold text-church-burgundy serif mb-6">Ministry Leaders</h2>
+              <p className="text-xl text-slate-500 max-w-2xl mx-auto font-light">
+                Dedicated servants leading with passion and purpose in their areas of calling.
+              </p>
+            </div>
+            <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-y-12 gap-x-6">
+              {MINISTRY_TEAM.map((member, i) => (
+                <div key={i} className="text-center group">
+                  <div className="relative mb-4 mx-auto w-24 h-24 lg:w-32 lg:h-32">
+                    <div className="absolute inset-0 rounded-full bg-church-gold scale-0 group-hover:scale-110 transition-transform duration-500 opacity-20"></div>
+                    <img src={member.imageUrl} className="w-full h-full object-cover rounded-full border-4 border-white shadow-xl relative z-10" alt={member.name} />
+                  </div>
+                  <h4 className="text-church-burgundy font-bold text-[13px] leading-tight px-2">{member.name}</h4>
+                  <p className="text-church-gold font-black uppercase tracking-widest text-[8px] mt-2 block opacity-80">{member.role}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Help Finding Ministry CTA */}
+          <div className="mt-32 bg-church-burgundy rounded-[4rem] p-16 md:p-24 relative overflow-hidden shadow-2xl">
+            <div className="absolute top-0 right-0 w-1/3 h-full bg-church-gold/5 -skew-x-12 translate-x-1/2"></div>
+            <div className="relative z-10 text-center max-w-3xl mx-auto">
+              <h2 className="text-white text-4xl md:text-5xl font-bold mb-8 serif">Discover Your Giftedness</h2>
+              <p className="text-gray-400 text-lg mb-12 font-light leading-relaxed">
+                Every member has a unique part to play in the body of Christ. Let us help you find yours.
+              </p>
+              <button className="bg-church-gold hover:bg-white text-white hover:text-church-burgundy px-12 py-5 rounded-full font-black uppercase tracking-[0.2em] text-xs transition-all duration-500">
+                Spiritual Gifts Assessment
+              </button>
+            </div>
           </div>
         </div>
       </div>

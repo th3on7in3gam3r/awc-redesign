@@ -80,7 +80,7 @@ export const MINISTRIES: Ministry[] = [
     name: "Community Outreach",
     description: "Sharing the love of Christ beyond our four walls through service, compassion, and practical ministry.",
     icon: "fa-solid fa-handshake-angle",
-    imageUrl: "https://images.unsplash.com/photo-1469571483333-24322989cc0c?auto=format&fit=crop&q=80&w=800",
+    imageUrl: "/images/community-outreach.png",
   }
 ];
 
