@@ -185,12 +185,23 @@ const Ministries: React.FC = () => {
 
             {/* CTA Buttons */}
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <button className="bg-church-gold hover:bg-white text-white hover:text-church-burgundy px-10 py-4 rounded-full font-bold uppercase tracking-widest text-xs transition-all duration-300 shadow-lg hover:shadow-church-gold/50">
+              <button
+                onClick={() => {
+                  const ministriesSection = document.querySelector('.ministries-section');
+                  if (ministriesSection) {
+                    ministriesSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                  }
+                }}
+                className="bg-church-gold hover:bg-white text-white hover:text-church-burgundy px-10 py-4 rounded-full font-bold uppercase tracking-widest text-xs transition-all duration-300 shadow-lg hover:shadow-church-gold/50"
+              >
                 Explore Ministries
               </button>
-              <button className="bg-white/10 backdrop-blur-sm border border-white/20 text-white hover:bg-white hover:text-church-burgundy px-10 py-4 rounded-full font-bold uppercase tracking-widest text-xs transition-all duration-300">
+              <a
+                href="/connect"
+                className="bg-white/10 backdrop-blur-sm border border-white/20 text-white hover:bg-white hover:text-church-burgundy px-10 py-4 rounded-full font-bold uppercase tracking-widest text-xs transition-all duration-300 text-center"
+              >
                 Contact Us
-              </button>
+              </a>
             </div>
           </div>
         </div>
@@ -208,7 +219,7 @@ const Ministries: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4">
 
           {/* Core Ministries Section */}
-          <div className="mb-32">
+          <div className="mb-32 ministries-section">
             <div className="text-center mb-16">
               <span className="text-church-gold font-black tracking-[0.4em] uppercase text-xs mb-4 block">Get Involved</span>
               <h2 className="text-5xl md:text-6xl font-bold text-church-burgundy serif mb-6">Core Ministries</h2>
