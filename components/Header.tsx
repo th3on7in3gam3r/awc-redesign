@@ -98,7 +98,7 @@ const Header: React.FC = () => {
               key={item.path}
               to={item.path}
               onClick={() => setIsMenuOpen(false)}
-              className="text-xs font-bold uppercase tracking-widest text-center py-2"
+               className="text-xs font-bold uppercase tracking-widest text-center py-2 text-white hover:text-church-gold"
             >
               {item.label}
             </NavLink>
