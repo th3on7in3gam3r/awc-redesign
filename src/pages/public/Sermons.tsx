@@ -1,13 +1,14 @@
 
 
-import React, { useState, useEffect } from 'react';
+import * as React from 'react';
+import { useState, useEffect } from 'react';
 import { youtubeService, YouTubeVideo, LiveStreamInfo } from '../../services/youtubeService';
 
 interface Sermon {
   id: string;
   title: string;
   speaker: string;
-  preached_at: string;
+  date: string;
   type: string;
   series?: string;
   scripture?: string;
@@ -49,9 +50,14 @@ const Sermons: React.FC = () => {
   const fetchDatabaseSermons = () => {
     // Fetch published sermons from API
     fetch('/api/sermons?published=true')
-      .then(res => res.json())
+      .then(res => {
+        if (!res.ok) throw new Error('Failed to fetch sermons');
+        return res.json();
+      })
       .then(data => {
-        setSermons(data);
+        if (Array.isArray(data)) {
+          setSermons(data);
+        }
         setLoading(false);
       })
       .catch(err => {
@@ -270,7 +276,7 @@ const Sermons: React.FC = () => {
                   </div>
                 </div>
                 <div className="p-10">
-                  <p className="text-xs text-church-gold font-black uppercase tracking-tighter mb-4">{formatDate(sermon.preached_at)}</p>
+                  <p className="text-xs text-church-gold font-black uppercase tracking-tighter mb-4">{formatDate(sermon.date)}</p>
                   <h3 className="text-2xl font-bold text-church-burgundy mb-4 serif group-hover:text-church-gold transition-colors">{sermon.title}</h3>
                   {sermon.scripture && (
                     <p className="text-sm text-slate-500 mb-3 italic">{sermon.scripture}</p>
@@ -365,7 +371,7 @@ const Sermons: React.FC = () => {
                   <div className="flex items-center gap-3 mb-2">
                     <span className="text-church-gold font-black uppercase tracking-[0.2em] text-[10px]">{selectedSermon.type}</span>
                     <span className="w-1 h-1 bg-white/20 rounded-full"></span>
-                    <span className="text-gray-400 text-xs font-medium">{formatDate(selectedSermon.preached_at)}</span>
+                    <span className="text-gray-400 text-xs font-medium">{formatDate(selectedSermon.date)}</span>
                   </div>
                   <h2 className="text-3xl font-bold text-white serif">{selectedSermon.title}</h2>
                   {selectedSermon.scripture && (

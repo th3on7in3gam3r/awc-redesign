@@ -75,3 +75,14 @@ export interface ChurchEvent {
     imageUrl: string;
     category: string;
 }
+
+export interface GalleryItem {
+    id: string;
+    title: string;
+    type: 'image' | 'video';
+    url: string;
+    thumbnail?: string;
+    description?: string;
+    category?: string;
+    created_at: string;
+}

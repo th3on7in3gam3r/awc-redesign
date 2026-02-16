@@ -1,6 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import * as React from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { SERVICE_TIMES } from '../../constants';
+import GallerySection from '../../components/ui/GallerySection';
 
 const Home: React.FC = () => {
   const [isVisible, setIsVisible] = useState(false);
@@ -25,8 +27,15 @@ const Home: React.FC = () => {
 
     // Fetch latest sermons from API
     fetch('/api/sermons?published=true')
-      .then(res => res.json())
-      .then(data => setSermons(data.slice(0, 3))) // Get top 3 latest
+      .then(res => {
+        if (!res.ok) throw new Error('Failed to fetch sermons');
+        return res.json();
+      })
+      .then(data => {
+        if (Array.isArray(data)) {
+          setSermons(data.slice(0, 3));
+        }
+      })
       .catch(err => console.error('Error fetching sermons:', err));
   }, []);
 
@@ -356,6 +365,9 @@ const Home: React.FC = () => {
         </div>
       </section>
 
+      {/* Gallery Section */}
+      <GallerySection />
+
       {/* Recent Messages Section */}
       <section id="sermons-section" className="py-24 bg-white">
         <div className="max-w-7xl mx-auto px-6">
@@ -405,7 +417,7 @@ const Home: React.FC = () => {
                     </div>
                   </div>
                   <h3 className="text-2xl font-bold text-church-burgundy mb-2 group-hover:text-church-gold transition-colors">{sermon.title}</h3>
-                  <p className="text-slate-400 text-xs font-medium uppercase tracking-widest italic">{sermon.speaker} • {formatDate(sermon.preached_at)}</p>
+                  <p className="text-slate-400 text-xs font-medium uppercase tracking-widest italic">{sermon.speaker} • {formatDate(sermon.date)}</p>
                 </div>
               );
             }) : (

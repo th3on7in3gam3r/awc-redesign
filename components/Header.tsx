@@ -26,6 +26,7 @@ const Header: React.FC = () => {
     { path: '/', label: 'Home' },
     { path: '/ministries', label: 'Ministries' },
     { path: '/sermons', label: 'Sermons' },
+    { path: '/gallery', label: 'Gallery' },
     { path: '/events', label: 'Events' },
     { path: '/community', label: 'Community' },
   ];
@@ -98,7 +99,7 @@ const Header: React.FC = () => {
               key={item.path}
               to={item.path}
               onClick={() => setIsMenuOpen(false)}
-               className="text-xs font-bold uppercase tracking-widest text-center py-2 text-white hover:text-church-gold"
+              className="text-xs font-bold uppercase tracking-widest text-center py-2 text-white hover:text-church-gold"
             >
               {item.label}
             </NavLink>

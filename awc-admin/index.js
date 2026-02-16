@@ -1,7 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
-import pool, { query, prisma } from './db.mjs';
+import { supabase, query } from './db.mjs';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { auth } from './middleware/auth.js';
@@ -49,7 +49,8 @@ const PORT = process.env.PORT || 5001;
 // Middleware
 app.use(cors());
 app.use(express.json({ limit: '10mb' }));
-app.use(express.static(path.join(__dirname, 'public'))); // Serve uploaded files
+app.use(express.static(path.join(__dirname, '..', 'public'))); // Serve root public files (images)
+app.use('/uploads', express.static(path.join(__dirname, 'public/uploads'))); // Serve specific admin uploads
 
 // Global Request Logger
 app.use((req, res, next) => {
@@ -72,11 +73,99 @@ app.get('/', (req, res) => {
 // Health check
 app.get('/api/health', async (req, res) => {
     try {
-        const result = await query('SELECT NOW()');
-        res.json({ status: 'ok', time: result.rows[0].now });
+        const { data, error } = await supabase.from('user_profiles').select('count', { count: 'exact', head: true });
+        if (error) throw error;
+        res.json({ status: 'ok', supabase: 'connected', user_count: data });
     } catch (err) {
         console.error(err);
-        res.status(500).json({ status: 'error', message: 'Database connection failed' });
+        res.status(500).json({ status: 'error', message: 'Supabase connection failed' });
+    }
+});
+
+// --- Gallery API (Supabase Driven) ---
+
+// GET /api/gallery - Fetch all media
+app.get('/api/gallery', async (req, res) => {
+    try {
+        const { data, error } = await supabase
+            .from('gallery_items')
+            .select('*')
+            .order('created_at', { ascending: false });
+
+        if (error) throw error;
+        res.json(data);
+    } catch (err) {
+        console.error('Error fetching gallery:', err);
+        res.status(500).json({ message: 'Error fetching gallery', error: err.message });
+    }
+});
+
+// POST /api/gallery/upload - Managed local upload + Supabase record
+app.post('/api/gallery/upload', auth, upload.single('media'), async (req, res) => {
+    try {
+        const { title, category, description, type, url: videoUrl } = req.body;
+
+        // Validation based on type
+        if (type !== 'video' && !req.file) {
+            return res.status(400).json({ message: 'No file uploaded' });
+        }
+        if (type === 'video' && !videoUrl) {
+            return res.status(400).json({ message: 'Video URL required for video type' });
+        }
+
+        let finalUrl = '';
+        let finalThumbnail = '';
+
+        if (req.file) {
+            finalUrl = `/uploads/${req.file.filename}`;
+            finalThumbnail = finalUrl;
+        } else if (type === 'video') {
+            finalUrl = videoUrl;
+            // Extract YouTube thumbnail
+            const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+            const match = videoUrl.match(regExp);
+            if (match && match[2].length === 11) {
+                finalThumbnail = `https://img.youtube.com/vi/${match[2]}/maxresdefault.jpg`;
+            } else {
+                finalThumbnail = 'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&q=80';
+            }
+        }
+
+        const { data, error } = await supabase
+            .from('gallery_items')
+            .insert([{
+                title: title || 'Untitled',
+                category: category || 'General',
+                description: description || '',
+                type: type || 'image',
+                url: finalUrl,
+                thumbnail: finalThumbnail,
+                created_at: new Date().toISOString()
+            }])
+            .select();
+
+        if (error) throw error;
+        res.status(201).json({ message: 'Media uploaded successfully', item: data[0] });
+    } catch (err) {
+        console.error('Upload error:', err);
+        res.status(500).json({ message: 'Upload failed', error: err.message });
+    }
+});
+
+// DELETE /api/gallery/:id - Remove gallery item
+app.delete('/api/gallery/:id', auth, async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { error } = await supabase
+            .from('gallery_items')
+            .delete()
+            .match({ id });
+
+        if (error) throw error;
+        res.json({ message: 'Item deleted successfully' });
+    } catch (err) {
+        console.error('Delete error:', err);
+        res.status(500).json({ message: 'Delete failed' });
     }
 });
 
@@ -2175,67 +2264,39 @@ app.post('/api/checkin/guest', async (req, res) => {
 // GET /api/sermons - Get all sermons with filtering
 app.get('/api/sermons', async (req, res) => {
     try {
-        console.log("🔍 DATABASE_URL exists:", !!process.env.DATABASE_URL);
-        console.log("🔍 Prisma client available:", !!prisma);
-        
         const { published, search, type, series, speaker, year } = req.query;
         const isAdmin = req.user && (req.user.role === 'admin' || req.user.role === 'pastor');
 
-        // Build Prisma where clause
-        const where = {};
-
-        // Filter by published status
-        if (!isAdmin || published === 'true') {
-            where.is_published = true;
-        } else if (published === 'false') {
-            where.is_published = false;
-        }
+        let queryText = `SELECT * FROM sermons WHERE 1=1`;
+        const params = [];
 
         // Search filter
         if (search) {
-            where.OR = [
-                { title: { contains: search, mode: 'insensitive' } },
-                { scripture: { contains: search, mode: 'insensitive' } },
-                { speaker: { contains: search, mode: 'insensitive' } }
-            ];
-        }
-
-        // Type filter
-        if (type && type !== 'all') {
-            where.type = type;
-        }
-
-        // Series filter
-        if (series && series !== 'all') {
-            where.series = series;
+            params.push(`%${search}%`);
+            queryText += ` AND (title ILIKE $${params.length} OR speaker ILIKE $${params.length})`;
         }
 
         // Speaker filter
         if (speaker && speaker !== 'all') {
-            where.speaker = speaker;
+            params.push(speaker);
+            queryText += ` AND speaker = $${params.length}`;
         }
 
-        // Year filter
+        // Year filter (using date column)
         if (year && year !== 'all') {
             const yearInt = parseInt(year);
-            where.preached_at = {
-                gte: new Date(`${yearInt}-01-01`),
-                lt: new Date(`${yearInt + 1}-01-01`)
-            };
+            params.push(`${yearInt}-01-01`);
+            params.push(`${yearInt + 1}-01-01`);
+            queryText += ` AND date >= $${params.length - 1} AND date < $${params.length}`;
         }
 
-        const sermons = await prisma.sermons.findMany({
-            where,
-            orderBy: { preached_at: 'desc' }
-        });
+        queryText += ` ORDER BY date DESC`;
 
-        return res.status(200).json(sermons);
+        const { rows } = await query(queryText, params);
+        res.json(rows);
     } catch (error) {
         console.error('❌ Sermons API Error:', error);
-        return res.status(500).json({
-            error: 'Failed to fetch sermons',
-            message: error.message
-        });
+        res.status(500).json({ error: 'Failed to fetch sermons' });
     }
 });
 
@@ -2247,10 +2308,7 @@ app.get('/api/sermons/:id', async (req, res) => {
 
         let sql = `SELECT * FROM sermons WHERE id = $1`;
 
-        // Non-admin users can only see published sermons
-        if (!isAdmin) {
-            sql += ` AND is_published = true`;
-        }
+
 
         const result = await query(sql, [id]);
 

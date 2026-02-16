@@ -14,6 +14,8 @@ import Sermons from './src/pages/public/Sermons';
 import Community from './src/pages/public/Community';
 import Events from './src/pages/public/Events';
 import Visit from './src/pages/public/Visit';
+import GallerySection from './src/components/ui/GallerySection';
+import Gallery from './src/pages/public/Gallery';
 
 // Auth Pages
 import { MemberLogin } from './src/pages/auth/MemberLogin';
@@ -34,6 +36,7 @@ import { PeopleDirectory } from './src/pages/admin/PeopleDirectory';
 import { AdminEvents } from './src/pages/admin/AdminEvents';
 import { AuditLogPage } from './src/pages/admin/AuditLogPage';
 import { ProgramsRoster } from './src/pages/admin/ProgramsRoster';
+import AdminGallery from './src/pages/admin/AdminGallery';
 import { HouseholdsPage } from './src/pages/staff/HouseholdsPage';
 import { HouseholdDetailPage } from './src/pages/staff/HouseholdDetailPage';
 import { StaffCalendar } from './src/pages/staff/StaffCalendar';
@@ -67,6 +70,7 @@ const App: React.FC = () => {
             <Route path="/sermons" element={<Sermons />} />
             <Route path="/events" element={<Events />} />
             <Route path="/community" element={<Community />} />
+            <Route path="/gallery" element={<Gallery />} />
             <Route path="/visit" element={<Visit />} />
           </Route>
 
@@ -137,6 +141,7 @@ const App: React.FC = () => {
             <Route path="giving" element={<GivingPage />} />
             <Route path="finance" element={<FinancePage />} />
             <Route path="chat" element={<ChatPage />} />
+            <Route path="gallery" element={<AdminGallery />} />
             <Route path="checkin/screen" element={<CheckInScreen />} />
             <Route path="settings" element={<StaffSettings />} />
           </Route>
