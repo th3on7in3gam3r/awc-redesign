@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import * as React from 'react';
+import { useState, useEffect } from 'react';
 import { NavLink, Link, useNavigate, useLocation } from 'react-router-dom';
 
 const Header: React.FC = () => {
@@ -31,8 +32,8 @@ const Header: React.FC = () => {
     { path: '/community', label: 'Community' },
   ];
 
-  const leftNavItems = navItems.slice(0, 3);
-  const rightNavItems = navItems.slice(3);
+  const leftNavItems = navItems.slice(0, 4);
+  const rightNavItems = navItems.slice(4);
 
   return (
     <nav className={navClasses}>
@@ -73,6 +74,14 @@ const Header: React.FC = () => {
                 {item.label}
               </NavLink>
             ))}
+            <a
+              href="https://awc-vault.vercel.app/#/login"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-[10px] font-black uppercase tracking-[0.3em] text-gray-300 hover:text-white transition-colors ml-4"
+            >
+              Members
+            </a>
             <button
               onClick={() => navigate('/visit')}
               className="bg-church-gold text-white px-6 py-2 rounded-lg text-[9px] font-black uppercase tracking-widest hover:bg-white hover:text-church-burgundy transition-all ml-4"
@@ -104,6 +113,15 @@ const Header: React.FC = () => {
               {item.label}
             </NavLink>
           ))}
+          <a
+            href="https://awc-vault.vercel.app/#/login"
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={() => setIsMenuOpen(false)}
+            className="text-xs font-bold uppercase tracking-widest text-center py-2 text-white hover:text-church-gold"
+          >
+            Members
+          </a>
         </div>
       </div>
     </nav>

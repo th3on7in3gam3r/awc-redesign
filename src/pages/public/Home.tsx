@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { SERVICE_TIMES } from '../../constants';
 import GallerySection from '../../components/ui/GallerySection';
+import QRCode from 'react-qr-code';
 
 const Home: React.FC = () => {
   const [isVisible, setIsVisible] = useState(false);
@@ -231,11 +232,11 @@ const Home: React.FC = () => {
             </div>
 
             {/* Actions */}
-            <a href="https://maps.google.com" target="_blank" rel="noopener noreferrer" className="hidden lg:flex items-center gap-3 group">
+            <a href="https://www.google.com/maps/search/?api=1&query=4+School+St+Acton,+MA+01720" target="_blank" rel="noopener noreferrer" className="hidden lg:flex items-center gap-3 group">
               <div className="w-8 h-8 rounded-full border border-white/20 flex items-center justify-center group-hover:bg-white group-hover:text-church-burgundy transition-all">
                 <i className="fa-solid fa-location-dot text-white text-xs group-hover:text-church-burgundy"></i>
               </div>
-              <span className="text-[10px] font-bold text-white uppercase tracking-widest group-hover:text-church-gold transition-colors">Get Directions</span>
+              <span className="text-[10px] font-bold text-white uppercase tracking-widest group-hover:text-church-gold transition-colors">4 SCHOOL ST ACTON, MA</span>
             </a>
 
             {/* Music Player */}
@@ -366,8 +367,146 @@ const Home: React.FC = () => {
         </div>
       </section>
 
+      {/* App Download Section */}
+      <section className="py-24 bg-church-burgundy relative overflow-hidden">
+        {/* Background Effects */}
+        <div className="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')]"></div>
+        <div className="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-church-gold/10 to-transparent"></div>
+        <div className="absolute bottom-0 left-0 w-96 h-96 bg-white/5 rounded-full blur-3xl"></div>
+
+        <div className="max-w-7xl mx-auto px-6 relative z-10">
+          <div className="grid lg:grid-cols-2 gap-16 items-center">
+            {/* Content Side */}
+            <div className="text-white space-y-8">
+              <div>
+                <span className="text-church-gold font-black tracking-[0.4em] uppercase text-xs mb-4 block">AWC Connect</span>
+                <h2 className="text-5xl md:text-6xl font-bold serif mb-6">Church in Your Pocket</h2>
+                <p className="text-xl text-white/80 font-light leading-relaxed max-w-xl">
+                  Stay connected with the AWC family wherever you go. Watch sermons, submit prayer requests, give securely, and get instant updates on upcoming events.
+                </p>
+              </div>
+
+              <div className="flex flex-col sm:flex-row gap-8 pt-4">
+                {/* QR Code Card */}
+                <div className="bg-white p-6 rounded-3xl shadow-xl inline-block max-w-[200px]">
+                  <div className="bg-white rounded-xl overflow-hidden mb-4">
+                    <QRCode
+                      value="https://awc-connect.vercel.app/welcome"
+                      size={120}
+                      style={{ height: "auto", maxWidth: "100%", width: "100%" }}
+                      viewBox={`0 0 256 256`}
+                    />
+                  </div>
+                  <p className="text-church-burgundy text-[10px] font-black uppercase tracking-widest text-center">
+                    Scan to Download
+                  </p>
+                </div>
+
+                {/* Feature List */}
+                <div className="space-y-6">
+                  <div className="flex items-center gap-4 group">
+                    <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center group-hover:bg-church-gold group-hover:text-white transition-colors duration-300">
+                      <i className="fa-solid fa-mobile-screen text-sm"></i>
+                    </div>
+                    <span className="font-medium text-sm tracking-wide">Watch Live & Archives</span>
+                  </div>
+                  <div className="flex items-center gap-4 group">
+                    <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center group-hover:bg-church-gold group-hover:text-white transition-colors duration-300">
+                      <i className="fa-solid fa-heart text-sm"></i>
+                    </div>
+                    <span className="font-medium text-sm tracking-wide">Easy Mobile Giving</span>
+                  </div>
+                  <div className="flex items-center gap-4 group">
+                    <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center group-hover:bg-church-gold group-hover:text-white transition-colors duration-300">
+                      <i className="fa-solid fa-calendar-check text-sm"></i>
+                    </div>
+                    <span className="font-medium text-sm tracking-wide">Event Registration</span>
+                  </div>
+                  <div className="flex items-center gap-4 group">
+                    <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center group-hover:bg-church-gold group-hover:text-white transition-colors duration-300">
+                      <i className="fa-solid fa-bell text-sm"></i>
+                    </div>
+                    <span className="font-medium text-sm tracking-wide">Push Notifications</span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="pt-8 flex gap-4">
+                <button className="bg-black/30 hover:bg-black/50 border border-white/20 backdrop-blur-md px-6 py-3 rounded-xl flex items-center gap-3 transition-all group">
+                  <i className="fa-brands fa-apple text-2xl"></i>
+                  <div className="text-left">
+                    <div className="text-[9px] uppercase tracking-wider opacity-60">Download on the</div>
+                    <div className="text-sm font-bold">App Store</div>
+                  </div>
+                </button>
+                <button className="bg-black/30 hover:bg-black/50 border border-white/20 backdrop-blur-md px-6 py-3 rounded-xl flex items-center gap-3 transition-all group">
+                  <i className="fa-brands fa-google-play text-2xl"></i>
+                  <div className="text-left">
+                    <div className="text-[9px] uppercase tracking-wider opacity-60">Get it on</div>
+                    <div className="text-sm font-bold">Google Play</div>
+                  </div>
+                </button>
+              </div>
+            </div>
+
+            {/* Phone Mockup Side */}
+            <div className="relative flex justify-center lg:justify-end">
+              <div className="relative w-[300px] h-[600px] bg-black rounded-[3rem] border-8 border-slate-900 shadow-2xl overflow-hidden transform rotate-[-6deg] hover:rotate-0 transition-transform duration-700">
+                {/* Dynamic Island / Notch */}
+                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-7 bg-black rounded-b-2xl z-20"></div>
+
+                {/* Scrolling Screen Content */}
+                <div className="w-full h-full overflow-hidden bg-white">
+                  <img
+                    src="/images/awc-app-preview.png"
+                    alt="AWC App Preview"
+                    className="w-full h-auto object-cover"
+                  />
+                  {/* Overlay Gradient at Bottom */}
+                  <div className="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-black/50 to-transparent"></div>
+                </div>
+              </div>
+
+              {/* Decorative Elements around phone */}
+              <div className="absolute -z-10 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-church-gold/20 rounded-full blur-3xl animate-pulse-slow"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Gallery Section */}
-      <GallerySection />
+      {/* Daily Inspiration Section */}
+      <section className="py-24 relative overflow-hidden bg-[#fafafa]">
+        <div className="absolute top-0 right-0 w-96 h-96 bg-church-gold/5 rounded-full blur-3xl translate-x-1/2 -translate-y-1/2"></div>
+        <div className="absolute bottom-0 left-0 w-96 h-96 bg-church-burgundy/5 rounded-full blur-3xl -translate-x-1/2 translate-y-1/2"></div>
+
+        <div className="max-w-5xl mx-auto px-6 text-center relative z-10">
+          <span className="text-church-gold font-bold uppercase tracking-[0.4em] text-[10px] block mb-6">Daily Inspiration</span>
+
+          <div className="mb-8">
+            <i className="fa-solid fa-quote-left text-4xl text-church-gold/20"></i>
+          </div>
+
+          <h2 className="text-3xl md:text-5xl font-serif italic text-church-burgundy leading-relaxed mb-8">
+            "But they that wait upon the Lord shall renew their strength; they shall mount up with wings as eagles; they shall run, and not be weary; and they shall walk, and not faint."
+          </h2>
+
+          <div className="flex items-center justify-center gap-3 mb-12">
+            <div className="h-px w-12 bg-church-gold/30"></div>
+            <p className="text-slate-500 font-bold uppercase tracking-widest text-xs">Isaiah 40:31</p>
+            <div className="h-px w-12 bg-church-gold/30"></div>
+          </div>
+
+          <div className="flex justify-center gap-4">
+            <button className="bg-white border border-slate-200 hover:border-church-gold text-slate-600 hover:text-church-gold px-6 py-3 rounded-full text-xs font-bold uppercase tracking-widest transition-all shadow-sm hover:shadow-md flex items-center gap-2">
+              <i className="fa-solid fa-share-nodes"></i> Share
+            </button>
+            <Link to="/daily-devotional" className="bg-church-burgundy hover:bg-church-gold text-white px-8 py-3 rounded-full text-xs font-bold uppercase tracking-widest transition-all shadow-lg hover:shadow-xl flex items-center gap-2">
+              <i className="fa-solid fa-book-open"></i> Read Devotional
+            </Link>
+          </div>
+        </div>
+      </section>
 
       {/* Recent Messages Section */}
       <section id="sermons-section" className="py-24 bg-white">

@@ -1,5 +1,7 @@
 
-import React, { useState, useEffect } from 'react';
+
+import * as React from 'react';
+import { useState, useEffect } from 'react';
 import { createClient } from '@supabase/supabase-js';
 import DOMPurify from 'dompurify';
 import { BlogPost } from '../../types';
@@ -256,7 +258,8 @@ const Community: React.FC = () => {
           ))}
         </div>
       </div>
-      );
-    };
+    </div>
+  );
+};
 
-      export default Community;
+export default Community;

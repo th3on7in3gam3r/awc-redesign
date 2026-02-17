@@ -197,10 +197,10 @@ const Ministries: React.FC = () => {
                 Explore Ministries
               </button>
               <a
-                href="/connect"
+                href="/visit"
                 className="bg-white/10 backdrop-blur-sm border border-white/20 text-white hover:bg-white hover:text-church-burgundy px-10 py-4 rounded-full font-bold uppercase tracking-widest text-xs transition-all duration-300 text-center"
               >
-                Contact Us
+                Plan A Visit
               </a>
             </div>
           </div>

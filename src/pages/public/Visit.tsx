@@ -1,8 +1,11 @@
-
-import React from 'react';
+import * as React from 'react';
 import { Button } from '../../components/ui/Button';
 
 const Visit: React.FC = () => {
+    const scrollToForm = () => {
+        document.getElementById('visitor-form-section')?.scrollIntoView({ behavior: 'smooth' });
+    };
+
     return (
         <div className="min-h-screen bg-gray-50">
             {/* Hero Section */}
@@ -18,16 +21,63 @@ const Visit: React.FC = () => {
                 <div className="relative z-10 h-full flex flex-col items-center justify-center text-center px-4">
                     <span className="text-church-gold font-black tracking-[0.4em] uppercase text-xs mb-6 animate-fade-in">Experience AWC</span>
                     <h1 className="text-6xl md:text-8xl font-bold text-white mb-8 serif tracking-tight shadow-sm">Plan Your Visit</h1>
-                    <p className="text-xl md:text-2xl text-gray-200 fnont-light max-w-2xl leading-relaxed mb-10 shimmer">
+                    <p className="text-xl md:text-2xl text-gray-200 font-light max-w-2xl leading-relaxed mb-10 shimmer">
                         We can't wait to meet you! Let us know you're coming, and we'll have a VIP gift ready for you.
                     </p>
-                    <Button className="bg-church-gold hover:bg-white text-white hover:text-church-burgundy px-10 py-5 text-sm font-black uppercase tracking-widest shadow-2xl hover:scale-105 transition-all">
+                    <Button
+                        onClick={scrollToForm}
+                        className="bg-church-gold hover:bg-white text-white hover:text-church-burgundy px-10 py-5 text-sm font-black uppercase tracking-widest shadow-2xl hover:scale-105 transition-all"
+                    >
                         Let Us Know You're Coming
                     </Button>
                 </div>
             </div>
 
             <div className="max-w-7xl mx-auto px-4 pb-20">
+                {/* Visitor Form Section */}
+                <div id="visitor-form-section" className="mb-32 scroll-mt-24">
+                    <div className="bg-white rounded-[3rem] shadow-2xl overflow-hidden border border-gray-100">
+                        <div className="grid lg:grid-cols-12">
+                            <div className="lg:col-span-4 bg-church-burgundy p-12 text-white flex flex-col justify-center relative overflow-hidden">
+                                <div className="absolute top-0 right-0 w-64 h-64 bg-church-gold/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
+                                <h2 className="text-4xl font-bold serif mb-6 relative z-10">You're a VIP</h2>
+                                <p className="text-white/70 mb-8 relative z-10 leading-relaxed">
+                                    When you plan your visit, we'll be ready for you. We'll meet you at the door, help you get your kids checked in, and introduce you to our pastors.
+                                </p>
+                                <div className="space-y-4 relative z-10">
+                                    <div className="flex items-center gap-4">
+                                        <div className="w-8 h-8 rounded-full bg-church-gold/20 flex items-center justify-center text-church-gold">
+                                            <i className="fa-solid fa-gift text-xs"></i>
+                                        </div>
+                                        <span className="text-sm font-bold tracking-wide">Reserved VIP Gift</span>
+                                    </div>
+                                    <div className="flex items-center gap-4">
+                                        <div className="w-8 h-8 rounded-full bg-church-gold/20 flex items-center justify-center text-church-gold">
+                                            <i className="fa-solid fa-parking text-xs"></i>
+                                        </div>
+                                        <span className="text-sm font-bold tracking-wide">Help with Parking</span>
+                                    </div>
+                                    <div className="flex items-center gap-4">
+                                        <div className="w-8 h-8 rounded-full bg-church-gold/20 flex items-center justify-center text-church-gold">
+                                            <i className="fa-solid fa-users-viewfinder text-xs"></i>
+                                        </div>
+                                        <span className="text-sm font-bold tracking-wide">Guided Tour</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="lg:col-span-8 p-4 md:p-8 bg-slate-50">
+                                <div className="w-full h-[800px] rounded-2xl overflow-hidden shadow-inner bg-white border border-slate-200">
+                                    <iframe
+                                        src="https://awc-vault.vercel.app/#/forms/public/f18177a2-683f-4157-86e8-22d490940999"
+                                        className="w-full h-full border-none"
+                                        title="New Visitor Connection"
+                                    ></iframe>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 {/* Service Times & Location */}
                 <div className="grid md:grid-cols-2 gap-12 mb-32">
                     <div className="bg-white rounded-[3rem] p-12 shadow-xl border border-gray-100 flex flex-col justify-center">

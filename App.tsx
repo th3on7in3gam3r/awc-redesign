@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './src/context/AuthContext';
 import MainLayout from './src/layouts/MainLayout';
@@ -16,6 +16,10 @@ import Events from './src/pages/public/Events';
 import Visit from './src/pages/public/Visit';
 import GallerySection from './src/components/ui/GallerySection';
 import Gallery from './src/pages/public/Gallery';
+import DailyDevotional from './src/pages/public/DailyDevotional';
+import Privacy from './src/pages/public/Privacy';
+import Terms from './src/pages/public/Terms';
+import Sitemap from './src/pages/public/Sitemap';
 
 // Auth Pages
 import { MemberLogin } from './src/pages/auth/MemberLogin';
@@ -71,7 +75,11 @@ const App: React.FC = () => {
             <Route path="/events" element={<Events />} />
             <Route path="/community" element={<Community />} />
             <Route path="/gallery" element={<Gallery />} />
+            <Route path="/daily-devotional" element={<DailyDevotional />} />
             <Route path="/visit" element={<Visit />} />
+            <Route path="/privacy" element={<Privacy />} />
+            <Route path="/terms" element={<Terms />} />
+            <Route path="/sitemap" element={<Sitemap />} />
           </Route>
 
           {/* Login Portals */}

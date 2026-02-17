@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import { Link } from 'react-router-dom';
 import { CHURCH_NAME } from '../src/constants';
 
@@ -76,9 +76,9 @@ const Footer: React.FC = () => {
                 <div className="flex flex-col md:flex-row justify-between items-center text-[9px] text-gray-500 font-bold uppercase tracking-[0.3em]">
                     <p>© {new Date().getFullYear()} Anointed Worship Center. For His Glory.</p>
                     <div className="flex gap-6 mt-4 md:mt-0">
-                        <span>Privacy</span>
-                        <span>Terms</span>
-                        <span>Sitemap</span>
+                        <Link to="/privacy" className="hover:text-white transition-colors">Privacy</Link>
+                        <Link to="/terms" className="hover:text-white transition-colors">Terms</Link>
+                        <Link to="/sitemap" className="hover:text-white transition-colors">Sitemap</Link>
                     </div>
                 </div>
             </div>
