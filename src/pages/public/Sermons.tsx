@@ -314,7 +314,7 @@ const Sermons: React.FC = () => {
             </p>
             <div className="flex flex-col sm:flex-row gap-6 justify-center">
               <a
-                href="https://www.youtube.com/@anointedworshipcenter"
+                href="https://www.youtube.com/@anointedworshipcenter/streams"
                 target="_blank"
                 rel="noreferrer"
                 className="bg-church-gold hover:bg-white text-white hover:text-church-burgundy px-12 py-5 rounded-full font-black uppercase tracking-[0.2em] text-xs transition-all duration-500 shadow-xl inline-flex items-center gap-3 justify-center"

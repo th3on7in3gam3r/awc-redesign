@@ -7,7 +7,9 @@ import GallerySection from '../../components/ui/GallerySection';
 const Home: React.FC = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
-  const [sermons, setSermons] = useState<any[]>([]);
+  // Using youtubeService types
+  const [recentVideos, setRecentVideos] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
   const [currentTrack, setCurrentTrack] = useState(0);
   const audioRef = React.useRef<HTMLAudioElement>(null);
 
@@ -25,7 +27,26 @@ const Home: React.FC = () => {
   useEffect(() => {
     setIsVisible(true);
 
-    // Fetch latest sermons from API
+    // Fetch latest videos from YouTube (Live Streams & Uploads)
+    import('../../services/youtubeService').then(({ youtubeService }) => {
+      youtubeService.getLatestVideos(3)
+        .then(videos => {
+          if (videos.length > 0) {
+            setRecentVideos(videos);
+          } else {
+            // Fallback to DB if YouTube fails or is empty
+            fetchDatabaseSermons();
+          }
+          setLoading(false);
+        })
+        .catch(err => {
+          console.error('Error fetching YouTube videos:', err);
+          fetchDatabaseSermons();
+        });
+    });
+  }, []);
+
+  const fetchDatabaseSermons = () => {
     fetch('/api/sermons?published=true')
       .then(res => {
         if (!res.ok) throw new Error('Failed to fetch sermons');
@@ -33,11 +54,15 @@ const Home: React.FC = () => {
       })
       .then(data => {
         if (Array.isArray(data)) {
-          setSermons(data.slice(0, 3));
+          setRecentVideos(data.slice(0, 3));
         }
+        setLoading(false);
       })
-      .catch(err => console.error('Error fetching sermons:', err));
-  }, []);
+      .catch(err => {
+        console.error('Error fetching sermons:', err);
+        setLoading(false);
+      });
+  };
 
   useEffect(() => {
     const audio = audioRef.current;
@@ -57,23 +82,14 @@ const Home: React.FC = () => {
 
   const togglePlay = async () => {
     const audio = audioRef.current;
-    console.log('Toggle play clicked. Audio element:', audio);
-    console.log('Current track:', playlist[currentTrack]);
-
-    if (!audio) {
-      console.error('Audio element not found!');
-      return;
-    }
+    if (!audio) return;
 
     try {
       if (isPlaying) {
-        console.log('Pausing audio...');
         audio.pause();
         setIsPlaying(false);
       } else {
-        console.log('Attempting to play audio from:', audio.src);
         await audio.play();
-        console.log('Audio playing successfully!');
         setIsPlaying(true);
       }
     } catch (error) {
@@ -89,10 +105,7 @@ const Home: React.FC = () => {
     if (audio) {
       audio.src = playlist[next].url;
       if (isPlaying) {
-        audio.play().catch(err => {
-          console.error('Error playing next track:', err);
-          setIsPlaying(false);
-        });
+        audio.play().catch(console.error);
       }
     }
   };
@@ -107,10 +120,7 @@ const Home: React.FC = () => {
         <div className="absolute inset-0 z-0 opacity-20 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')]"></div>
 
         {/* Pastor & First Lady Image */}
-        {/* Mobile: Pushed slightly lower + Stronger Mask */}
-        {/* Desktop: Standard positioning */}
         <div className={`absolute bottom-0 right-0 z-10 h-[50vh] sm:h-[65vh] md:h-[90vh] w-full md:w-auto flex justify-end items-end transition-all duration-1000 delay-300 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`}>
-          {/* Divine Light Effect - Strong Backlight (Desktop/Tablet Only) */}
           <div className="hidden md:block absolute top-[20%] right-[-10%] md:right-[10%] w-[400px] h-[400px] md:w-[800px] md:h-[800px] bg-church-gold/30 rounded-full blur-[100px] animate-pulse-slow"></div>
 
           <img
@@ -120,18 +130,14 @@ const Home: React.FC = () => {
             style={{ filter: 'drop-shadow(0 0 40px rgba(0,0,0,0.5))' }}
           />
 
-          {/* Divine Light Effect - FOREGROUND HIT (Desktop/Tablet Only) */}
-          {/* A soft white glow that blends onto the subjects as if light is hitting them */}
           <div className="hidden md:block absolute top-0 right-0 w-full h-full z-20 pointer-events-none mix-blend-soft-light bg-gradient-to-tr from-transparent via-transparent to-white/40 md:to-white/20"></div>
           <div className="hidden md:block absolute top-[10%] right-[10%] w-[300px] h-[300px] bg-church-gold/20 rounded-full blur-[80px] z-20 mix-blend-screen pointer-events-none"></div>
 
-          {/* Gradient Overlay Key for readability */}
           <div className="absolute inset-0 bg-gradient-to-t from-black via-black/80 to-transparent md:hidden h-full z-20"></div>
           <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-transparent to-transparent md:hidden z-20"></div>
         </div>
 
         {/* Content Container */}
-        {/* Mobile: Align top to avoid image overlap */}
         <div className="container mx-auto px-6 relative z-20 h-full flex flex-col justify-start md:justify-center pt-10 md:pt-0">
           <div className="max-w-3xl mt-12 md:mt-0">
             {/* Animated Welcome Badge */}
@@ -179,7 +185,7 @@ const Home: React.FC = () => {
               </button>
             </div>
 
-            {/* Quick Stats - Vertically stacked on mobile to save width */}
+            {/* Quick Stats */}
             <div className={`flex md:grid md:grid-cols-3 gap-6 md:gap-6 max-w-lg transition-all duration-700 delay-500 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}`}>
               <div className="text-left">
                 <div className="text-xl md:text-4xl font-black text-church-gold mb-1">20+</div>
@@ -198,12 +204,10 @@ const Home: React.FC = () => {
         </div>
 
         {/* Bottom Service Times & Music Player Bar */}
-        {/* Mobile: Pushed slightly up from very bottom, reduced padding */}
-        {/* Bottom Service Times & Music Player Bar - Centered & Slim */}
         <div className="absolute bottom-6 left-1/2 -translate-x-1/2 w-full max-w-6xl px-4 z-30">
           <div className="bg-black/60 backdrop-blur-xl rounded-full py-2 px-4 md:px-8 flex flex-col md:flex-row items-center justify-between gap-4 border border-white/10 shadow-2xl">
 
-            {/* Service Times - Compact */}
+            {/* Service Times */}
             <div className="flex items-center gap-6 md:gap-12 w-full md:w-auto justify-center md:justify-start">
               <div className="flex items-center gap-3">
                 <div className="w-8 h-8 bg-church-gold/20 rounded-full flex items-center justify-center">
@@ -226,7 +230,7 @@ const Home: React.FC = () => {
               </div>
             </div>
 
-            {/* New: Useful Link in the Gap (Get Directions) */}
+            {/* Actions */}
             <a href="https://maps.google.com" target="_blank" rel="noopener noreferrer" className="hidden lg:flex items-center gap-3 group">
               <div className="w-8 h-8 rounded-full border border-white/20 flex items-center justify-center group-hover:bg-white group-hover:text-church-burgundy transition-all">
                 <i className="fa-solid fa-location-dot text-white text-xs group-hover:text-church-burgundy"></i>
@@ -234,7 +238,7 @@ const Home: React.FC = () => {
               <span className="text-[10px] font-bold text-white uppercase tracking-widest group-hover:text-church-gold transition-colors">Get Directions</span>
             </a>
 
-            {/* Music Player - Slimmer & Modern */}
+            {/* Music Player */}
             <div className="flex items-center gap-4 bg-white/5 rounded-full px-5 py-1.5 border border-white/10 w-full md:w-auto justify-center">
               <button
                 onClick={togglePlay}
@@ -247,7 +251,6 @@ const Home: React.FC = () => {
                 <span className="text-[10px] font-bold text-white uppercase tracking-wider truncate max-w-[120px]">
                   {playlist[currentTrack].title}
                 </span>
-                {/* Tiny Audio Bars */}
                 <div className="flex items-center gap-0.5 h-2">
                   {isPlaying ? (
                     <>
@@ -292,8 +295,6 @@ const Home: React.FC = () => {
           }}
         />
       </section>
-
-
 
       {/* Legacy Section */}
       <section className="py-24 bg-white">
@@ -381,9 +382,15 @@ const Home: React.FC = () => {
             </Link>
           </div>
           <div className="grid md:grid-cols-3 gap-10">
-            {sermons.length > 0 ? sermons.map((sermon) => {
+            {recentVideos.length > 0 ? recentVideos.map((video) => {
               // Extract YouTube video ID for thumbnail
+              const videoUrl = video.videoUrl || video.video_url; // Handle both types
+              const title = video.title;
+              const date = video.publishedAt || video.date;
+              const speaker = video.speaker || null;
+
               const getYouTubeThumbnail = (url?: string) => {
+                if (video.thumbnail) return video.thumbnail; // Use provided thumbnail if available
                 if (!url) return 'https://images.unsplash.com/photo-1544427920-c49ccfb85579?auto=format&fit=crop&q=80';
                 const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
                 const match = url.match(regExp);
@@ -399,12 +406,12 @@ const Home: React.FC = () => {
               };
 
               return (
-                <div key={sermon.id} className="group cursor-pointer" onClick={() => sermon.video_url && window.open(sermon.video_url, '_blank')}>
+                <div key={video.id || video.url} className="group cursor-pointer" onClick={() => videoUrl && window.open(videoUrl, '_blank')}>
                   <div className="aspect-video bg-gray-100 rounded-3xl overflow-hidden mb-6 relative">
                     <img
-                      src={getYouTubeThumbnail(sermon.video_url)}
+                      src={getYouTubeThumbnail(videoUrl)}
                       className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                      alt={sermon.title}
+                      alt={title}
                       onError={(e) => {
                         const target = e.target as HTMLImageElement;
                         target.src = 'https://images.unsplash.com/photo-1544427920-c49ccfb85579?auto=format&fit=crop&q=80';
@@ -416,8 +423,11 @@ const Home: React.FC = () => {
                       </div>
                     </div>
                   </div>
-                  <h3 className="text-2xl font-bold text-church-burgundy mb-2 group-hover:text-church-gold transition-colors">{sermon.title}</h3>
-                  <p className="text-slate-400 text-xs font-medium uppercase tracking-widest italic">{sermon.speaker} • {formatDate(sermon.date)}</p>
+                  <h3 className="text-2xl font-bold text-church-burgundy mb-2 group-hover:text-church-gold transition-colors">{title}</h3>
+                  <p className="text-slate-400 text-xs font-medium uppercase tracking-widest italic">
+                    {speaker ? `${speaker} • ` : ''}
+                    {formatDate(date)}
+                  </p>
                 </div>
               );
             }) : (

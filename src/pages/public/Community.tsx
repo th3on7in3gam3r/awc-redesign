@@ -1,6 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { createClient } from '@supabase/supabase-js';
+import DOMPurify from 'dompurify';
 import { BlogPost } from '../../types';
 
 // Initialize Supabase Client
@@ -41,6 +42,7 @@ const Community: React.FC = () => {
         excerpt: post.excerpt || '',
         content: post.content,
         author: post.author,
+        author_image_url: post.author_image_url,
         date: post.published_date, // Map from DB
         category: post.category || 'General',
         imageUrl: post.image_url || 'https://images.unsplash.com/photo-1507676184212-d03ab07a01bf?auto=format&fit=crop&q=80&w=800', // Fallback
@@ -92,7 +94,11 @@ const Community: React.FC = () => {
             <div className="flex items-center gap-4 py-8 border-y border-gray-100 my-10">
               <div className="relative">
                 <div className="absolute inset-0 bg-church-gold/20 rounded-full blur-md"></div>
-                <img src={`https://i.pravatar.cc/150?u=${selectedPost.author}`} className="relative w-14 h-14 rounded-full border-2 border-church-gold shadow-lg" alt={selectedPost.author} />
+                <img
+                  src={selectedPost.author_image_url || `https://i.pravatar.cc/150?u=${selectedPost.author}`}
+                  className="relative w-14 h-14 rounded-full border-2 border-church-gold shadow-lg object-cover"
+                  alt={selectedPost.author}
+                />
               </div>
               <div>
                 <p className="text-church-burgundy font-black uppercase tracking-widest text-xs">Shared By</p>
@@ -100,16 +106,12 @@ const Community: React.FC = () => {
               </div>
             </div>
 
-            <div className="prose prose-lg max-w-none text-slate-600 leading-relaxed space-y-8 pt-4">
-              <p className="first-letter:text-7xl first-letter:font-black first-letter:text-church-burgundy first-letter:mr-3 first-letter:float-left serif">
-                {selectedPost.content}
-              </p>
-              <p>The journey of faith is often navigated through the quiet moments of reflection and the shared experiences of our community. As we grow together at Anointed Worship Center, stories like these serve as milestones of God's grace in our lives.</p>
-              <blockquote className="border-l-4 border-church-gold pl-8 py-4 italic text-2xl serif text-church-burgundy font-medium bg-church-gold/5 rounded-r-3xl">
-                "For where two or three gather in my name, there am I with them."
-              </blockquote>
-              <p>We encourage you to find your own story within these pages and share how God is moving in your world. Your testimony could be the very thing that encourages a brother or sister today.</p>
-            </div>
+            <div
+              className="prose prose-lg max-w-none text-slate-600 leading-relaxed space-y-8 pt-4"
+              dangerouslySetInnerHTML={{
+                __html: DOMPurify.sanitize(selectedPost.content)
+              }}
+            />
 
             {/* Comments Section */}
             <div className="mt-32 pt-20 border-t border-gray-100">
@@ -220,7 +222,10 @@ const Community: React.FC = () => {
 
                 {/* Truncated Excerpt with Read More Button */}
                 <div className="flex-1 mb-8">
-                  <p className="text-slate-500 text-sm line-clamp-2 leading-relaxed font-light mb-4">{post.excerpt}</p>
+                  <p
+                    className="text-slate-500 text-sm line-clamp-2 leading-relaxed font-light mb-4"
+                    dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(post.excerpt) }}
+                  ></p>
                   <button
                     className="flex items-center gap-2 text-church-gold font-black uppercase tracking-widest text-[10px] group/btn"
                     onClick={(e) => {
@@ -235,7 +240,11 @@ const Community: React.FC = () => {
 
                 <div className="flex items-center justify-between pt-6 border-t border-gray-50">
                   <div className="flex items-center gap-3">
-                    <img src={`https://i.pravatar.cc/100?u=${post.author}`} className="w-10 h-10 rounded-xl border-2 border-white shadow-sm" alt={post.author} />
+                    <img
+                      src={post.author_image_url || `https://i.pravatar.cc/100?u=${post.author}`}
+                      className="w-10 h-10 rounded-xl border-2 border-white shadow-sm object-cover"
+                      alt={post.author}
+                    />
                     <span className="text-[11px] font-black uppercase tracking-widest text-slate-400 group-hover:text-church-burgundy transition-colors">{post.author}</span>
                   </div>
                   <div className="w-10 h-10 bg-gray-50 rounded-xl flex items-center justify-center text-church-gold group-hover:bg-church-gold group-hover:text-white transition-all duration-500">
@@ -247,8 +256,7 @@ const Community: React.FC = () => {
           ))}
         </div>
       </div>
-    </div>
-  );
-};
+      );
+    };
 
-export default Community;
+      export default Community;
