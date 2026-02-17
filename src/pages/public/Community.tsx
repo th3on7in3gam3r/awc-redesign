@@ -1,16 +1,70 @@
 
 import React, { useState, useEffect } from 'react';
-import { BLOG_POSTS } from '../../constants';
+import { createClient } from '@supabase/supabase-js';
+import { BlogPost } from '../../types';
+
+// Initialize Supabase Client
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 const Community: React.FC = () => {
-  const [selectedPost, setSelectedPost] = useState<typeof BLOG_POSTS[0] | null>(null);
+  const [posts, setPosts] = useState<BlogPost[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [selectedPost, setSelectedPost] = useState<BlogPost | null>(null);
 
-  // Scroll to top when a post is selected to ensure the user starts at the beginning
+  useEffect(() => {
+    fetchPosts();
+  }, []);
+
+  // Scroll to top when a post is selected
   useEffect(() => {
     if (selectedPost) {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   }, [selectedPost]);
+
+  const fetchPosts = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('community_voices')
+        .select('*')
+        .eq('status', 'published')
+        .order('published_date', { ascending: false });
+
+      if (error) throw error;
+
+      // Map DB fields to UI interface
+      const mappedPosts: BlogPost[] = (data || []).map(post => ({
+        id: post.id,
+        title: post.title,
+        excerpt: post.excerpt || '',
+        content: post.content,
+        author: post.author,
+        date: post.published_date, // Map from DB
+        category: post.category || 'General',
+        imageUrl: post.image_url || 'https://images.unsplash.com/photo-1507676184212-d03ab07a01bf?auto=format&fit=crop&q=80&w=800', // Fallback
+        comments: post.comments || []
+      }));
+
+      setPosts(mappedPosts);
+    } catch (err) {
+      console.error('Error fetching voices:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 pt-32">
+        <div className="flex flex-col items-center gap-4">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-church-gold"></div>
+          <p className="text-church-burgundy font-black uppercase tracking-widest text-xs">Loading Community Voices...</p>
+        </div>
+      </div>
+    );
+  }
 
   if (selectedPost) {
     return (
@@ -60,12 +114,12 @@ const Community: React.FC = () => {
             {/* Comments Section */}
             <div className="mt-32 pt-20 border-t border-gray-100">
               <div className="flex items-center justify-between mb-12">
-                <h3 className="text-3xl font-bold text-church-burgundy serif">Reflections <span className="text-church-gold ml-2 opacity-50 font-light italic">({selectedPost.comments.length})</span></h3>
+                <h3 className="text-3xl font-bold text-church-burgundy serif">Reflections <span className="text-church-gold ml-2 opacity-50 font-light italic">({(selectedPost.comments || []).length})</span></h3>
                 <div className="h-[1px] flex-1 bg-gradient-to-r from-church-gold/30 to-transparent ml-8"></div>
               </div>
 
               <div className="space-y-10 mb-20">
-                {selectedPost.comments.length > 0 ? selectedPost.comments.map(c => (
+                {(selectedPost.comments || []).length > 0 ? selectedPost.comments.map(c => (
                   <div key={c.id} className="flex gap-6 animate-slide-up">
                     <div className="flex-shrink-0">
                       <img
@@ -145,7 +199,7 @@ const Community: React.FC = () => {
         </div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-10">
-          {BLOG_POSTS.map((post) => (
+          {posts.map((post) => (
             <div
               key={post.id}
               className="bg-white rounded-[2.5rem] overflow-hidden shadow-xl border border-gray-100 group cursor-pointer hover:-translate-y-3 transition-all duration-700 h-full flex flex-col"
