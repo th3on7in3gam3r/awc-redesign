@@ -56,7 +56,10 @@ app.use('/uploads', express.static(path.join(__dirname, 'public/uploads'))); // 
 app.use((req, res, next) => {
     const line = `[${new Date().toISOString()}] ${req.method} ${req.url} \n`;
     try {
-        fs.appendFileSync('server_global.log', line);
+        // Only log to file if NOT in Vercel serverless environment
+        if (process.env.VERCEL !== '1') {
+            fs.appendFileSync('server_global.log', line);
+        }
         console.log(`Request: ${req.method} ${req.url} `);
     } catch (e) {
         console.error('Logging failed', e);
@@ -2282,15 +2285,15 @@ app.get('/api/sermons', async (req, res) => {
             queryText += ` AND speaker = $${params.length}`;
         }
 
-        // Year filter (using date column)
+        // Year filter (using preached_at column)
         if (year && year !== 'all') {
             const yearInt = parseInt(year);
             params.push(`${yearInt}-01-01`);
             params.push(`${yearInt + 1}-01-01`);
-            queryText += ` AND date >= $${params.length - 1} AND date < $${params.length}`;
+            queryText += ` AND preached_at >= $${params.length - 1} AND preached_at < $${params.length}`;
         }
 
-        queryText += ` ORDER BY date DESC`;
+        queryText += ` ORDER BY preached_at DESC`;
 
         const { rows } = await query(queryText, params);
         res.json(rows);
