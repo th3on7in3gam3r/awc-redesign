@@ -1,5 +1,17 @@
 // Vercel Serverless Function wrapper for Express app
-import app from '../awc-admin/index.js';
+// Vercel Serverless Function wrapper for Express app
+import express from 'express';
 
-// Export the Express app as a Vercel serverless function
-export default app;
+export default async function handler(req, res) {
+    try {
+        const { default: app } = await import('../awc-admin/index.js');
+        return app(req, res);
+    } catch (error) {
+        console.error('Vercel Bootstrap Error:', error);
+        res.status(500).json({
+            error: 'VERCEL_BOOTSTRAP_ERROR',
+            message: error.message,
+            stack: error.stack
+        });
+    }
+}
