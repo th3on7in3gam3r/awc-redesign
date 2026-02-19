@@ -397,9 +397,19 @@ const Home: React.FC = () => {
                       viewBox={`0 0 256 256`}
                     />
                   </div>
-                  <p className="text-church-burgundy text-[10px] font-black uppercase tracking-widest text-center">
+                  <p className="text-church-burgundy text-[10px] font-black uppercase tracking-widest text-center mb-2">
                     Scan to Download
                   </p>
+                  <div className="border-t border-gray-100 pt-2 text-center">
+                    <a
+                      href="https://awc-connect.vercel.app/welcome"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-church-burgundy hover:text-church-gold text-[9px] font-bold underline transition-colors"
+                    >
+                      awc-connect.vercel.app
+                    </a>
+                  </div>
                 </div>
 
                 {/* Feature List */}

@@ -64,9 +64,12 @@ export const ProjectorScreen: React.FC = () => {
                         </div>
                     ))}
                 </div>
-                <div className="mt-12 flex items-center gap-4 bg-slate-900/50 border border-slate-800 px-8 py-4 rounded-full">
-                    <QrCode className="w-8 h-8 text-church-gold" />
-                    <p className="text-2xl font-medium text-slate-300">Open <span className="text-white font-bold">AWC-Connect</span> App & Enter Code</p>
+                <div className="mt-12 flex flex-col items-center gap-4">
+                    <div className="flex items-center gap-4 bg-slate-900/50 border border-slate-800 px-8 py-4 rounded-full">
+                        <QrCode className="w-8 h-8 text-church-gold" />
+                        <p className="text-2xl font-medium text-slate-300">Open <span className="text-white font-bold">AWC-Connect</span> App & Enter Code</p>
+                    </div>
+                    <p className="text-xl text-slate-500 font-bold tracking-widest mt-2">awc-connect.vercel.app</p>
                 </div>
             </div>
 

@@ -124,7 +124,7 @@ export const CheckInScreen: React.FC = () => {
                     <ol className="text-left text-xl text-white/80 space-y-3 max-w-xl mx-auto">
                         <li className="flex items-start gap-3">
                             <span className="flex-shrink-0 w-8 h-8 bg-church-gold text-church-burgundy rounded-full flex items-center justify-center font-black text-sm">1</span>
-                            <span>Open <strong>AWC-Connect</strong> on your phone or device</span>
+                            <span>Open <strong>AWC-Connect</strong> on your phone or device <span className="text-church-gold font-bold ml-2">(awc-connect.vercel.app)</span></span>
                         </li>
                         <li className="flex items-start gap-3">
                             <span className="flex-shrink-0 w-8 h-8 bg-church-gold text-church-burgundy rounded-full flex items-center justify-center font-black text-sm">2</span>
