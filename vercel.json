@@ -1,12 +1,20 @@
 {
   "rewrites": [
     {
-      "source": "/api/:path*",
-      "destination": "/api"
+      "source": "/app",
+      "destination": "https://awc-connect.vercel.app"
     },
     {
-      "source": "/((?!api/).*)",
-      "destination": "/index.html"
+      "source": "/app/:path*",
+      "destination": "https://awc-connect.vercel.app/:path*"
+    },
+    {
+      "source": "/vault",
+      "destination": "https://awc-vault.vercel.app"
+    },
+    {
+      "source": "/vault/:path*",
+      "destination": "https://awc-vault.vercel.app/:path*"
     }
   ]
 }
