@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { SERVICE_TIMES } from '../../constants';
 import GallerySection from '../../components/ui/GallerySection';
 import QRCode from 'react-qr-code';
+import { GivingModal } from '../../components/giving/GivingModal';
 
 const Home: React.FC = () => {
   const [isVisible, setIsVisible] = useState(false);
@@ -12,6 +13,7 @@ const Home: React.FC = () => {
   const [recentVideos, setRecentVideos] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [currentTrack, setCurrentTrack] = useState(0);
+  const [showGivingModal, setShowGivingModal] = useState(false);
   const audioRef = React.useRef<HTMLAudioElement>(null);
 
   const playlist = [
@@ -113,6 +115,7 @@ const Home: React.FC = () => {
 
   return (
     <div className="flex flex-col w-full">
+      <GivingModal isOpen={showGivingModal} onClose={() => setShowGivingModal(false)} />
       {/* Hero Section - Mobile Optimized */}
       <section className="relative h-screen min-h-[700px] flex items-center overflow-hidden pt-20 bg-[#1a0509]">
         {/* Background Gradient & Effects */}
@@ -183,6 +186,13 @@ const Home: React.FC = () => {
               >
                 <i className="fa-solid fa-play text-[10px]"></i>
                 Watch Sermons
+              </button>
+              <button
+                onClick={() => setShowGivingModal(true)}
+                className="group bg-white/5 backdrop-blur-sm border border-church-gold/40 text-church-gold hover:bg-church-gold hover:text-white px-8 py-3 md:py-4 rounded-full font-bold uppercase tracking-widest text-[10px] md:text-xs transition-all duration-300 flex items-center justify-center gap-3 hover:shadow-lg hover:shadow-church-gold/30"
+              >
+                <i className="fa-solid fa-hand-holding-heart text-[10px]"></i>
+                Give
               </button>
             </div>
 

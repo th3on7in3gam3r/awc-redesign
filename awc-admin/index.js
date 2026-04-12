@@ -2273,6 +2273,11 @@ app.get('/api/sermons', async (req, res) => {
         let queryText = `SELECT * FROM sermons WHERE 1=1`;
         const params = [];
 
+        // Published filter
+        if (published === 'true' || !isAdmin) {
+            queryText += ` AND is_published = true`;
+        }
+
         // Search filter
         if (search) {
             params.push(`%${search}%`);
@@ -2299,7 +2304,7 @@ app.get('/api/sermons', async (req, res) => {
         res.json(rows);
     } catch (error) {
         console.error('❌ Sermons API Error:', error);
-        res.status(500).json({ error: 'Failed to fetch sermons' });
+        res.status(500).json({ error: 'Failed to fetch sermons', detail: error.message, code: error.code });
     }
 });
 
@@ -2926,6 +2931,49 @@ app.delete('/api/me/household/members/:id', auth, async (req, res) => {
 
 // --- Giving/Tithes & Offerings Endpoints ---
 
+// Public: Get active giving options (no auth required - for public giving modal)
+app.get('/api/giving/public/options', async (req, res) => {
+    try {
+        const result = await query(
+            'SELECT id, title, provider, category, url, handle, subtitle, is_primary, sort_order FROM giving_options WHERE is_active = true ORDER BY sort_order ASC'
+        );
+        res.json(result.rows);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: 'Error fetching giving options' });
+    }
+});
+
+// Public: Get giving content (no auth required)
+app.get('/api/giving/public/content', async (req, res) => {
+    try {
+        const result = await query('SELECT * FROM giving_content');
+        const content = {};
+        result.rows.forEach(row => {
+            content[row.key] = row.value;
+        });
+        res.json(content);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: 'Error fetching giving content' });
+    }
+});
+
+// Public: Log giving intent (no auth - tracked anonymously for AWC-Vault insights)
+app.post('/api/giving/public/intent', async (req, res) => {
+    const { giving_option_id, amount, frequency, giver_name } = req.body;
+    try {
+        await query(
+            `INSERT INTO giving_intents (user_id, giving_option_id, amount, frequency, giver_name)
+             VALUES (NULL, $1, $2, $3, $4)`,
+            [giving_option_id, amount || null, frequency || 'one-time', giver_name || null]
+        );
+        res.json({ success: true });
+    } catch (err) {
+        console.error('Error logging public giving intent:', err);
+        res.json({ success: false }); // non-blocking
+    }
+});
 
 // Get all active giving options
 app.get('/api/giving/options', auth, async (req, res) => {
