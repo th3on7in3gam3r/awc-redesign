@@ -7,7 +7,7 @@ const Header: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
-  const logoUrl = "https://anointedworshipcenter.com/logo.png";
+  const logoUrl = "/images/logo.png";
 
   const isHome = location.pathname === '/';
 
