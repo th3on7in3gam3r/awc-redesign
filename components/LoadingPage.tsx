@@ -5,7 +5,7 @@ interface LoadingPageProps {
 }
 
 const LoadingPage: React.FC<LoadingPageProps> = ({ loadingText }) => {
-    const logoUrl = "https://anointedworshipcenter.com/logo.png";
+    const logoUrl = "/images/logo.png";
 
     return (
         <div className="fixed inset-0 z-[110] bg-white flex flex-col items-center justify-center">

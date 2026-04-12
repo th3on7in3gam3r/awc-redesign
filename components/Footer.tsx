@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { CHURCH_NAME } from '../src/constants';
 
 const Footer: React.FC = () => {
-    const logoUrl = "https://anointedworshipcenter.com/logo.png";
+    const logoUrl = "/images/logo.png";
 
     return (
         <footer className="bg-church-burgundy text-white py-16">

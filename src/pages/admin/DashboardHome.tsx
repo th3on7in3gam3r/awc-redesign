@@ -64,7 +64,7 @@ export const DashboardHome = () => {
                 <div className="bg-gradient-to-br from-amber-50 to-orange-50 rounded-2xl p-8 border border-amber-100 shadow-sm">
                     <div className="flex flex-col md:flex-row items-center gap-6">
                         <img
-                            src="https://anointedworshipcenter.com/images/new_welcome.png"
+                            src="/images/pastors-hero.png"
                             alt="Welcome"
                             className="w-full md:w-80 h-56 object-contain rounded-xl"
                         />

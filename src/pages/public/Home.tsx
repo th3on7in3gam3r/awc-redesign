@@ -314,7 +314,7 @@ const Home: React.FC = () => {
             <div className="relative">
               <div className="aspect-video bg-gray-100 rounded-[2rem] overflow-hidden shadow-2xl relative">
                 <img
-                  src="https://anointedworshipcenter.com/images/new_welcome.png"
+                  src="/images/pastors-hero.png"
                   className="w-full h-full object-cover"
                   alt="Church Ministry"
                 />

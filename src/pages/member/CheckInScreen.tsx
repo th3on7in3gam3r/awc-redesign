@@ -71,7 +71,7 @@ export const CheckInScreen: React.FC = () => {
             <div className="relative z-10 mb-12">
                 <div className="w-32 h-32 bg-white rounded-full flex items-center justify-center border-8 border-church-gold/30 shadow-2xl mx-auto mb-6">
                     <img
-                        src="https://anointedworshipcenter.com/logo.png"
+                        src="/images/logo.png"
                         className="w-full h-full object-contain p-4"
                         alt="AWC Logo"
                     />

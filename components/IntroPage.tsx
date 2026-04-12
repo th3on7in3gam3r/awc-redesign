@@ -5,7 +5,7 @@ interface IntroPageProps {
 }
 
 const IntroPage: React.FC<IntroPageProps> = ({ onEnter }) => {
-    const logoUrl = "https://anointedworshipcenter.com/logo.png";
+    const logoUrl = "/images/logo.png";
 
     return (
         <div className="fixed inset-0 z-[100] bg-church-burgundy flex items-center justify-center overflow-hidden">
