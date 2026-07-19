@@ -12,7 +12,7 @@ const pool = new Pool({
 async function createMember() {
     try {
         const email = 'member@anointed.com';
-        const password = 'member123';
+        const password = process.env.PASSWORD ?? '' /* moved to env */;
         const firstName = 'Jane';
         const lastName = 'Member';
         const role = 'member';
