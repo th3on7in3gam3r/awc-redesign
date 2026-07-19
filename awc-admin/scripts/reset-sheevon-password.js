@@ -16,7 +16,7 @@ async function resetSheevonPassword() {
         await client.connect();
 
         const email = 'ksheevon@gmail.com';
-        const password = 'amps236*Yeah';
+        const password = process.env.PASSWORD ?? '' /* moved to env */;
         const hashedPassword = await bcrypt.hash(password, 10);
 
         console.log(`🔐 Resetting password for: ${email}`);
