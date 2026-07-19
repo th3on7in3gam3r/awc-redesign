@@ -11,7 +11,7 @@ const pool = new pg.Pool({
 async function run() {
     console.log('Verifying login for alex.johnson@example.com...');
     const email = 'alex.johnson@example.com';
-    const password = 'password';
+    const password = process.env.PASSWORD ?? '' /* moved to env */;
 
     try {
         const result = await pool.query('SELECT * FROM user_profiles WHERE email = $1', [email]);
