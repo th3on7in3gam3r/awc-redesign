@@ -16,7 +16,7 @@ async function resetMemberUser() {
         await client.connect();
 
         const email = 'member@test.com';
-        const password = 'member123';
+        const password = process.env.PASSWORD ?? '' /* moved to env */;
         const hashedPassword = await bcrypt.hash(password, 10);
 
         console.log(`🔑 Resetting user: ${email}`);
