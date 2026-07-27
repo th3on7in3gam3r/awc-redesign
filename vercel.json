@@ -19,6 +19,10 @@
     {
       "source": "/vault/:path*",
       "destination": "https://awc-vault.vercel.app/:path*"
+    },
+    {
+      "source": "/((?!api/).*)",
+      "destination": "/index.html"
     }
   ]
 }
