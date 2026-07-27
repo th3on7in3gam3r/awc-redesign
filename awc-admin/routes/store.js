@@ -2,6 +2,8 @@ import express from 'express';
 import jwt from 'jsonwebtoken';
 import { query } from '../db.mjs';
 import { PRODUCT_MAP, COLOR_NAMES } from '../data/storeProducts.js';
+import { auth } from '../middleware/auth.js';
+import requireStaff from '../middleware/requireStaff.js';
 
 const router = express.Router();
 
@@ -25,6 +27,18 @@ function optionalAuth(req, _res, next) {
 function emailsMatch(a, b) {
   return String(a || '').trim().toLowerCase() === String(b || '').trim().toLowerCase();
 }
+
+function paymentInfo() {
+  return {
+    cashappHandle: process.env.STORE_CASHAPP_HANDLE || '$AnointedWorshipCenter',
+    zelleTarget: process.env.STORE_ZELLE_TARGET || 'anointedworshipcenter@gmail.com',
+  };
+}
+
+// GET /api/store/payment-info
+router.get('/payment-info', (_req, res) => {
+  res.json(paymentInfo());
+});
 
 // POST /api/store/orders
 router.post('/orders', optionalAuth, async (req, res) => {
@@ -160,6 +174,46 @@ router.post('/orders', optionalAuth, async (req, res) => {
   }
 });
 
+// PATCH /api/store/orders/:id/paid — staff mark paid (mirror for Vault)
+router.patch('/orders/:id/paid', auth, requireStaff, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const paidBy =
+      req.user?.email ||
+      req.user?.name ||
+      req.user?.userId ||
+      'staff';
+
+    const result = await query(
+      `
+      UPDATE store_orders
+      SET status = 'paid',
+          paid_at = NOW(),
+          paid_by = $2,
+          updated_at = NOW()
+      WHERE id = $1
+        AND status IN ('pending_payment', 'awaiting_pickup')
+      RETURNING id, status, paid_at, paid_by, total_cents, payment_method
+      `,
+      [id, String(paidBy)]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ message: 'Order not found or already paid' });
+    }
+
+    res.json({ ok: true, order: result.rows[0] });
+  } catch (err) {
+    console.error('Error marking store order paid:', err);
+    if (err.code === '42703') {
+      return res.status(503).json({
+        message: 'Run add_store_paid_columns migration first.',
+      });
+    }
+    res.status(500).json({ message: 'Error updating order' });
+  }
+});
+
 // GET /api/store/orders/:id?email=
 router.get('/orders/:id', async (req, res) => {
   try {
@@ -171,7 +225,8 @@ router.get('/orders/:id', async (req, res) => {
       SELECT
         id, customer_name, email, phone, fulfillment,
         address_line1, address_line2, city, state, zip,
-        payment_method, status, total_cents, created_at
+        payment_method, status, total_cents, created_at,
+        paid_at, paid_by
       FROM store_orders
       WHERE id = $1
       `,
@@ -184,11 +239,7 @@ router.get('/orders/:id', async (req, res) => {
 
     const order = orderResult.rows[0];
 
-    // Require email match for full order details (protects PII)
     if (!email || !emailsMatch(email, order.email)) {
-      // Allow confirmation page right after checkout without email if
-      // client just placed the order — still require email for privacy on refresh.
-      // Return a soft gate so the UI can ask for email.
       return res.status(401).json({
         requiresEmail: true,
         message: 'Email required to view this order',
@@ -205,6 +256,8 @@ router.get('/orders/:id', async (req, res) => {
       [id]
     );
 
+    const pay = paymentInfo();
+
     res.json({
       id: order.id,
       customer_name: order.customer_name,
@@ -214,13 +267,21 @@ router.get('/orders/:id', async (req, res) => {
       status: order.status,
       total_cents: order.total_cents,
       created_at: order.created_at,
+      paid_at: order.paid_at,
       items: itemsResult.rows,
+      payment_info: pay,
     });
   } catch (err) {
     console.error('Error fetching store order:', err);
     if (err.code === '42P01') {
       return res.status(503).json({
         message: 'Store is not set up yet. Please run the store schema migration.',
+      });
+    }
+    // paid_at column missing — retry without it
+    if (err.code === '42703') {
+      return res.status(503).json({
+        message: 'Run add_store_paid_columns migration first.',
       });
     }
     res.status(500).json({ message: 'Error fetching order' });
