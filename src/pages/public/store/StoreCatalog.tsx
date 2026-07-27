@@ -57,18 +57,18 @@ const StoreCatalog: React.FC = () => {
                 to={`/store/product/${product.id}`}
                 className="group block bg-white rounded-xl overflow-hidden border border-gray-100 shadow-sm hover:shadow-md transition-all duration-300"
               >
-                <div className="aspect-[4/5] overflow-hidden relative bg-slate-100">
+                <div className="aspect-square sm:aspect-[4/5] overflow-hidden relative bg-slate-100">
                   <img
                     src={product.imageUrl}
                     alt={product.name}
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    className="w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
                   />
                 </div>
-                <div className="p-3">
-                  <h3 className="text-sm font-semibold text-church-burgundy serif leading-snug mb-0.5 line-clamp-2">
+                <div className="p-2.5 sm:p-3">
+                  <h3 className="text-xs sm:text-sm font-semibold text-church-burgundy serif leading-snug mb-0.5 line-clamp-2">
                     {product.name}
                   </h3>
-                  <p className="text-church-burgundy font-semibold text-sm">
+                  <p className="text-church-burgundy font-semibold text-xs sm:text-sm">
                     {formatPrice(product.priceCents)}
                   </p>
                 </div>

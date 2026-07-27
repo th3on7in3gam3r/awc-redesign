@@ -60,7 +60,7 @@ export const StoreWelcomeModal: React.FC = () => {
 
   return (
     <div
-      className={`fixed inset-0 z-[100] flex items-center justify-center p-4 transition-opacity duration-300 ${
+      className={`fixed inset-0 z-[100] flex items-center justify-center p-4 pt-[max(1rem,env(safe-area-inset-top))] pb-[max(1rem,env(safe-area-inset-bottom))] transition-opacity duration-300 ${
         visible ? 'opacity-100' : 'opacity-0'
       } bg-black/75 backdrop-blur-sm`}
       role="dialog"
@@ -69,7 +69,7 @@ export const StoreWelcomeModal: React.FC = () => {
       onClick={dismiss}
     >
       <div
-        className={`relative w-full max-w-lg bg-white rounded-2xl overflow-hidden shadow-2xl border border-gray-100 transition-all duration-300 ${
+        className={`relative w-full max-w-lg max-h-[90dvh] overflow-y-auto bg-white rounded-2xl shadow-2xl border border-gray-100 transition-all duration-300 ${
           visible ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-3 scale-[0.98]'
         }`}
         onClick={(e) => e.stopPropagation()}
@@ -77,14 +77,14 @@ export const StoreWelcomeModal: React.FC = () => {
         <button
           type="button"
           onClick={dismiss}
-          className="absolute top-3 right-3 z-20 w-9 h-9 rounded-full bg-black/50 text-white hover:bg-church-gold transition-colors flex items-center justify-center"
+          className="absolute top-3 right-3 z-20 w-10 h-10 rounded-full bg-black/50 text-white hover:bg-church-gold transition-colors flex items-center justify-center"
           aria-label="Close"
         >
           <i className="fa-solid fa-xmark" />
         </button>
 
         {phase === 'choice' ? (
-          <div className="p-8 md:p-10 text-center">
+          <div className="p-6 sm:p-8 md:p-10 text-center">
             <span className="text-church-gold font-bold tracking-[0.3em] uppercase text-[10px] mb-3 block">
               Welcome
             </span>
@@ -98,7 +98,7 @@ export const StoreWelcomeModal: React.FC = () => {
               <button
                 type="button"
                 onClick={startPlayback}
-                className="inline-flex items-center justify-center gap-2 bg-church-burgundy hover:bg-church-gold text-white px-6 py-3 rounded-xl text-[10px] font-bold uppercase tracking-[0.2em] transition-colors"
+                className="inline-flex items-center justify-center gap-2 min-h-[44px] bg-church-burgundy hover:bg-church-gold text-white px-6 py-3 rounded-xl text-[10px] font-bold uppercase tracking-[0.2em] transition-colors"
               >
                 <i className="fa-solid fa-play text-[10px]" />
                 Play Welcome
@@ -106,7 +106,7 @@ export const StoreWelcomeModal: React.FC = () => {
               <button
                 type="button"
                 onClick={dismiss}
-                className="inline-flex items-center justify-center bg-white border border-gray-200 text-slate-600 hover:border-church-burgundy hover:text-church-burgundy px-6 py-3 rounded-xl text-[10px] font-bold uppercase tracking-[0.2em] transition-colors"
+                className="inline-flex items-center justify-center min-h-[44px] bg-white border border-gray-200 text-slate-600 hover:border-church-burgundy hover:text-church-burgundy px-6 py-3 rounded-xl text-[10px] font-bold uppercase tracking-[0.2em] transition-colors"
               >
                 Close
               </button>
@@ -117,7 +117,7 @@ export const StoreWelcomeModal: React.FC = () => {
             <video
               ref={videoRef}
               src={VIDEO_SRC}
-              className="w-full max-h-[70vh] object-contain bg-black"
+              className="w-full max-h-[50vh] md:max-h-[70vh] object-contain bg-black"
               playsInline
               controls
               onEnded={dismiss}

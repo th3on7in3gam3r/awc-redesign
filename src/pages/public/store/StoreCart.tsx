@@ -8,16 +8,18 @@ const StoreCart: React.FC = () => {
 
   if (items.length === 0) {
     return (
-      <div className="bg-gray-50 min-h-screen pt-32 pb-20">
-        <div className="max-w-3xl mx-auto px-6 text-center">
-          <span className="text-church-gold font-black tracking-[0.4em] uppercase text-xs mb-4 block">
+      <div className="bg-gray-50 min-h-screen pt-24 md:pt-28 pb-14">
+        <div className="max-w-3xl mx-auto px-5 md:px-6 text-center">
+          <span className="text-church-gold font-bold tracking-[0.3em] uppercase text-[10px] mb-3 block">
             Your Cart
           </span>
-          <h1 className="text-4xl font-bold text-church-burgundy serif mb-4">Cart is empty</h1>
-          <p className="text-slate-500 mb-10">Browse a ministry collection to add apparel.</p>
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-church-burgundy serif mb-3">
+            Cart is empty
+          </h1>
+          <p className="text-slate-500 text-sm mb-8">Browse a ministry collection to add apparel.</p>
           <Link
             to="/store"
-            className="inline-block bg-church-burgundy text-white px-8 py-4 rounded-xl text-xs font-black uppercase tracking-widest hover:bg-church-gold transition-all"
+            className="inline-flex items-center justify-center min-h-[44px] bg-church-burgundy text-white px-6 py-3 rounded-xl text-[10px] font-bold uppercase tracking-widest hover:bg-church-gold transition-all"
           >
             Go to AWC Store
           </Link>
@@ -27,26 +29,26 @@ const StoreCart: React.FC = () => {
   }
 
   return (
-    <div className="bg-gray-50 min-h-screen pt-32 pb-20">
-      <div className="max-w-4xl mx-auto px-6">
+    <div className="bg-gray-50 min-h-screen pt-24 md:pt-28 pb-14">
+      <div className="max-w-4xl mx-auto px-5 md:px-6">
         <Link
           to="/store"
-          className="mb-10 inline-flex items-center gap-2 text-church-gold font-bold uppercase tracking-widest text-xs group"
+          className="mb-6 md:mb-8 inline-flex items-center gap-2 text-church-gold font-semibold uppercase tracking-widest text-[10px] group"
         >
-          <i className="fa-solid fa-arrow-left group-hover:-translate-x-1 transition-transform" />
+          <i className="fa-solid fa-arrow-left text-[10px] group-hover:-translate-x-0.5 transition-transform" />
           Continue Shopping
         </Link>
 
-        <div className="mb-10">
-          <span className="text-church-gold font-black tracking-[0.4em] uppercase text-xs mb-4 block">
+        <div className="mb-6 md:mb-8">
+          <span className="text-church-gold font-bold tracking-[0.3em] uppercase text-[10px] mb-2 block">
             Your Cart
           </span>
-          <h1 className="text-4xl md:text-5xl font-bold text-church-burgundy serif">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-church-burgundy serif">
             {itemCount} {itemCount === 1 ? 'Item' : 'Items'}
           </h1>
         </div>
 
-        <div className="space-y-4 mb-10">
+        <div className="space-y-3 mb-8">
           {items.map((item) => {
             const product = getProductById(item.productId);
             if (!product) return null;
@@ -54,82 +56,86 @@ const StoreCart: React.FC = () => {
             return (
               <div
                 key={`${item.productId}-${item.size}-${item.color}`}
-                className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 sm:p-6 flex flex-col sm:flex-row gap-4 sm:items-center"
+                className="bg-white rounded-xl border border-gray-100 shadow-sm p-3 sm:p-5 flex flex-row gap-3 sm:gap-4 items-start sm:items-center"
               >
                 <Link
                   to={`/store/product/${product.id}`}
-                  className="w-full sm:w-24 h-40 sm:h-24 rounded-xl overflow-hidden flex-shrink-0 bg-slate-100"
+                  className="w-20 h-20 sm:w-24 sm:h-24 rounded-lg overflow-hidden flex-shrink-0 bg-slate-100"
                 >
                   <img
                     src={product.imageUrl}
                     alt={product.name}
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-cover object-top"
                   />
                 </Link>
                 <div className="flex-1 min-w-0">
                   <Link
                     to={`/store/product/${product.id}`}
-                    className="font-bold text-church-burgundy serif text-lg hover:text-church-gold transition-colors"
+                    className="font-semibold text-church-burgundy serif text-base sm:text-lg hover:text-church-gold transition-colors line-clamp-2"
                   >
                     {product.name}
                   </Link>
-                  <p className="text-slate-400 text-xs uppercase tracking-wider mt-1 flex items-center gap-2">
+                  <p className="text-slate-400 text-[10px] sm:text-xs uppercase tracking-wider mt-1 flex items-center gap-2">
                     {colorMeta && (
                       <span
-                        className="inline-block w-3 h-3 rounded-full ring-1 ring-gray-200"
+                        className="inline-block w-3 h-3 rounded-full ring-1 ring-gray-200 shrink-0"
                         style={{ backgroundColor: colorMeta.hex }}
                         aria-hidden
                       />
                     )}
-                    {colorMeta?.name ?? item.color} · Size: {item.size}
+                    <span className="truncate">
+                      {colorMeta?.name ?? item.color} · Size: {item.size}
+                    </span>
                   </p>
-                  <p className="text-church-burgundy font-bold mt-2">
+                  <p className="text-church-burgundy font-semibold mt-1 text-sm sm:text-base">
                     {formatPrice(product.priceCents)}
                   </p>
-                </div>
-                <div className="flex items-center justify-between sm:justify-end gap-4">
-                  <div className="inline-flex items-center border border-gray-200 rounded-lg overflow-hidden">
+                  <div className="flex items-center justify-between gap-3 mt-3 sm:mt-2">
+                    <div className="inline-flex items-center border border-gray-200 rounded-lg overflow-hidden">
+                      <button
+                        type="button"
+                        onClick={() => updateQty(item.productId, item.size, item.color, item.quantity - 1)}
+                        className="px-3 py-2 text-slate-500 hover:bg-slate-50 min-h-[40px]"
+                      >
+                        −
+                      </button>
+                      <span className="px-3 py-1.5 font-semibold text-sm min-w-[2rem] text-center">
+                        {item.quantity}
+                      </span>
+                      <button
+                        type="button"
+                        onClick={() => updateQty(item.productId, item.size, item.color, item.quantity + 1)}
+                        className="px-3 py-2 text-slate-500 hover:bg-slate-50 min-h-[40px]"
+                      >
+                        +
+                      </button>
+                    </div>
                     <button
                       type="button"
-                      onClick={() => updateQty(item.productId, item.size, item.color, item.quantity - 1)}
-                      className="px-3 py-1.5 text-slate-500 hover:bg-slate-50"
+                      onClick={() => removeItem(item.productId, item.size, item.color)}
+                      className="text-slate-400 hover:text-red-600 text-[10px] font-bold uppercase tracking-wider py-2"
                     >
-                      −
-                    </button>
-                    <span className="px-3 py-1.5 font-bold text-sm min-w-[2rem] text-center">
-                      {item.quantity}
-                    </span>
-                    <button
-                      type="button"
-                      onClick={() => updateQty(item.productId, item.size, item.color, item.quantity + 1)}
-                      className="px-3 py-1.5 text-slate-500 hover:bg-slate-50"
-                    >
-                      +
+                      Remove
                     </button>
                   </div>
-                  <button
-                    type="button"
-                    onClick={() => removeItem(item.productId, item.size, item.color)}
-                    className="text-slate-400 hover:text-red-600 text-xs font-bold uppercase tracking-wider"
-                  >
-                    Remove
-                  </button>
                 </div>
               </div>
             );
           })}
         </div>
 
-        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 sm:p-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
+        <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-5 sm:p-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
-            <p className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400 mb-1">
+            <p className="text-[9px] font-bold uppercase tracking-[0.25em] text-slate-400 mb-1">
               Subtotal
             </p>
-            <p className="text-3xl font-bold text-church-burgundy">{formatPrice(subtotalCents)}</p>
+            <p className="text-2xl sm:text-3xl font-bold text-church-burgundy">
+              {formatPrice(subtotalCents)}
+            </p>
           </div>
           <Link
             to="/store/checkout"
-            className="inline-block text-center bg-church-burgundy hover:bg-church-gold text-white px-10 py-4 rounded-xl text-xs font-black uppercase tracking-widest transition-all"
+            className="inline-flex items-center justify-center w-full sm:w-auto min-h-[44px] text-center bg-church-burgundy hover:bg-church-gold text-white px-8 py-3 rounded-xl text-[10px] font-bold uppercase tracking-widest transition-all"
           >
             Proceed to Checkout
           </Link>

@@ -40,12 +40,12 @@ const StoreProduct: React.FC = () => {
         </Link>
 
         <div className="grid md:grid-cols-2 gap-6 md:gap-8 items-start">
-          <div className="aspect-square max-h-[420px] w-full mx-auto rounded-xl overflow-hidden bg-white shadow-sm border border-gray-100 relative">
+          <div className="aspect-square max-h-[280px] md:max-h-[420px] w-full mx-auto rounded-xl overflow-hidden bg-white shadow-sm border border-gray-100 relative flex items-center justify-center">
             <img
               key={displayImage}
               src={displayImage}
               alt={`${product.name}${selectedColor ? ` — ${selectedColor.name}` : ''}`}
-              className="w-full h-full object-cover animate-[fadeIn_0.35s_ease-out]"
+              className="w-full h-full object-contain animate-[fadeIn_0.35s_ease-out]"
             />
           </div>
 
@@ -86,7 +86,7 @@ const StoreProduct: React.FC = () => {
                       aria-label={c.name}
                       aria-pressed={isSelected}
                       onClick={() => setColor(c.id)}
-                      className={`relative w-8 h-8 rounded-full transition-all ${
+                      className={`relative w-9 h-9 sm:w-8 sm:h-8 rounded-full transition-all ${
                         isSelected
                           ? 'ring-2 ring-offset-1 ring-church-burgundy scale-105'
                           : 'ring-1 ring-gray-200 hover:ring-church-gold'
@@ -118,7 +118,7 @@ const StoreProduct: React.FC = () => {
                     key={s}
                     type="button"
                     onClick={() => setSize(s)}
-                    className={`min-w-[2.5rem] px-3 py-1.5 rounded-md text-[11px] font-semibold uppercase tracking-wider transition-all ${
+                    className={`min-w-[2.75rem] min-h-[44px] sm:min-h-0 px-3 py-2 sm:py-1.5 rounded-md text-[11px] font-semibold uppercase tracking-wider transition-all ${
                       size === s
                         ? 'bg-church-burgundy text-white'
                         : 'bg-white border border-gray-200 text-slate-600 hover:border-church-gold'
@@ -138,7 +138,7 @@ const StoreProduct: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setQuantity((q) => Math.max(1, q - 1))}
-                  className="px-3 py-1.5 text-slate-500 hover:bg-slate-50 text-sm"
+                  className="px-4 py-2.5 sm:px-3 sm:py-1.5 text-slate-500 hover:bg-slate-50 text-sm min-h-[44px] sm:min-h-0"
                 >
                   −
                 </button>
@@ -148,7 +148,7 @@ const StoreProduct: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setQuantity((q) => q + 1)}
-                  className="px-3 py-1.5 text-slate-500 hover:bg-slate-50 text-sm"
+                  className="px-4 py-2.5 sm:px-3 sm:py-1.5 text-slate-500 hover:bg-slate-50 text-sm min-h-[44px] sm:min-h-0"
                 >
                   +
                 </button>
@@ -159,7 +159,7 @@ const StoreProduct: React.FC = () => {
               <button
                 type="button"
                 onClick={handleAdd}
-                className="bg-church-burgundy hover:bg-church-gold text-white px-5 py-2.5 rounded-lg text-[10px] font-bold uppercase tracking-widest transition-all"
+                className="w-full sm:w-auto min-h-[44px] bg-church-burgundy hover:bg-church-gold text-white px-5 py-3 sm:py-2.5 rounded-lg text-[10px] font-bold uppercase tracking-widest transition-all"
               >
                 {added ? 'Added to Cart' : 'Add to Cart'}
               </button>
@@ -169,7 +169,7 @@ const StoreProduct: React.FC = () => {
                   handleAdd();
                   navigate('/store/cart');
                 }}
-                className="bg-white border border-church-burgundy text-church-burgundy hover:bg-church-burgundy hover:text-white px-5 py-2.5 rounded-lg text-[10px] font-bold uppercase tracking-widest transition-all"
+                className="w-full sm:w-auto min-h-[44px] bg-white border border-church-burgundy text-church-burgundy hover:bg-church-burgundy hover:text-white px-5 py-3 sm:py-2.5 rounded-lg text-[10px] font-bold uppercase tracking-widest transition-all"
               >
                 Buy Now
               </button>

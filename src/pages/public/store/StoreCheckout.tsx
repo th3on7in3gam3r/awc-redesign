@@ -74,28 +74,28 @@ const StoreCheckout: React.FC = () => {
   };
 
   return (
-    <div className="bg-gray-50 min-h-screen pt-32 pb-20">
-      <div className="max-w-5xl mx-auto px-6">
+    <div className="bg-gray-50 min-h-screen pt-24 md:pt-28 pb-14 overflow-x-hidden">
+      <div className="max-w-5xl mx-auto px-5 md:px-6">
         <Link
           to="/store/cart"
-          className="mb-10 inline-flex items-center gap-2 text-church-gold font-bold uppercase tracking-widest text-xs group"
+          className="mb-6 md:mb-8 inline-flex items-center gap-2 text-church-gold font-semibold uppercase tracking-widest text-[10px] group"
         >
-          <i className="fa-solid fa-arrow-left group-hover:-translate-x-1 transition-transform" />
+          <i className="fa-solid fa-arrow-left text-[10px] group-hover:-translate-x-0.5 transition-transform" />
           Back to Cart
         </Link>
 
-        <div className="mb-10">
-          <span className="text-church-gold font-black tracking-[0.4em] uppercase text-xs mb-4 block">
+        <div className="mb-6 md:mb-8">
+          <span className="text-church-gold font-bold tracking-[0.3em] uppercase text-[10px] mb-2 block">
             Checkout
           </span>
-          <h1 className="text-4xl md:text-5xl font-bold text-church-burgundy serif">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-church-burgundy serif">
             Complete Your Order
           </h1>
         </div>
 
-        <form onSubmit={handleSubmit} className="grid lg:grid-cols-5 gap-10">
-          <div className="lg:col-span-3 space-y-8">
-            <section className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 sm:p-8 space-y-4">
+        <form onSubmit={handleSubmit} className="grid lg:grid-cols-5 gap-6 lg:gap-10">
+          <div className="lg:col-span-3 space-y-5 md:space-y-8">
+            <section className="bg-white rounded-xl md:rounded-2xl border border-gray-100 shadow-sm p-5 sm:p-8 space-y-4">
               <h2 className="text-lg font-bold text-church-burgundy serif">Contact</h2>
               <div>
                 <label className="block text-[10px] font-black uppercase tracking-[0.3em] text-slate-400 mb-2">
@@ -136,9 +136,9 @@ const StoreCheckout: React.FC = () => {
               </div>
             </section>
 
-            <section className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 sm:p-8 space-y-4">
+            <section className="bg-white rounded-xl md:rounded-2xl border border-gray-100 shadow-sm p-5 sm:p-8 space-y-4">
               <h2 className="text-lg font-bold text-church-burgundy serif">Fulfillment</h2>
-              <div className="flex flex-wrap gap-3">
+              <div className="flex flex-col sm:flex-row flex-wrap gap-2 sm:gap-3">
                 {(
                   [
                     { id: 'pickup', label: 'Pickup at Church' },
@@ -149,7 +149,7 @@ const StoreCheckout: React.FC = () => {
                     key={opt.id}
                     type="button"
                     onClick={() => setFulfillment(opt.id)}
-                    className={`px-5 py-3 rounded-xl text-xs font-black uppercase tracking-wider transition-all ${
+                    className={`w-full sm:w-auto min-h-[44px] px-5 py-3 rounded-xl text-xs font-black uppercase tracking-wider transition-all ${
                       fulfillment === opt.id
                         ? 'bg-church-burgundy text-white'
                         : 'bg-slate-50 text-slate-600 border border-gray-200'
@@ -202,7 +202,7 @@ const StoreCheckout: React.FC = () => {
               )}
             </section>
 
-            <section className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 sm:p-8 space-y-4">
+            <section className="bg-white rounded-xl md:rounded-2xl border border-gray-100 shadow-sm p-5 sm:p-8 space-y-4">
               <h2 className="text-lg font-bold text-church-burgundy serif">Payment</h2>
               <p className="text-slate-500 text-sm font-light">
                 Online card payments are coming soon. Choose how you would like to pay for this order.
@@ -217,7 +217,7 @@ const StoreCheckout: React.FC = () => {
                 ).map((opt) => (
                   <label
                     key={opt.id}
-                    className={`flex items-center gap-3 p-4 rounded-xl border cursor-pointer transition-all ${
+                    className={`flex items-center gap-3 p-4 min-h-[44px] rounded-xl border cursor-pointer transition-all ${
                       paymentMethod === opt.id
                         ? 'border-church-gold bg-church-gold/5'
                         : 'border-gray-200 hover:border-gray-300'
@@ -238,7 +238,7 @@ const StoreCheckout: React.FC = () => {
           </div>
 
           <div className="lg:col-span-2">
-            <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 sm:p-8 sticky top-28 space-y-6">
+            <div className="bg-white rounded-xl md:rounded-2xl border border-gray-100 shadow-sm p-5 sm:p-8 sticky top-24 space-y-5">
               <h2 className="text-lg font-bold text-church-burgundy serif">Order Summary</h2>
               <ul className="space-y-3 text-sm">
                 {items.map((item) => {
@@ -250,10 +250,10 @@ const StoreCheckout: React.FC = () => {
                       key={`${item.productId}-${item.size}-${item.color}`}
                       className="flex justify-between gap-4 text-slate-600"
                     >
-                      <span>
+                      <span className="min-w-0 break-words">
                         {product.name} ({colorMeta?.name ?? item.color}, {item.size}) × {item.quantity}
                       </span>
-                      <span className="font-medium text-church-burgundy whitespace-nowrap">
+                      <span className="font-medium text-church-burgundy whitespace-nowrap shrink-0">
                         {formatPrice(product.priceCents * item.quantity)}
                       </span>
                     </li>
@@ -276,7 +276,7 @@ const StoreCheckout: React.FC = () => {
               <button
                 type="submit"
                 disabled={submitting}
-                className="w-full bg-church-burgundy hover:bg-church-gold disabled:opacity-60 text-white px-8 py-4 rounded-xl text-xs font-black uppercase tracking-widest transition-all"
+                className="w-full min-h-[48px] bg-church-burgundy hover:bg-church-gold disabled:opacity-60 text-white px-8 py-4 rounded-xl text-xs font-black uppercase tracking-widest transition-all"
               >
                 {submitting ? 'Placing Order…' : 'Place Order'}
               </button>
