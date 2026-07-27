@@ -34,6 +34,7 @@ const Footer: React.FC = () => {
                             <li><Link to="/about" className="hover:text-white transition-colors cursor-pointer">Our Beliefs</Link></li>
                             <li><Link to="/sermons" className="hover:text-white transition-colors cursor-pointer">Digital Sermons</Link></li>
                             <li><Link to="/ministries" className="hover:text-white transition-colors cursor-pointer">Leadership Team</Link></li>
+                            <li><Link to="/store" className="hover:text-white transition-colors cursor-pointer">AWC Store</Link></li>
                         </ul>
                     </div>
 

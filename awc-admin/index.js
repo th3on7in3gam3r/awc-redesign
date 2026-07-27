@@ -15,6 +15,7 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import multer from 'multer';
+import storeRoutes from './routes/store.js';
 
 dotenv.config();
 
@@ -72,6 +73,9 @@ app.use((req, res, next) => {
 app.get('/', (req, res) => {
     res.send('Anointed Worship Center API (Church Hub Edition) is running');
 });
+
+// AWC Store
+app.use('/api/store', storeRoutes);
 
 // Health check
 app.get('/api/health', async (req, res) => {

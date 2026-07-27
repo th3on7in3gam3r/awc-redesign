@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Outlet, NavLink } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { LayoutDashboard, Users, Calendar, BookOpen, LogOut, ShieldCheck, Settings, HandHeart } from 'lucide-react';
+import { LayoutDashboard, Users, Calendar, BookOpen, LogOut, ShieldCheck, Settings, HandHeart, ShoppingBag } from 'lucide-react';
 import { OnboardingModal } from '../components/onboarding/OnboardingModal';
 
 const STAFF_ROLES = ['admin', 'pastor', 'staff', 'ministry_leader', 'checkin_team'];
@@ -56,6 +56,7 @@ export const MemberLayout = () => {
         { name: 'Kids & Youth Check-In', path: '/dashboard/kids-checkin', icon: Users },
         { name: 'Sermons', path: '/dashboard/sermons', icon: BookOpen },
         { name: 'Tithes & Offerings', path: '/dashboard/giving', icon: HandHeart },
+        { name: 'AWC Store', path: '/store', icon: ShoppingBag },
     ];
 
     const staffLinks = [

@@ -1,7 +1,14 @@
 import * as React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './src/context/AuthContext';
+import { CartProvider } from './src/context/CartContext';
 import MainLayout from './src/layouts/MainLayout';
+import StoreHub from './src/pages/public/store/StoreHub';
+import StoreCatalog from './src/pages/public/store/StoreCatalog';
+import StoreProduct from './src/pages/public/store/StoreProduct';
+import StoreCart from './src/pages/public/store/StoreCart';
+import StoreCheckout from './src/pages/public/store/StoreCheckout';
+import StoreOrderConfirmation from './src/pages/public/store/StoreOrderConfirmation';
 import { MemberLayout } from './src/layouts/MemberLayout';
 import { StaffLayout } from './src/layouts/StaffLayout';
 import { RoleGate } from './src/components/auth/RoleGate';
@@ -64,6 +71,7 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
 const App: React.FC = () => {
   return (
     <AuthProvider>
+      <CartProvider>
       <BrowserRouter>
         <Routes>
           {/* Public Routes */}
@@ -77,6 +85,12 @@ const App: React.FC = () => {
             <Route path="/gallery" element={<Gallery />} />
             <Route path="/daily-devotional" element={<DailyDevotional />} />
             <Route path="/visit" element={<Visit />} />
+            <Route path="/store" element={<StoreHub />} />
+            <Route path="/store/cart" element={<StoreCart />} />
+            <Route path="/store/checkout" element={<StoreCheckout />} />
+            <Route path="/store/order/:id" element={<StoreOrderConfirmation />} />
+            <Route path="/store/product/:id" element={<StoreProduct />} />
+            <Route path="/store/:ministry" element={<StoreCatalog />} />
             <Route path="/privacy" element={<Privacy />} />
             <Route path="/terms" element={<Terms />} />
             <Route path="/sitemap" element={<Sitemap />} />
@@ -158,6 +172,7 @@ const App: React.FC = () => {
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </BrowserRouter>
+      </CartProvider>
     </AuthProvider>
   );
 };

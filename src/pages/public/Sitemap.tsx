@@ -25,6 +25,8 @@ const Sitemap: React.FC = () => {
             links: [
                 { name: "Events", path: "/events" },
                 { name: "Community Center", path: "/community" },
+                { name: "AWC Store", path: "/store" },
+                { name: "Youth Collection", path: "/store/youth" },
             ]
         },
         {
