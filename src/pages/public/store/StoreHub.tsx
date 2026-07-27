@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { STORE_MINISTRIES } from '../../../data/storeProducts';
+import { STORE_HUB_SCRIPTURE } from '../../../data/storeScriptures';
 import { StoreWelcomeModal } from '../../../components/store/StoreWelcomeModal';
 
 const StoreHub: React.FC = () => {
@@ -111,6 +112,16 @@ const StoreHub: React.FC = () => {
                 </motion.div>
               );
             })}
+          </div>
+
+          <div className="mt-10 md:mt-14 max-w-2xl mx-auto text-center px-2">
+            <i className="fa-solid fa-quote-left text-church-gold/30 text-lg mb-3 block" aria-hidden />
+            <p className="text-church-burgundy serif text-base md:text-lg leading-relaxed italic">
+              “{STORE_HUB_SCRIPTURE.text}”
+            </p>
+            <p className="mt-3 text-[10px] font-bold uppercase tracking-[0.25em] text-church-gold">
+              {STORE_HUB_SCRIPTURE.reference}
+            </p>
           </div>
         </div>
       </section>
