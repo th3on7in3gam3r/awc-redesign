@@ -302,8 +302,8 @@ export const GivingModal: React.FC<GivingModalProps> = ({ isOpen, onClose }) => 
                                         className="flex items-center justify-between gap-3 w-full p-4 rounded-2xl border-2 border-church-burgundy/20 bg-church-burgundy/5 hover:border-church-burgundy hover:shadow-md transition-all"
                                     >
                                         <div>
-                                            <p className="font-bold text-slate-900 text-sm">Digital Contribution Book</p>
-                                            <p className="text-xs text-slate-500">Sign in to view statements and giving history</p>
+                                            <p className="font-bold text-slate-900 text-sm">Financial team ledger</p>
+                                            <p className="text-xs text-slate-500">Treasurer and clerks: open the Digital Contribution Book</p>
                                         </div>
                                         <ExternalLink className="w-4 h-4 text-church-burgundy shrink-0" />
                                     </a>

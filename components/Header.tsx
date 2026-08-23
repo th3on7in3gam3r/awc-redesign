@@ -2,7 +2,6 @@ import * as React from 'react';
 import { useState, useEffect } from 'react';
 import { NavLink, Link, useNavigate, useLocation } from 'react-router-dom';
 import { useCart } from '../src/context/CartContext';
-import { CONTRIBUTION_BOOK_URL } from '../src/constants';
 
 const Header: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -84,21 +83,13 @@ const Header: React.FC = () => {
 
             <div className="flex items-center gap-5 shrink-0">
               <a
-                href={CONTRIBUTION_BOOK_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                title="Digital Contribution Book"
-                className={utilityClass}
-              >
-                Giving
-              </a>
-              <a
                 href="https://awc-vault.vercel.app/#/login"
                 target="_blank"
                 rel="noopener noreferrer"
+                title="Member portal and financial team sign-in"
                 className={utilityClass}
               >
-                Members
+                Sign In
               </a>
               <Link
                 to="/store/cart"
@@ -154,22 +145,13 @@ const Header: React.FC = () => {
             Cart{itemCount > 0 ? ` (${itemCount})` : ''}
           </Link>
           <a
-            href={CONTRIBUTION_BOOK_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            onClick={() => setIsMenuOpen(false)}
-            className="text-[12px] font-semibold uppercase tracking-[0.16em] text-center py-2.5 text-white/85 hover:text-church-gold"
-          >
-            Giving
-          </a>
-          <a
             href="https://awc-vault.vercel.app/#/login"
             target="_blank"
             rel="noopener noreferrer"
             onClick={() => setIsMenuOpen(false)}
             className="text-[12px] font-semibold uppercase tracking-[0.16em] text-center py-2.5 text-white/85 hover:text-church-gold"
           >
-            Members
+            Sign In
           </a>
           <button
             type="button"

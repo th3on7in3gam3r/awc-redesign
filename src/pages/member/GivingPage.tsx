@@ -296,8 +296,8 @@ export const GivingPage: React.FC = () => {
                         className="flex items-center justify-between gap-3 bg-white rounded-2xl p-6 border border-slate-200 hover:border-church-burgundy hover:shadow-md transition-all"
                     >
                         <div>
-                            <h3 className="font-bold text-slate-900">Digital Contribution Book</h3>
-                            <p className="text-sm text-slate-500 mt-1">Sign in to view statements and giving history</p>
+                            <h3 className="font-bold text-slate-900">Financial team ledger</h3>
+                            <p className="text-sm text-slate-500 mt-1">Treasurer and clerks: open the Digital Contribution Book</p>
                         </div>
                         <ExternalLink className="w-4 h-4 text-church-burgundy shrink-0" />
                     </a>
