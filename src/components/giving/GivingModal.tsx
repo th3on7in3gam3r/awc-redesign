@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { X, HandHeart, DollarSign, Info, ChevronDown, ChevronUp, HelpCircle, User } from 'lucide-react';
+import { X, HandHeart, DollarSign, Info, ChevronDown, ChevronUp, HelpCircle, User, ExternalLink } from 'lucide-react';
+import { CONTRIBUTION_BOOK_URL } from '../../constants';
 
 interface GivingOption {
     id: string;
@@ -293,6 +294,19 @@ export const GivingModal: React.FC<GivingModalProps> = ({ isOpen, onClose }) => 
                                             );
                                         })}
                                     </div>
+
+                                    <a
+                                        href={CONTRIBUTION_BOOK_URL}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="flex items-center justify-between gap-3 w-full p-4 rounded-2xl border-2 border-church-burgundy/20 bg-church-burgundy/5 hover:border-church-burgundy hover:shadow-md transition-all"
+                                    >
+                                        <div>
+                                            <p className="font-bold text-slate-900 text-sm">Digital Contribution Book</p>
+                                            <p className="text-xs text-slate-500">Sign in to view statements and giving history</p>
+                                        </div>
+                                        <ExternalLink className="w-4 h-4 text-church-burgundy shrink-0" />
+                                    </a>
                                 </div>
                             )}
 

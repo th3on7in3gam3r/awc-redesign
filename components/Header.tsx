@@ -2,6 +2,7 @@ import * as React from 'react';
 import { useState, useEffect } from 'react';
 import { NavLink, Link, useNavigate, useLocation } from 'react-router-dom';
 import { useCart } from '../src/context/CartContext';
+import { CONTRIBUTION_BOOK_LABEL, CONTRIBUTION_BOOK_URL } from '../src/constants';
 
 const Header: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -79,6 +80,14 @@ const Header: React.FC = () => {
 
             <div className="flex items-center gap-3">
               <a
+                href={CONTRIBUTION_BOOK_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-[9px] font-bold uppercase tracking-[0.25em] text-gray-400 hover:text-white transition-colors"
+              >
+                {CONTRIBUTION_BOOK_LABEL}
+              </a>
+              <a
                 href="https://awc-vault.vercel.app/#/login"
                 target="_blank"
                 rel="noopener noreferrer"
@@ -137,6 +146,15 @@ const Header: React.FC = () => {
           >
             Cart{itemCount > 0 ? ` (${itemCount})` : ''}
           </Link>
+          <a
+            href={CONTRIBUTION_BOOK_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={() => setIsMenuOpen(false)}
+            className="text-xs font-bold uppercase tracking-widest text-center py-2 text-white hover:text-church-gold"
+          >
+            {CONTRIBUTION_BOOK_LABEL}
+          </a>
           <a
             href="https://awc-vault.vercel.app/#/login"
             target="_blank"

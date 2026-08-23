@@ -3,6 +3,8 @@ import { Sermon, Ministry, BlogPost, ChurchEvent } from './types';
 
 export const CHURCH_NAME = "Anointed Worship Center";
 export const TAGLINE = "A Place of Purpose, Power, and Praise";
+export const CONTRIBUTION_BOOK_URL = "https://awc-digital-contribution-book.onrender.com";
+export const CONTRIBUTION_BOOK_LABEL = "Contribution Book";
 
 export const SERVICE_TIMES = [
   { day: "Sundays", time: "10:00 AM", type: "Morning Worship" },

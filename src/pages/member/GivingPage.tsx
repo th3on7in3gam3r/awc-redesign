@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext';
-import { HandHeart, DollarSign, Calendar, Info, HelpCircle, ChevronDown, ChevronUp, Settings } from 'lucide-react';
+import { HandHeart, DollarSign, Calendar, Info, HelpCircle, ChevronDown, ChevronUp, Settings, ExternalLink } from 'lucide-react';
 import { ManageGivingModal } from '../../components/giving/ManageGivingModal';
+import { CONTRIBUTION_BOOK_URL } from '../../constants';
 
 interface GivingOption {
     id: string;
@@ -287,6 +288,19 @@ export const GivingPage: React.FC = () => {
                             );
                         })}
                     </div>
+
+                    <a
+                        href={CONTRIBUTION_BOOK_URL}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center justify-between gap-3 bg-white rounded-2xl p-6 border border-slate-200 hover:border-church-burgundy hover:shadow-md transition-all"
+                    >
+                        <div>
+                            <h3 className="font-bold text-slate-900">Digital Contribution Book</h3>
+                            <p className="text-sm text-slate-500 mt-1">Sign in to view statements and giving history</p>
+                        </div>
+                        <ExternalLink className="w-4 h-4 text-church-burgundy shrink-0" />
+                    </a>
                 </div>
 
                 {/* Right: Info Panel */}
