@@ -328,7 +328,7 @@ const Home: React.FC = () => {
                   <span className="text-church-gold">faith & purpose.</span>
                 </h2>
                 <p className="text-slate-500 text-lg leading-relaxed font-light">
-                  For over two decades, Anointed Worship Center has been a beacon of light in Grace City. We are a multi-generational, diverse family of believers dedicated to the radical love of Christ and the transformation of our community.
+                  For over two decades, Anointed Worship Center has been a beacon of light in Acton, MA. We are a multi-generational, diverse family of believers dedicated to the radical love of Christ and the transformation of our community.
                 </p>
               </div>
               <div className="grid grid-cols-2 gap-8">

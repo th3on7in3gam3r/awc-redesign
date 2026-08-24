@@ -26,7 +26,7 @@ const LEADER_TEAM: TeamMember[] = [
   {
     name: "Pastor Janet Mukarrumongi",
     role: "Pastor (Nalongo)",
-    bio: "Deeply committed to spiritual mentorship and nurturing the next generation of believers in Grace City.",
+    bio: "Deeply committed to spiritual mentorship and nurturing the next generation of believers in Acton, MA.",
     imageUrl: "https://anointedworshipcenter.com/images/pastor-janet.jpeg"
   },
   {

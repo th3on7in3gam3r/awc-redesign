@@ -51,7 +51,7 @@ const IntroPage: React.FC<IntroPageProps> = ({ onEnter }) => {
             </div>
 
             <div className="absolute bottom-12 left-1/2 -translate-x-1/2 text-white/20 text-[9px] font-black uppercase tracking-[0.4em]">
-                Grace City • Established in Faith
+                Acton, MA • Established in Faith
             </div>
         </div>
     );

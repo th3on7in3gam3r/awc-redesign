@@ -230,7 +230,7 @@ export const UserProfile = () => {
                                     name="address"
                                     value={formData.address}
                                     onChange={handleChange}
-                                    placeholder="123 Faith St, Heaven City, GC"
+                                    placeholder="4 School St, Acton, MA 01720"
                                     className="w-full px-4 py-2 rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-church-gold/50"
                                 />
                             </div>
