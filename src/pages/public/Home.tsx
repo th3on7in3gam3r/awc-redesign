@@ -117,11 +117,11 @@ const Home: React.FC = () => {
     <div className="flex flex-col w-full">
       <GivingModal isOpen={showGivingModal} onClose={() => setShowGivingModal(false)} />
       {/* Hero Section - Mobile Optimized */}
-      <section className="relative h-screen min-h-[700px] flex items-center overflow-hidden pt-20 bg-[#1a0509]">
+      <section className="relative min-h-[100svh] flex flex-col overflow-hidden pt-20 bg-[#1a0509]">
         {/* Background Gradient & Effects */}
-        <div className="absolute inset-0 z-0 bg-gradient-to-br from-[#4a0d18] via-[#2a080d] to-black"></div>
-        <div className="absolute inset-0 z-0 bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-church-gold/20 via-transparent to-transparent opacity-60"></div>
-        <div className="absolute inset-0 z-0 opacity-20 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')]"></div>
+        <div className="absolute inset-0 z-0 bg-gradient-to-br from-[#3a0a12] via-[#1a0509] to-black"></div>
+        <div className="absolute inset-0 z-0 bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-church-gold/15 via-transparent to-transparent opacity-50"></div>
+        <div className="absolute inset-0 z-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')]"></div>
 
         {/* Pastor & First Lady Image */}
         <div className={`absolute bottom-0 right-0 z-10 h-[50vh] sm:h-[65vh] md:h-[90vh] w-full md:w-auto flex justify-end items-end transition-all duration-1000 delay-300 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`}>
@@ -142,36 +142,36 @@ const Home: React.FC = () => {
         </div>
 
         {/* Content Container */}
-        <div className="container mx-auto px-6 relative z-20 h-full flex flex-col justify-start md:justify-center pt-10 md:pt-0">
-          <div className="max-w-3xl mt-12 md:mt-0">
+        <div className="container mx-auto px-6 relative z-20 flex-1 flex flex-col justify-center py-10 md:py-12">
+          <div className="max-w-3xl">
             {/* Animated Welcome Badge */}
             <div className={`transition-all duration-700 delay-100 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}`}>
-              <div className="inline-flex items-center gap-3 bg-white/5 backdrop-blur-md border border-white/10 rounded-full px-4 py-1.5 md:px-5 md:py-2 mb-6 sm:mb-8">
-                <div className="w-1.5 h-1.5 md:w-2 md:h-2 bg-church-gold rounded-full animate-pulse"></div>
-                <span className="text-white text-[9px] sm:text-xs font-bold uppercase tracking-widest">Welcome to Anointed Worship Center</span>
+              <div className="inline-flex items-center gap-2.5 bg-white/5 backdrop-blur-sm border border-white/10 rounded-full px-3.5 py-1.5 mb-6 sm:mb-8">
+                <div className="w-1.5 h-1.5 bg-church-gold rounded-full"></div>
+                <span className="text-white/80 text-[11px] font-medium tracking-wide">Welcome to Anointed Worship Center</span>
               </div>
             </div>
 
             {/* Main Heading */}
-            <h1 className={`text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black text-white mb-6 leading-[0.9] md:leading-tight transition-all duration-700 delay-200 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}`}>
-              Where <span className="text-transparent bg-clip-text bg-gradient-to-r from-church-gold to-yellow-200">Everybody</span>
+            <h1 className={`font-serif text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-5 leading-[1.08] transition-all duration-700 delay-200 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}`}>
+              Where <span className="text-church-gold">Everybody</span>
               <br />
-              Is <span className="text-transparent bg-clip-text bg-gradient-to-r from-church-gold to-yellow-200">Somebody</span>
+              Is <span className="text-church-gold">Somebody</span>
             </h1>
 
             {/* Subtitle */}
-            <p className={`text-base sm:text-xl md:text-2xl text-white/80 font-light mb-8 md:mb-10 max-w-sm md:max-w-2xl leading-relaxed transition-all duration-700 delay-300 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}`}>
-              A vibrant community of faith in Grace City. Join us as we grow together in the radical love of Christ.
+            <p className={`text-base sm:text-lg md:text-xl text-white/70 font-light mb-8 md:mb-10 max-w-xl leading-relaxed transition-all duration-700 delay-300 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}`}>
+              A vibrant community of faith in Acton, MA. Join us as we grow together to love Christ the Lord.
             </p>
 
             {/* CTA Buttons */}
-            <div className={`flex flex-col sm:flex-row gap-4 mb-8 md:mb-16 transition-all duration-700 delay-400 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}`}>
+            <div className={`flex flex-col sm:flex-row sm:flex-wrap gap-3 mb-10 md:mb-14 transition-all duration-700 delay-400 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}`}>
               <Link
                 to="/about"
-                className="group bg-church-gold hover:bg-white text-white hover:text-church-burgundy px-8 py-3 md:py-4 rounded-full font-bold uppercase tracking-widest text-[10px] md:text-xs transition-all duration-300 shadow-lg hover:shadow-church-gold/50 flex items-center justify-center gap-3"
+                className="group bg-church-gold hover:bg-white text-church-burgundy px-6 py-3 rounded-lg font-semibold text-[12px] tracking-wide transition-colors flex items-center justify-center gap-2"
               >
                 Plan Your Visit
-                <i className="fa-solid fa-arrow-right text-[10px] group-hover:translate-x-1 transition-transform"></i>
+                <i className="fa-solid fa-arrow-right text-[10px] group-hover:translate-x-0.5 transition-transform"></i>
               </Link>
               <button
                 onClick={() => {
@@ -182,14 +182,14 @@ const Home: React.FC = () => {
                     window.location.href = '/sermons';
                   }
                 }}
-                className="group bg-white/5 backdrop-blur-sm border border-white/20 text-white hover:bg-white hover:text-church-burgundy px-8 py-3 md:py-4 rounded-full font-bold uppercase tracking-widest text-[10px] md:text-xs transition-all duration-300 flex items-center justify-center gap-3 hover:shadow-lg"
+                className="group bg-transparent border border-white/25 text-white hover:bg-white hover:text-church-burgundy px-6 py-3 rounded-lg font-semibold text-[12px] tracking-wide transition-colors flex items-center justify-center gap-2"
               >
                 <i className="fa-solid fa-play text-[10px]"></i>
                 Watch Sermons
               </button>
               <button
                 onClick={() => setShowGivingModal(true)}
-                className="group bg-white/5 backdrop-blur-sm border border-church-gold/40 text-church-gold hover:bg-church-gold hover:text-white px-8 py-3 md:py-4 rounded-full font-bold uppercase tracking-widest text-[10px] md:text-xs transition-all duration-300 flex items-center justify-center gap-3 hover:shadow-lg hover:shadow-church-gold/30"
+                className="group bg-transparent border border-church-gold/50 text-church-gold hover:bg-church-gold hover:text-church-burgundy px-6 py-3 rounded-lg font-semibold text-[12px] tracking-wide transition-colors flex items-center justify-center gap-2"
               >
                 <i className="fa-solid fa-hand-holding-heart text-[10px]"></i>
                 Give
@@ -197,97 +197,92 @@ const Home: React.FC = () => {
             </div>
 
             {/* Quick Stats */}
-            <div className={`flex md:grid md:grid-cols-3 gap-6 md:gap-6 max-w-lg transition-all duration-700 delay-500 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}`}>
+            <div className={`grid grid-cols-3 gap-6 max-w-md transition-all duration-700 delay-500 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}`}>
               <div className="text-left">
-                <div className="text-xl md:text-4xl font-black text-church-gold mb-1">20+</div>
-                <div className="text-white/40 text-[9px] md:text-xs uppercase tracking-wider">Years</div>
+                <div className="text-2xl md:text-3xl font-bold text-church-gold">20+</div>
+                <div className="text-white/45 text-[11px] uppercase tracking-wider mt-1">Years</div>
               </div>
               <div className="text-left">
-                <div className="text-xl md:text-4xl font-black text-church-gold mb-1">500+</div>
-                <div className="text-white/40 text-[9px] md:text-xs uppercase tracking-wider">Members</div>
+                <div className="text-2xl md:text-3xl font-bold text-church-gold">500+</div>
+                <div className="text-white/45 text-[11px] uppercase tracking-wider mt-1">Members</div>
               </div>
-              <div className="text-left hidden xs:block">
-                <div className="text-xl md:text-4xl font-black text-church-gold mb-1">30+</div>
-                <div className="text-white/40 text-[9px] md:text-xs uppercase tracking-wider">Ministries</div>
+              <div className="text-left">
+                <div className="text-2xl md:text-3xl font-bold text-church-gold">30+</div>
+                <div className="text-white/45 text-[11px] uppercase tracking-wider mt-1">Ministries</div>
               </div>
             </div>
           </div>
         </div>
 
         {/* Bottom Service Times & Music Player Bar */}
-        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 w-full max-w-6xl px-4 z-30">
-          <div className="bg-black/60 backdrop-blur-xl rounded-full py-2 px-4 md:px-8 flex flex-col md:flex-row items-center justify-between gap-4 border border-white/10 shadow-2xl">
+        <div className="relative z-30 px-4 pb-4 md:pb-6 mt-auto">
+          <div className="mx-auto max-w-5xl bg-black/40 backdrop-blur-md rounded-2xl px-5 py-3.5 md:px-7 border border-white/10">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 items-center gap-4">
 
             {/* Service Times */}
-            <div className="flex items-center gap-6 md:gap-12 w-full md:w-auto justify-center md:justify-start">
-              <div className="flex items-center gap-3">
-                <div className="w-8 h-8 bg-church-gold/20 rounded-full flex items-center justify-center">
-                  <i className="fa-solid fa-calendar-day text-church-gold text-xs"></i>
+            <div className="flex items-center justify-center sm:justify-start gap-6">
+              <div className="flex items-center gap-2.5">
+                <div className="w-8 h-8 shrink-0 bg-church-gold/15 rounded-full flex items-center justify-center">
+                  <i className="fa-solid fa-calendar-day text-church-gold text-[11px]"></i>
                 </div>
-                <div className="flex flex-col">
-                  <span className="text-[9px] font-bold text-church-gold uppercase tracking-widest">Sun</span>
-                  <span className="text-white text-xs font-bold">10 AM</span>
+                <div className="leading-tight">
+                  <span className="block text-[10px] font-semibold text-church-gold uppercase tracking-wider">Sun</span>
+                  <span className="block text-white text-sm font-semibold">10 AM</span>
                 </div>
               </div>
-              <div className="w-px h-6 bg-white/10 hidden md:block"></div>
-              <div className="flex items-center gap-3">
-                <div className="w-8 h-8 bg-church-gold/20 rounded-full flex items-center justify-center">
-                  <i className="fa-solid fa-book-bible text-church-gold text-xs"></i>
+              <div className="w-px h-7 bg-white/15"></div>
+              <div className="flex items-center gap-2.5">
+                <div className="w-8 h-8 shrink-0 bg-church-gold/15 rounded-full flex items-center justify-center">
+                  <i className="fa-solid fa-book-bible text-church-gold text-[11px]"></i>
                 </div>
-                <div className="flex flex-col">
-                  <span className="text-[9px] font-bold text-church-gold uppercase tracking-widest">Wed</span>
-                  <span className="text-white text-xs font-bold">7 PM</span>
+                <div className="leading-tight">
+                  <span className="block text-[10px] font-semibold text-church-gold uppercase tracking-wider">Wed</span>
+                  <span className="block text-white text-sm font-semibold">7 PM</span>
                 </div>
               </div>
             </div>
 
             {/* Actions */}
-            <a href="https://www.google.com/maps/search/?api=1&query=4+School+St+Acton,+MA+01720" target="_blank" rel="noopener noreferrer" className="hidden lg:flex items-center gap-3 group">
-              <div className="w-8 h-8 rounded-full border border-white/20 flex items-center justify-center group-hover:bg-white group-hover:text-church-burgundy transition-all">
-                <i className="fa-solid fa-location-dot text-white text-xs group-hover:text-church-burgundy"></i>
+            <a href="https://www.google.com/maps/search/?api=1&query=4+School+St+Acton,+MA+01720" target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-2.5 group">
+              <div className="w-8 h-8 shrink-0 rounded-full bg-church-gold/15 flex items-center justify-center group-hover:bg-church-gold transition-colors">
+                <i className="fa-solid fa-location-dot text-church-gold text-[11px] group-hover:text-church-burgundy"></i>
               </div>
-              <span className="text-[10px] font-bold text-white uppercase tracking-widest group-hover:text-church-gold transition-colors">4 SCHOOL ST ACTON, MA</span>
+              <span className="text-[13px] font-semibold text-white/85 group-hover:text-white transition-colors">4 School St, Acton, MA</span>
             </a>
 
             {/* Music Player */}
-            <div className="flex items-center gap-4 bg-white/5 rounded-full px-5 py-1.5 border border-white/10 w-full md:w-auto justify-center">
+            <div className="flex items-center justify-center sm:justify-end gap-3">
               <button
                 onClick={togglePlay}
-                className={`w-8 h-8 rounded-full flex items-center justify-center transition-all shadow-md ${isPlaying ? 'bg-white text-church-burgundy' : 'bg-church-gold text-white'}`}
+                className={`w-8 h-8 shrink-0 rounded-full flex items-center justify-center transition-colors ${isPlaying ? 'bg-white text-church-burgundy' : 'bg-church-gold text-church-burgundy'}`}
+                aria-label={isPlaying ? 'Pause' : 'Play'}
               >
                 <i className={`fa-solid ${isPlaying ? 'fa-pause' : 'fa-play'} text-[10px]`}></i>
               </button>
 
-              <div className="flex flex-col min-w-[120px]">
-                <span className="text-[10px] font-bold text-white uppercase tracking-wider truncate max-w-[120px]">
+              <div className="min-w-0">
+                <span className="block text-[13px] font-semibold text-white whitespace-nowrap">
                   {playlist[currentTrack].title}
                 </span>
-                <div className="flex items-center gap-0.5 h-2">
-                  {isPlaying ? (
-                    <>
-                      <div className="w-0.5 h-1.5 bg-church-gold animate-[bounce_1s_infinite]"></div>
-                      <div className="w-0.5 h-2.5 bg-church-gold animate-[bounce_1.2s_infinite]"></div>
-                      <div className="w-0.5 h-1 bg-church-gold animate-[bounce_0.8s_infinite]"></div>
-                      <span className="text-[8px] text-white/50 font-normal ml-1">Now Playing</span>
-                    </>
-                  ) : (
-                    <span className="text-[8px] text-white/40 font-normal">Paused</span>
-                  )}
-                </div>
+                <span className="block text-[10px] text-white/45">
+                  {isPlaying ? 'Now playing' : 'Paused'}
+                </span>
               </div>
 
               <button
                 onClick={nextTrack}
-                className="w-6 h-6 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center transition-all"
+                className="w-8 h-8 shrink-0 rounded-full border border-white/15 hover:bg-white/10 flex items-center justify-center transition-colors"
+                aria-label="Next track"
               >
-                <i className="fa-solid fa-forward text-[8px] text-white"></i>
+                <i className="fa-solid fa-forward text-[9px] text-white/80"></i>
               </button>
+            </div>
             </div>
           </div>
         </div>
 
         {/* Scroll Indicator */}
-        <div className="absolute bottom-32 left-1/2 -translate-x-1/2 animate-bounce hidden lg:block z-30">
+        <div className="absolute bottom-28 left-8 animate-bounce hidden 2xl:block z-20 pointer-events-none">
           <div className="w-6 h-10 border-2 border-white/30 rounded-full flex items-start justify-center p-2">
             <div className="w-1 h-2 bg-white/50 rounded-full"></div>
           </div>
