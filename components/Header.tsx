@@ -1,15 +1,12 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
-import { NavLink, Link, useNavigate, useLocation } from 'react-router-dom';
-import { useCart } from '../src/context/CartContext';
+import { NavLink, Link, useLocation } from 'react-router-dom';
 import { AWC_VAULT_LOGIN_URL, AWC_CONNECT_URL } from '../src/constants';
 
 const Header: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
-  const navigate = useNavigate();
   const location = useLocation();
-  const { itemCount } = useCart();
   const logoUrl = "/images/logo.png";
 
   const isHome = location.pathname === '/';
@@ -104,25 +101,6 @@ const Header: React.FC = () => {
               >
                 AWC Connect
               </a>
-              <Link
-                to="/store/cart"
-                className="relative text-white/70 hover:text-white transition-colors p-1"
-                aria-label={`Cart${itemCount > 0 ? `, ${itemCount} items` : ''}`}
-              >
-                <i className="fa-solid fa-bag-shopping text-sm" />
-                {itemCount > 0 && (
-                  <span className="absolute -top-1 -right-1.5 min-w-[1.1rem] h-[1.1rem] px-1 bg-church-gold text-church-burgundy text-[8px] font-bold rounded-full flex items-center justify-center">
-                    {itemCount > 99 ? '99+' : itemCount}
-                  </span>
-                )}
-              </Link>
-              <button
-                type="button"
-                onClick={() => navigate('/visit')}
-                className="whitespace-nowrap bg-church-gold text-church-burgundy px-4 py-2 rounded-md text-[11px] font-semibold uppercase tracking-[0.12em] hover:bg-white transition-colors"
-              >
-                Visit Us
-              </button>
             </div>
           </div>
 
@@ -168,23 +146,6 @@ const Header: React.FC = () => {
           >
             AWC Connect
           </a>
-          <Link
-            to="/store/cart"
-            onClick={() => setIsMenuOpen(false)}
-            className={mobileLinkClass}
-          >
-            Cart{itemCount > 0 ? ` (${itemCount})` : ''}
-          </Link>
-          <button
-            type="button"
-            onClick={() => {
-              setIsMenuOpen(false);
-              navigate('/visit');
-            }}
-            className="mt-3 bg-church-gold text-church-burgundy py-3 rounded-md text-[12px] font-semibold uppercase tracking-[0.14em]"
-          >
-            Visit Us
-          </button>
         </div>
       </div>
     </nav>
