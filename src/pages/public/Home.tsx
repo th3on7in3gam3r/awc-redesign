@@ -6,13 +6,26 @@ import GallerySection from '../../components/ui/GallerySection';
 import QRCode from 'react-qr-code';
 import { GivingModal } from '../../components/giving/GivingModal';
 import EventCountdown from '../../components/EventCountdown';
+import { youtubeService, YouTubeVideo } from '../../services/youtubeService';
+
+const formatSermonDate = (dateStr?: string): string => {
+  if (!dateStr) return '';
+  const parsed = new Date(dateStr);
+  if (Number.isNaN(parsed.getTime())) return '';
+  return parsed.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+};
+
+const getVideoThumbnail = (video: YouTubeVideo): string => {
+  if (video.thumbnail) return video.thumbnail;
+  if (video.id) return `https://img.youtube.com/vi/${video.id}/maxresdefault.jpg`;
+  return 'https://images.unsplash.com/photo-1544427920-c49ccfb85579?auto=format&fit=crop&q=80';
+};
 
 const Home: React.FC = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
-  // Using youtubeService types
-  const [recentVideos, setRecentVideos] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [recentVideos, setRecentVideos] = useState<YouTubeVideo[]>([]);
+  const [loadingVideos, setLoadingVideos] = useState(true);
   const [currentTrack, setCurrentTrack] = useState(0);
   const [showGivingModal, setShowGivingModal] = useState(false);
   const audioRef = React.useRef<HTMLAudioElement>(null);
@@ -31,42 +44,12 @@ const Home: React.FC = () => {
   useEffect(() => {
     setIsVisible(true);
 
-    // Fetch latest videos from YouTube (Live Streams & Uploads)
-    import('../../services/youtubeService').then(({ youtubeService }) => {
-      youtubeService.getLatestVideos(3)
-        .then(videos => {
-          if (videos.length > 0) {
-            setRecentVideos(videos);
-          } else {
-            // Fallback to DB if YouTube fails or is empty
-            fetchDatabaseSermons();
-          }
-          setLoading(false);
-        })
-        .catch(err => {
-          console.error('Error fetching YouTube videos:', err);
-          fetchDatabaseSermons();
-        });
-    });
+    youtubeService
+      .getLatestVideos(3)
+      .then((videos) => setRecentVideos(videos))
+      .catch((err) => console.error('Error fetching YouTube videos:', err))
+      .finally(() => setLoadingVideos(false));
   }, []);
-
-  const fetchDatabaseSermons = () => {
-    fetch('/api/sermons?published=true')
-      .then(res => {
-        if (!res.ok) throw new Error('Failed to fetch sermons');
-        return res.json();
-      })
-      .then(data => {
-        if (Array.isArray(data)) {
-          setRecentVideos(data.slice(0, 3));
-        }
-        setLoading(false);
-      })
-      .catch(err => {
-        console.error('Error fetching sermons:', err);
-        setLoading(false);
-      });
-  };
 
   useEffect(() => {
     const audio = audioRef.current;
@@ -311,42 +294,72 @@ const Home: React.FC = () => {
       </section>
 
       {/* Legacy Section */}
-      <section className="py-24 bg-white">
+      <section className="py-20 md:py-28 bg-gradient-to-b from-white via-gray-50/40 to-white">
         <div className="max-w-7xl mx-auto px-6">
-          <div className="grid lg:grid-cols-2 gap-20 items-center">
-            <div className="relative">
-              <div className="aspect-video bg-gray-100 rounded-[2rem] overflow-hidden shadow-2xl relative">
+          <div className="grid lg:grid-cols-12 gap-12 lg:gap-16 items-center">
+            {/* Image */}
+            <div className="lg:col-span-5 relative">
+              <div className="absolute -inset-3 md:-inset-4 bg-church-burgundy/5 rounded-[2rem] -z-10" aria-hidden="true" />
+              <div className="absolute -bottom-4 -right-4 w-32 h-32 bg-church-gold/15 rounded-full blur-3xl -z-10" aria-hidden="true" />
+              <div className="relative overflow-hidden rounded-[1.75rem] shadow-[0_24px_60px_-20px_rgba(64,0,16,0.25)] ring-1 ring-black/5">
                 <img
-                  src="/images/pastors-hero.png"
-                  className="w-full h-full object-cover"
-                  alt="Church Ministry"
+                  src="/images/awc-welcome.png"
+                  className="w-full aspect-[3/2] object-cover object-center"
+                  alt="Welcome to Anointed Worship Center"
                 />
               </div>
             </div>
-            <div className="space-y-10">
-              <div>
-                <div className="flex items-center gap-4 mb-6">
-                  <div className="bg-church-burgundy px-6 py-3 rounded-2xl">
-                    <p className="text-church-gold text-3xl font-black leading-none">20+</p>
-                  </div>
-                  <p className="text-slate-500 text-sm font-bold uppercase tracking-wider">Years of Ministry</p>
+
+            {/* Content */}
+            <div className="lg:col-span-7 space-y-8 md:space-y-10">
+              <div className="space-y-6">
+                <div className="inline-flex items-center gap-3 rounded-full border border-church-burgundy/10 bg-white px-4 py-2 shadow-sm">
+                  <span className="text-church-burgundy text-xl md:text-2xl font-bold serif leading-none">20+</span>
+                  <span className="h-8 w-px bg-church-burgundy/15" aria-hidden="true" />
+                  <span className="text-[11px] font-bold uppercase tracking-[0.22em] text-slate-500">
+                    Years of Ministry
+                  </span>
                 </div>
-                <h2 className="text-5xl md:text-6xl font-bold text-church-burgundy serif italic mb-8">
-                  Building a legacy of <br />
-                  <span className="text-church-gold">faith & purpose.</span>
+
+                <h2 className="text-4xl md:text-5xl lg:text-[3.25rem] font-bold text-church-burgundy serif leading-[1.1]">
+                  Building a legacy of{' '}
+                  <span className="text-church-gold italic">faith &amp; purpose.</span>
                 </h2>
-                <p className="text-slate-500 text-lg leading-relaxed font-light">
-                  For over two decades, Anointed Worship Center has been a beacon of light in Acton, MA. We are a multi-generational, diverse family of believers dedicated to the radical love of Christ and the transformation of our community.
+
+                <p className="text-slate-600 text-base md:text-lg leading-relaxed max-w-2xl">
+                  For over two decades, Anointed Worship Center has been a beacon of light in Acton, MA.
+                  We are a multi-generational, diverse family of believers dedicated to the radical love of
+                  Christ and the transformation of our community.
                 </p>
               </div>
-              <div className="grid grid-cols-2 gap-8">
-                <div className="p-6 bg-gray-50 rounded-2xl border border-gray-100 italic">
-                  <h4 className="text-church-gold font-bold uppercase tracking-widest text-[10px] mb-3">Our Vision</h4>
-                  <p className="text-slate-500 text-xs leading-relaxed">Empowering every believer through the uncompromising Word of God.</p>
+
+              <div className="grid sm:grid-cols-2 gap-4 md:gap-5">
+                <div className="rounded-2xl border border-gray-100 bg-white p-6 md:p-7 shadow-sm">
+                  <div className="flex items-center gap-3 mb-4">
+                    <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-church-gold/10 text-church-gold">
+                      <i className="fa-solid fa-eye text-sm" aria-hidden="true"></i>
+                    </span>
+                    <h3 className="text-[11px] font-bold uppercase tracking-[0.2em] text-church-gold">
+                      Our Vision
+                    </h3>
+                  </div>
+                  <p className="text-slate-600 text-sm md:text-[15px] leading-relaxed">
+                    Empowering every believer through the uncompromising Word of God.
+                  </p>
                 </div>
-                <div className="p-6 bg-gray-50 rounded-2xl border border-gray-100 italic">
-                  <h4 className="text-church-gold font-bold uppercase tracking-widest text-[10px] mb-3">Our Mission</h4>
-                  <p className="text-slate-500 text-xs leading-relaxed">Transforming lives locally and globally through active service.</p>
+
+                <div className="rounded-2xl border border-gray-100 bg-white p-6 md:p-7 shadow-sm">
+                  <div className="flex items-center gap-3 mb-4">
+                    <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-church-gold/10 text-church-gold">
+                      <i className="fa-solid fa-hands-holding-heart text-sm" aria-hidden="true"></i>
+                    </span>
+                    <h3 className="text-[11px] font-bold uppercase tracking-[0.2em] text-church-gold">
+                      Our Mission
+                    </h3>
+                  </div>
+                  <p className="text-slate-600 text-sm md:text-[15px] leading-relaxed">
+                    Transforming lives locally and globally through active service.
+                  </p>
                 </div>
               </div>
             </div>
@@ -544,63 +557,60 @@ const Home: React.FC = () => {
             </Link>
           </div>
           <div className="grid md:grid-cols-3 gap-10">
-            {recentVideos.length > 0 ? recentVideos.map((video) => {
-              // Extract YouTube video ID for thumbnail
-              const videoUrl = video.videoUrl || video.video_url; // Handle both types
-              const title = video.title;
-              const date = video.publishedAt || video.date;
-              const speaker = video.speaker || null;
-
-              const getYouTubeThumbnail = (url?: string) => {
-                if (video.thumbnail) return video.thumbnail; // Use provided thumbnail if available
-                if (!url) return 'https://images.unsplash.com/photo-1544427920-c49ccfb85579?auto=format&fit=crop&q=80';
-                const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
-                const match = url.match(regExp);
-                if (match && match[2].length === 11) {
-                  return `https://img.youtube.com/vi/${match[2]}/maxresdefault.jpg`;
-                }
-                return 'https://images.unsplash.com/photo-1544427920-c49ccfb85579?auto=format&fit=crop&q=80';
-              };
-
-              const formatDate = (dateStr: string) => {
-                const date = new Date(dateStr);
-                return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-              };
-
-              return (
-                <div key={video.id || video.url} className="group cursor-pointer" onClick={() => videoUrl && window.open(videoUrl, '_blank')}>
-                  <div className="aspect-video bg-gray-100 rounded-3xl overflow-hidden mb-6 relative">
-                    <img
-                      src={getYouTubeThumbnail(videoUrl)}
-                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                      alt={title}
-                      onError={(e) => {
-                        const target = e.target as HTMLImageElement;
-                        target.src = 'https://images.unsplash.com/photo-1544427920-c49ccfb85579?auto=format&fit=crop&q=80';
-                      }}
-                    />
-                    <div className="absolute inset-0 bg-church-burgundy/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                      <div className="w-16 h-16 bg-white/90 rounded-full flex items-center justify-center">
-                        <div className="w-0 h-0 border-l-[16px] border-l-church-burgundy border-t-[10px] border-t-transparent border-b-[10px] border-b-transparent ml-1"></div>
-                      </div>
-                    </div>
-                  </div>
-                  <h3 className="text-2xl font-bold text-church-burgundy mb-2 group-hover:text-church-gold transition-colors">{title}</h3>
-                  <p className="text-slate-400 text-xs font-medium uppercase tracking-widest italic">
-                    {speaker ? `${speaker} • ` : ''}
-                    {formatDate(date)}
-                  </p>
-                </div>
-              );
-            }) : (
-              // Fallback while loading
-              [1, 2, 3].map(i => (
+            {loadingVideos ? (
+              [1, 2, 3].map((i) => (
                 <div key={i} className="animate-pulse">
                   <div className="aspect-video bg-gray-200 rounded-3xl mb-6"></div>
                   <div className="h-6 bg-gray-200 rounded mb-2"></div>
                   <div className="h-4 bg-gray-200 rounded w-2/3"></div>
                 </div>
               ))
+            ) : recentVideos.length > 0 ? (
+              recentVideos.map((video) => {
+                const formattedDate = formatSermonDate(video.publishedAt);
+
+                return (
+                  <a
+                    key={video.id}
+                    href={video.videoUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="group block"
+                  >
+                    <div className="aspect-video bg-gray-100 rounded-3xl overflow-hidden mb-6 relative">
+                      <img
+                        src={getVideoThumbnail(video)}
+                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                        alt={video.title}
+                        onError={(e) => {
+                          const target = e.target as HTMLImageElement;
+                          if (video.id) {
+                            target.src = `https://img.youtube.com/vi/${video.id}/hqdefault.jpg`;
+                          }
+                        }}
+                      />
+                      <div className="absolute inset-0 bg-church-burgundy/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                        <div className="w-16 h-16 bg-white/90 rounded-full flex items-center justify-center">
+                          <div className="w-0 h-0 border-l-[16px] border-l-church-burgundy border-t-[10px] border-t-transparent border-b-[10px] border-b-transparent ml-1"></div>
+                        </div>
+                      </div>
+                    </div>
+                    <h3 className="text-xl md:text-2xl font-bold text-church-burgundy mb-2 group-hover:text-church-gold transition-colors line-clamp-2">
+                      {video.title}
+                    </h3>
+                    <p className="text-slate-400 text-xs font-medium uppercase tracking-widest">
+                      {[formattedDate, video.viewCount ? `${youtubeService.formatViewCount(video.viewCount)} views` : '']
+                        .filter(Boolean)
+                        .join(' • ')}
+                    </p>
+                  </a>
+                );
+              })
+            ) : (
+              <div className="md:col-span-3 text-center py-16 bg-gray-50 rounded-3xl border border-gray-100">
+                <p className="text-church-burgundy font-semibold mb-2">Sermons are on the way</p>
+                <p className="text-slate-500 text-sm">Visit our YouTube channel for the latest messages.</p>
+              </div>
             )}
           </div>
         </div>

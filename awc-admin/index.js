@@ -2485,6 +2485,84 @@ app.delete('/api/sermons/:id', auth, async (req, res) => {
     }
 });
 
+const DEFAULT_YOUTUBE_CHANNEL_ID = 'UCd7BAXFftbXrKrjiAniwIEQ';
+
+async function fetchLatestYouTubeVideos(maxResults = 12) {
+    const CHANNEL_ID = process.env.VITE_YOUTUBE_CHANNEL_ID || DEFAULT_YOUTUBE_CHANNEL_ID;
+    const API_KEY = process.env.VITE_YOUTUBE_API_KEY;
+
+    if (API_KEY) {
+        try {
+            const searchUrl = `https://www.googleapis.com/youtube/v3/search?part=snippet&channelId=${CHANNEL_ID}&order=date&type=video&maxResults=${maxResults}&key=${API_KEY}`;
+            const response = await fetch(searchUrl);
+
+            if (response.ok) {
+                const data = await response.json();
+
+                if (data.items?.length) {
+                    const videoIds = data.items.map((item) => item.id.videoId).join(',');
+                    const detailsUrl = `https://www.googleapis.com/youtube/v3/videos?part=snippet,contentDetails,statistics&id=${videoIds}&key=${API_KEY}`;
+                    const detailsResponse = await fetch(detailsUrl);
+
+                    if (detailsResponse.ok) {
+                        const detailsData = await detailsResponse.json();
+                        return detailsData.items.map((video) => ({
+                            id: video.id,
+                            title: video.snippet.title,
+                            description: video.snippet.description,
+                            thumbnail:
+                                video.snippet.thumbnails?.maxres?.url ||
+                                video.snippet.thumbnails?.high?.url ||
+                                video.snippet.thumbnails?.medium?.url,
+                            publishedAt: video.snippet.publishedAt,
+                            viewCount: video.statistics?.viewCount,
+                            videoUrl: `https://www.youtube.com/watch?v=${video.id}`,
+                        }));
+                    }
+                }
+            }
+        } catch (error) {
+            console.error('YouTube API fetch failed, falling back to RSS:', error.message);
+        }
+    }
+
+    const RSS_URL = `https://www.youtube.com/feeds/videos.xml?channel_id=${CHANNEL_ID}`;
+    const rssRes = await fetch(RSS_URL);
+    if (!rssRes.ok) {
+        throw new Error(`Failed to fetch YouTube RSS: ${rssRes.status}`);
+    }
+
+    const { parseStringPromise } = await import('xml2js');
+    const result = await parseStringPromise(await rssRes.text());
+    const entries = (result.feed?.entry || []).slice(0, maxResults);
+
+    return entries.map((entry) => {
+        const videoId = entry['yt:videoId']?.[0];
+        const mediaGroup = entry['media:group']?.[0];
+
+        return {
+            id: videoId,
+            title: entry.title?.[0] || 'Untitled',
+            description: mediaGroup?.['media:description']?.[0] || '',
+            thumbnail: `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`,
+            publishedAt: entry.published?.[0],
+            videoUrl: `https://www.youtube.com/watch?v=${videoId}`,
+        };
+    });
+}
+
+// GET /api/youtube/latest - Public latest videos from the AWC YouTube channel
+app.get('/api/youtube/latest', async (req, res) => {
+    try {
+        const maxResults = Math.min(Math.max(parseInt(req.query.maxResults, 10) || 12, 1), 25);
+        const videos = await fetchLatestYouTubeVideos(maxResults);
+        res.json(videos);
+    } catch (error) {
+        console.error('YouTube latest API error:', error);
+        res.status(500).json({ message: 'Failed to fetch latest YouTube videos', error: error.message });
+    }
+});
+
 // POST /api/sermons/sync - Sync with YouTube RSS (Admin/Cron)
 import { parseStringPromise } from 'xml2js';
 app.post('/api/sermons/sync', auth, async (req, res) => {
@@ -2493,7 +2571,7 @@ app.post('/api/sermons/sync', auth, async (req, res) => {
         return res.status(403).json({ message: 'Access denied' });
     }
 
-    const CHANNEL_ID = 'UCZ1TpjsmG54-sIXk5m-AIbw';
+    const CHANNEL_ID = process.env.VITE_YOUTUBE_CHANNEL_ID || DEFAULT_YOUTUBE_CHANNEL_ID;
     const RSS_URL = `https://www.youtube.com/feeds/videos.xml?channel_id=${CHANNEL_ID}`;
 
     try {

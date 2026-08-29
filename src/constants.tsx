@@ -179,6 +179,9 @@ export const AWC_VAULT_FELLOWSHIP_COOKOUT_URL = `${AWC_VAULT_URL}/#/fellowship-c
 export const AWC_VAULT_EVENTS_API = `${AWC_VAULT_URL}/api/vault?resource=events`;
 export const AWC_CONNECT_URL = 'https://awc-connect.vercel.app/welcome';
 
+export const YOUTUBE_CHANNEL_URL = 'https://www.youtube.com/@KMutegyekiOfficial';
+export const YOUTUBE_CHANNEL_ID = 'UCd7BAXFftbXrKrjiAniwIEQ';
+
 export const FELLOWSHIP_COOKOUT = {
   title: 'AWC Fellowship Cookout',
   eyebrow: 'First Fellowship Event',

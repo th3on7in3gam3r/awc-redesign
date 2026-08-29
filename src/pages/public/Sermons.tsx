@@ -3,6 +3,7 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
 import { youtubeService, YouTubeVideo, LiveStreamInfo } from '../../services/youtubeService';
+import { YOUTUBE_CHANNEL_URL } from '../../constants';
 
 interface Sermon {
   id: string;
@@ -170,7 +171,7 @@ const Sermons: React.FC = () => {
                   : 'Sundays at 10:00 AM EST'}
               </p>
               <a
-                href="https://www.youtube.com/@anointedworshipcenter/streams"
+                href={YOUTUBE_CHANNEL_URL}
                 target="_blank"
                 rel="noreferrer"
                 className="inline-flex items-center gap-3 bg-church-gold hover:bg-white text-white hover:text-church-burgundy px-8 py-4 rounded-full font-black uppercase tracking-[0.2em] text-xs transition-all duration-500 shadow-xl"
@@ -314,7 +315,7 @@ const Sermons: React.FC = () => {
             </p>
             <div className="flex flex-col sm:flex-row gap-6 justify-center">
               <a
-                href="https://www.youtube.com/@anointedworshipcenter/streams"
+                href={YOUTUBE_CHANNEL_URL}
                 target="_blank"
                 rel="noreferrer"
                 className="bg-church-gold hover:bg-white text-white hover:text-church-burgundy px-12 py-5 rounded-full font-black uppercase tracking-[0.2em] text-xs transition-all duration-500 shadow-xl inline-flex items-center gap-3 justify-center"

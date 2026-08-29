@@ -1,4 +1,5 @@
 // YouTube Data API v3 Service for Anointed Worship Center
+import { YOUTUBE_CHANNEL_ID } from '../constants';
 
 interface YouTubeVideo {
     id: string;
@@ -32,7 +33,7 @@ let liveCache: { data: LiveStreamInfo; timestamp: number } | null = null;
 
 // YouTube API configuration
 const API_KEY = import.meta.env.VITE_YOUTUBE_API_KEY;
-const CHANNEL_ID = import.meta.env.VITE_YOUTUBE_CHANNEL_ID || 'UCkWQ0vGh7eKPXSQddo9fGRw'; // Default to AWC channel
+const CHANNEL_ID = import.meta.env.VITE_YOUTUBE_CHANNEL_ID || YOUTUBE_CHANNEL_ID;
 
 class YouTubeService {
     private baseUrl = 'https://www.googleapis.com/youtube/v3';
@@ -158,6 +159,19 @@ class YouTubeService {
         // Check cache first
         if (videosCache && Date.now() - videosCache.timestamp < CACHE_DURATION.VIDEOS) {
             return videosCache.data.slice(0, maxResults);
+        }
+
+        try {
+            const response = await fetch(`/api/youtube/latest?maxResults=${maxResults}`);
+            if (response.ok) {
+                const videos = await response.json();
+                if (Array.isArray(videos) && videos.length > 0) {
+                    videosCache = { data: videos, timestamp: Date.now() };
+                    return videos.slice(0, maxResults);
+                }
+            }
+        } catch (error) {
+            console.warn('Server YouTube feed unavailable, trying client API:', error);
         }
 
         if (!API_KEY) {
