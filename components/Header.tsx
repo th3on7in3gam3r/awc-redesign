@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
 import { NavLink, Link, useLocation } from 'react-router-dom';
-import { AWC_VAULT_LOGIN_URL, AWC_CONNECT_URL } from '../src/constants';
+import { AWC_VAULT_LOGIN_URL, AWC_VAULT_MEMBER_SETUP_URL, AWC_CONNECT_URL } from '../src/constants';
 
 const Header: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -93,6 +93,14 @@ const Header: React.FC = () => {
                 AWC Vault
               </a>
               <a
+                href={AWC_VAULT_MEMBER_SETUP_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="whitespace-nowrap text-[10px] font-medium text-church-gold hover:text-church-gold/80 transition-colors"
+              >
+                Need help creating an account?
+              </a>
+              <a
                 href={AWC_CONNECT_URL}
                 target="_blank"
                 rel="noopener noreferrer"
@@ -136,6 +144,15 @@ const Header: React.FC = () => {
             className={mobileLinkClass}
           >
             AWC Vault
+          </a>
+          <a
+            href={AWC_VAULT_MEMBER_SETUP_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={() => setIsMenuOpen(false)}
+            className="text-[11px] font-medium text-center py-2 text-church-gold hover:text-church-gold/80 transition-colors"
+          >
+            Need help creating an account?
           </a>
           <a
             href={AWC_CONNECT_URL}

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Link } from 'react-router-dom';
-import { CHURCH_NAME } from '../src/constants';
+import { CHURCH_NAME, AWC_VAULT_LOGIN_URL, AWC_VAULT_MEMBER_SETUP_URL } from '../src/constants';
 
 const Footer: React.FC = () => {
     const logoUrl = "/images/logo.png";
@@ -37,12 +37,22 @@ const Footer: React.FC = () => {
                             <li><Link to="/store" className="hover:text-white transition-colors cursor-pointer">AWC Store</Link></li>
                             <li>
                                 <a
-                                    href="https://awc-vault.vercel.app/#/login"
+                                    href={AWC_VAULT_LOGIN_URL}
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     className="hover:text-white transition-colors cursor-pointer"
                                 >
                                     Sign In
+                                </a>
+                            </li>
+                            <li>
+                                <a
+                                    href={AWC_VAULT_MEMBER_SETUP_URL}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="hover:text-church-gold transition-colors cursor-pointer"
+                                >
+                                    Need help creating an account?
                                 </a>
                             </li>
                         </ul>
