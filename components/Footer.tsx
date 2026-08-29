@@ -52,7 +52,7 @@ const Footer: React.FC = () => {
                                     rel="noopener noreferrer"
                                     className="hover:text-church-gold transition-colors cursor-pointer"
                                 >
-                                    Need help creating an account?
+                                    Create account help
                                 </a>
                             </li>
                         </ul>

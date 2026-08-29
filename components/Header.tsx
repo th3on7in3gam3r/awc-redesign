@@ -83,23 +83,40 @@ const Header: React.FC = () => {
             <span className="h-4 w-px bg-white/20 shrink-0" aria-hidden="true" />
 
             <div className="flex items-center gap-5 shrink-0">
-              <a
-                href={AWC_VAULT_LOGIN_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                title="AWC Vault — staff and church operations sign-in"
-                className={utilityClass}
-              >
-                AWC Vault
-              </a>
-              <a
-                href={AWC_VAULT_MEMBER_SETUP_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="whitespace-nowrap text-[10px] font-medium text-church-gold hover:text-church-gold/80 transition-colors"
-              >
-                Need help creating an account?
-              </a>
+              <div className="relative group">
+                <button
+                  type="button"
+                  title="AWC Vault — staff and church operations"
+                  className={`${utilityClass} inline-flex items-center gap-1.5`}
+                  aria-haspopup="true"
+                >
+                  AWC Vault
+                  <i className="fa-solid fa-chevron-down text-[8px] opacity-60" aria-hidden="true"></i>
+                </button>
+                <div
+                  className="invisible absolute left-1/2 top-full z-50 mt-2 w-48 -translate-x-1/2 rounded-lg border border-church-gold/25 bg-church-burgundy py-1.5 opacity-0 shadow-lg transition-all duration-150 group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100"
+                  role="menu"
+                >
+                  <a
+                    href={AWC_VAULT_LOGIN_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    role="menuitem"
+                    className="block px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.12em] text-white/80 hover:bg-white/5 hover:text-church-gold transition-colors"
+                  >
+                    Sign in
+                  </a>
+                  <a
+                    href={AWC_VAULT_MEMBER_SETUP_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    role="menuitem"
+                    className="block px-4 py-2 text-[11px] font-medium text-church-gold/90 hover:bg-white/5 hover:text-church-gold transition-colors"
+                  >
+                    Create account help
+                  </a>
+                </div>
+              </div>
               <a
                 href={AWC_CONNECT_URL}
                 target="_blank"
@@ -150,9 +167,9 @@ const Header: React.FC = () => {
             target="_blank"
             rel="noopener noreferrer"
             onClick={() => setIsMenuOpen(false)}
-            className="text-[11px] font-medium text-center py-2 text-church-gold hover:text-church-gold/80 transition-colors"
+            className="text-[10px] font-medium text-center py-1.5 text-church-gold/80 hover:text-church-gold transition-colors"
           >
-            Need help creating an account?
+            Create account help
           </a>
           <a
             href={AWC_CONNECT_URL}
