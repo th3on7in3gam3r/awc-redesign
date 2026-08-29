@@ -33,7 +33,7 @@ let liveCache: { data: LiveStreamInfo; timestamp: number } | null = null;
 
 // YouTube API configuration
 const API_KEY = import.meta.env.VITE_YOUTUBE_API_KEY;
-const CHANNEL_ID = import.meta.env.VITE_YOUTUBE_CHANNEL_ID || YOUTUBE_CHANNEL_ID;
+const CHANNEL_ID = YOUTUBE_CHANNEL_ID;
 
 class YouTubeService {
     private baseUrl = 'https://www.googleapis.com/youtube/v3';
