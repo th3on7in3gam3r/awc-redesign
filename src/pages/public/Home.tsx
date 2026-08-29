@@ -1,0 +1,612 @@
+import * as React from 'react';
+import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import { SERVICE_TIMES } from '../../constants';
+import GallerySection from '../../components/ui/GallerySection';
+import QRCode from 'react-qr-code';
+import { GivingModal } from '../../components/giving/GivingModal';
+import EventCountdown from '../../components/EventCountdown';
+
+const Home: React.FC = () => {
+  const [isVisible, setIsVisible] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(false);
+  // Using youtubeService types
+  const [recentVideos, setRecentVideos] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [currentTrack, setCurrentTrack] = useState(0);
+  const [showGivingModal, setShowGivingModal] = useState(false);
+  const audioRef = React.useRef<HTMLAudioElement>(null);
+
+  const playlist = [
+    {
+      title: "Everybody Is Somebody",
+      url: "/music/everybody-is-somebody.mp3"
+    },
+    {
+      title: "Reign in This House",
+      url: "/music/reign-in-this-house.mp3"
+    }
+  ];
+
+  useEffect(() => {
+    setIsVisible(true);
+
+    // Fetch latest videos from YouTube (Live Streams & Uploads)
+    import('../../services/youtubeService').then(({ youtubeService }) => {
+      youtubeService.getLatestVideos(3)
+        .then(videos => {
+          if (videos.length > 0) {
+            setRecentVideos(videos);
+          } else {
+            // Fallback to DB if YouTube fails or is empty
+            fetchDatabaseSermons();
+          }
+          setLoading(false);
+        })
+        .catch(err => {
+          console.error('Error fetching YouTube videos:', err);
+          fetchDatabaseSermons();
+        });
+    });
+  }, []);
+
+  const fetchDatabaseSermons = () => {
+    fetch('/api/sermons?published=true')
+      .then(res => {
+        if (!res.ok) throw new Error('Failed to fetch sermons');
+        return res.json();
+      })
+      .then(data => {
+        if (Array.isArray(data)) {
+          setRecentVideos(data.slice(0, 3));
+        }
+        setLoading(false);
+      })
+      .catch(err => {
+        console.error('Error fetching sermons:', err);
+        setLoading(false);
+      });
+  };
+
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    const handleEnded = () => {
+      // Auto-play next track
+      const nextTrack = (currentTrack + 1) % playlist.length;
+      setCurrentTrack(nextTrack);
+      audio.src = playlist[nextTrack].url;
+      audio.play();
+    };
+
+    audio.addEventListener('ended', handleEnded);
+    return () => audio.removeEventListener('ended', handleEnded);
+  }, [currentTrack]);
+
+  const togglePlay = async () => {
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    try {
+      if (isPlaying) {
+        audio.pause();
+        setIsPlaying(false);
+      } else {
+        await audio.play();
+        setIsPlaying(true);
+      }
+    } catch (error) {
+      console.error('Audio playback error:', error);
+      setIsPlaying(false);
+    }
+  };
+
+  const nextTrack = () => {
+    const next = (currentTrack + 1) % playlist.length;
+    setCurrentTrack(next);
+    const audio = audioRef.current;
+    if (audio) {
+      audio.src = playlist[next].url;
+      if (isPlaying) {
+        audio.play().catch(console.error);
+      }
+    }
+  };
+
+  return (
+    <div className="flex flex-col w-full">
+      <GivingModal isOpen={showGivingModal} onClose={() => setShowGivingModal(false)} />
+      {/* Hero Section - Mobile Optimized */}
+      <section className="relative min-h-[100svh] flex flex-col overflow-hidden pt-20 bg-[#1a0509]">
+        {/* Background Gradient & Effects */}
+        <div className="absolute inset-0 z-0 bg-gradient-to-br from-[#3a0a12] via-[#1a0509] to-black"></div>
+        <div className="absolute inset-0 z-0 bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-church-gold/15 via-transparent to-transparent opacity-50"></div>
+        <div className="absolute inset-0 z-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')]"></div>
+
+        {/* Pastor & First Lady Image */}
+        <div className={`absolute bottom-0 right-0 z-10 h-[50vh] sm:h-[65vh] md:h-[90vh] w-full md:w-auto flex justify-end items-end transition-all duration-1000 delay-300 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`}>
+          <div className="hidden md:block absolute top-[20%] right-[-10%] md:right-[10%] w-[400px] h-[400px] md:w-[800px] md:h-[800px] bg-church-gold/30 rounded-full blur-[100px] animate-pulse-slow"></div>
+
+          <img
+            src="/images/pastors-hero-transparent.png"
+            alt="Pastor & First Lady"
+            className="h-full w-auto object-contain object-bottom drop-shadow-2xl relative z-10"
+            style={{ filter: 'drop-shadow(0 0 40px rgba(0,0,0,0.5))' }}
+          />
+
+          <div className="hidden md:block absolute top-0 right-0 w-full h-full z-20 pointer-events-none mix-blend-soft-light bg-gradient-to-tr from-transparent via-transparent to-white/40 md:to-white/20"></div>
+          <div className="hidden md:block absolute top-[10%] right-[10%] w-[300px] h-[300px] bg-church-gold/20 rounded-full blur-[80px] z-20 mix-blend-screen pointer-events-none"></div>
+
+          <div className="absolute inset-0 bg-gradient-to-t from-black via-black/80 to-transparent md:hidden h-full z-20"></div>
+          <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-transparent to-transparent md:hidden z-20"></div>
+        </div>
+
+        {/* Content Container */}
+        <div className="container mx-auto px-6 relative z-20 flex-1 flex flex-col justify-center py-10 md:py-12">
+          <div className="max-w-3xl">
+            {/* Animated Welcome Badge */}
+            <div className={`transition-all duration-700 delay-100 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}`}>
+              <div className="inline-flex items-center gap-2.5 bg-white/5 backdrop-blur-sm border border-white/10 rounded-full px-3.5 py-1.5 mb-6 sm:mb-8">
+                <div className="w-1.5 h-1.5 bg-church-gold rounded-full"></div>
+                <span className="text-white/80 text-[11px] font-medium tracking-wide">Welcome to Anointed Worship Center</span>
+              </div>
+            </div>
+
+            {/* Main Heading */}
+            <h1 className={`font-serif text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-5 leading-[1.08] transition-all duration-700 delay-200 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}`}>
+              Where <span className="text-church-gold">Everybody</span>
+              <br />
+              Is <span className="text-church-gold">Somebody</span>
+            </h1>
+
+            {/* Subtitle */}
+            <p className={`text-base sm:text-lg md:text-xl text-white/70 font-light mb-8 md:mb-10 max-w-xl leading-relaxed transition-all duration-700 delay-300 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}`}>
+              A vibrant community of faith in Acton, MA. Join us as we grow together to love Christ the Lord.
+            </p>
+
+            {/* CTA Buttons */}
+            <div className={`flex flex-col sm:flex-row sm:flex-wrap gap-3 mb-10 md:mb-14 transition-all duration-700 delay-400 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}`}>
+              <Link
+                to="/about"
+                className="group bg-church-gold hover:bg-white text-church-burgundy px-6 py-3 rounded-lg font-semibold text-[12px] tracking-wide transition-colors flex items-center justify-center gap-2"
+              >
+                Plan Your Visit
+                <i className="fa-solid fa-arrow-right text-[10px] group-hover:translate-x-0.5 transition-transform"></i>
+              </Link>
+              <button
+                onClick={() => {
+                  const sermonSection = document.getElementById('sermons-section');
+                  if (sermonSection) {
+                    sermonSection.scrollIntoView({ behavior: 'smooth' });
+                  } else {
+                    window.location.href = '/sermons';
+                  }
+                }}
+                className="group bg-transparent border border-white/25 text-white hover:bg-white hover:text-church-burgundy px-6 py-3 rounded-lg font-semibold text-[12px] tracking-wide transition-colors flex items-center justify-center gap-2"
+              >
+                <i className="fa-solid fa-play text-[10px]"></i>
+                Watch Sermons
+              </button>
+              <button
+                onClick={() => setShowGivingModal(true)}
+                className="group bg-transparent border border-church-gold/50 text-church-gold hover:bg-church-gold hover:text-church-burgundy px-6 py-3 rounded-lg font-semibold text-[12px] tracking-wide transition-colors flex items-center justify-center gap-2"
+              >
+                <i className="fa-solid fa-hand-holding-heart text-[10px]"></i>
+                Give
+              </button>
+            </div>
+
+            {/* Quick Stats */}
+            <div className={`grid grid-cols-3 gap-6 max-w-md transition-all duration-700 delay-500 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}`}>
+              <div className="text-left">
+                <div className="text-2xl md:text-3xl font-bold text-church-gold">20+</div>
+                <div className="text-white/45 text-[11px] uppercase tracking-wider mt-1">Years</div>
+              </div>
+              <div className="text-left">
+                <div className="text-2xl md:text-3xl font-bold text-church-gold">500+</div>
+                <div className="text-white/45 text-[11px] uppercase tracking-wider mt-1">Members</div>
+              </div>
+              <div className="text-left">
+                <div className="text-2xl md:text-3xl font-bold text-church-gold">30+</div>
+                <div className="text-white/45 text-[11px] uppercase tracking-wider mt-1">Ministries</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Bottom Service Times & Music Player Bar */}
+        <div className="relative z-30 px-4 pb-4 md:pb-6 mt-auto">
+          <div className="mx-auto max-w-5xl bg-black/40 backdrop-blur-md rounded-2xl px-5 py-3.5 md:px-7 border border-white/10">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 items-center gap-4">
+
+            {/* Service Times */}
+            <div className="flex items-center justify-center sm:justify-start gap-6">
+              <div className="flex items-center gap-2.5">
+                <div className="w-8 h-8 shrink-0 bg-church-gold/15 rounded-full flex items-center justify-center">
+                  <i className="fa-solid fa-calendar-day text-church-gold text-[11px]"></i>
+                </div>
+                <div className="leading-tight">
+                  <span className="block text-[10px] font-semibold text-church-gold uppercase tracking-wider">Sun</span>
+                  <span className="block text-white text-sm font-semibold">10 AM</span>
+                </div>
+              </div>
+              <div className="w-px h-7 bg-white/15"></div>
+              <div className="flex items-center gap-2.5">
+                <div className="w-8 h-8 shrink-0 bg-church-gold/15 rounded-full flex items-center justify-center">
+                  <i className="fa-solid fa-book-bible text-church-gold text-[11px]"></i>
+                </div>
+                <div className="leading-tight">
+                  <span className="block text-[10px] font-semibold text-church-gold uppercase tracking-wider">Wed</span>
+                  <span className="block text-white text-sm font-semibold">7 PM</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Actions */}
+            <a href="https://www.google.com/maps/search/?api=1&query=4+School+St+Acton,+MA+01720" target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-2.5 group">
+              <div className="w-8 h-8 shrink-0 rounded-full bg-church-gold/15 flex items-center justify-center group-hover:bg-church-gold transition-colors">
+                <i className="fa-solid fa-location-dot text-church-gold text-[11px] group-hover:text-church-burgundy"></i>
+              </div>
+              <span className="text-[13px] font-semibold text-white/85 group-hover:text-white transition-colors">4 School St, Acton, MA</span>
+            </a>
+
+            {/* Music Player */}
+            <div className="flex items-center justify-center sm:justify-end gap-3">
+              <button
+                onClick={togglePlay}
+                className={`w-8 h-8 shrink-0 rounded-full flex items-center justify-center transition-colors ${isPlaying ? 'bg-white text-church-burgundy' : 'bg-church-gold text-church-burgundy'}`}
+                aria-label={isPlaying ? 'Pause' : 'Play'}
+              >
+                <i className={`fa-solid ${isPlaying ? 'fa-pause' : 'fa-play'} text-[10px]`}></i>
+              </button>
+
+              <div className="min-w-0">
+                <span className="block text-[13px] font-semibold text-white whitespace-nowrap">
+                  {playlist[currentTrack].title}
+                </span>
+                <span className="block text-[10px] text-white/45">
+                  {isPlaying ? 'Now playing' : 'Paused'}
+                </span>
+              </div>
+
+              <button
+                onClick={nextTrack}
+                className="w-8 h-8 shrink-0 rounded-full border border-white/15 hover:bg-white/10 flex items-center justify-center transition-colors"
+                aria-label="Next track"
+              >
+                <i className="fa-solid fa-forward text-[9px] text-white/80"></i>
+              </button>
+            </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Scroll Indicator */}
+        <div className="absolute bottom-28 left-8 animate-bounce hidden 2xl:block z-20 pointer-events-none">
+          <div className="w-6 h-10 border-2 border-white/30 rounded-full flex items-start justify-center p-2">
+            <div className="w-1 h-2 bg-white/50 rounded-full"></div>
+          </div>
+        </div>
+
+        {/* Hidden Audio Element */}
+        <audio
+          ref={audioRef}
+          src={playlist[currentTrack].url}
+          preload="metadata"
+          onPlay={() => setIsPlaying(true)}
+          onPause={() => setIsPlaying(false)}
+          onError={(e) => {
+            console.error('Audio loading error:', e);
+            setIsPlaying(false);
+          }}
+        />
+      </section>
+
+      {/* Fellowship Cookout Countdown */}
+      <section className="py-16 md:py-20 bg-white">
+        <div className="max-w-7xl mx-auto px-6">
+          <EventCountdown />
+        </div>
+      </section>
+
+      {/* Legacy Section */}
+      <section className="py-24 bg-white">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="grid lg:grid-cols-2 gap-20 items-center">
+            <div className="relative">
+              <div className="aspect-video bg-gray-100 rounded-[2rem] overflow-hidden shadow-2xl relative">
+                <img
+                  src="/images/pastors-hero.png"
+                  className="w-full h-full object-cover"
+                  alt="Church Ministry"
+                />
+              </div>
+            </div>
+            <div className="space-y-10">
+              <div>
+                <div className="flex items-center gap-4 mb-6">
+                  <div className="bg-church-burgundy px-6 py-3 rounded-2xl">
+                    <p className="text-church-gold text-3xl font-black leading-none">20+</p>
+                  </div>
+                  <p className="text-slate-500 text-sm font-bold uppercase tracking-wider">Years of Ministry</p>
+                </div>
+                <h2 className="text-5xl md:text-6xl font-bold text-church-burgundy serif italic mb-8">
+                  Building a legacy of <br />
+                  <span className="text-church-gold">faith & purpose.</span>
+                </h2>
+                <p className="text-slate-500 text-lg leading-relaxed font-light">
+                  For over two decades, Anointed Worship Center has been a beacon of light in Acton, MA. We are a multi-generational, diverse family of believers dedicated to the radical love of Christ and the transformation of our community.
+                </p>
+              </div>
+              <div className="grid grid-cols-2 gap-8">
+                <div className="p-6 bg-gray-50 rounded-2xl border border-gray-100 italic">
+                  <h4 className="text-church-gold font-bold uppercase tracking-widest text-[10px] mb-3">Our Vision</h4>
+                  <p className="text-slate-500 text-xs leading-relaxed">Empowering every believer through the uncompromising Word of God.</p>
+                </div>
+                <div className="p-6 bg-gray-50 rounded-2xl border border-gray-100 italic">
+                  <h4 className="text-church-gold font-bold uppercase tracking-widest text-[10px] mb-3">Our Mission</h4>
+                  <p className="text-slate-500 text-xs leading-relaxed">Transforming lives locally and globally through active service.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Next Steps Section */}
+      <section className="py-24 bg-gray-50">
+        <div className="max-w-7xl mx-auto px-6 text-center">
+          <span className="text-church-gold font-bold uppercase tracking-[0.4em] text-[10px] block mb-4">Your Journey Starts Here</span>
+          <h2 className="text-4xl md:text-5xl font-bold text-church-burgundy serif mb-16">Discover Your Next Step</h2>
+          <div className="grid md:grid-cols-3 gap-10 text-left">
+            {[
+              { title: "I'm New Here", icon: "fa-user-plus", desc: "First time at AWC? We have something special for you." },
+              { title: "Get Connected", icon: "fa-users", desc: "Find your community in our small groups and ministries." },
+              { title: "Serve with Us", icon: "fa-heart", desc: "Discover how your unique talents can help build the Kingdom." }
+            ].map((step, i) => (
+              <div key={i} className="bg-white p-12 rounded-[2.5rem] shadow-sm hover:shadow-xl transition-shadow duration-500">
+                <div className="w-12 h-12 bg-church-gold/10 rounded-xl flex items-center justify-center text-church-gold text-xl mb-8">
+                  <i className={`fa-solid ${step.icon}`}></i>
+                </div>
+                <h3 className="text-2xl font-bold text-church-burgundy mb-4">{step.title}</h3>
+                <p className="text-slate-500 text-sm leading-relaxed mb-8">{step.desc}</p>
+                <button className="text-church-gold font-bold uppercase tracking-widest text-[10px] flex items-center gap-2 hover:gap-4 transition-all">
+                  Start Here <i className="fa-solid fa-chevron-right text-[8px]"></i>
+                </button>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* App Download Section */}
+      <section className="py-24 bg-church-burgundy relative overflow-hidden">
+        {/* Background Effects */}
+        <div className="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')]"></div>
+        <div className="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-church-gold/10 to-transparent"></div>
+        <div className="absolute bottom-0 left-0 w-96 h-96 bg-white/5 rounded-full blur-3xl"></div>
+
+        <div className="max-w-7xl mx-auto px-6 relative z-10">
+          <div className="grid lg:grid-cols-2 gap-16 items-center">
+            {/* Content Side */}
+            <div className="text-white space-y-8">
+              <div>
+                <span className="text-church-gold font-black tracking-[0.4em] uppercase text-xs mb-4 block">AWC Connect</span>
+                <h2 className="text-5xl md:text-6xl font-bold serif mb-6">Church in Your Pocket</h2>
+                <p className="text-xl text-white/80 font-light leading-relaxed max-w-xl">
+                  Stay connected with the AWC family wherever you go. Watch sermons, submit prayer requests, give securely, and get instant updates on upcoming events.
+                </p>
+              </div>
+
+              <div className="flex flex-col sm:flex-row gap-8 pt-4">
+                {/* QR Code Card */}
+                <div className="bg-white p-6 rounded-3xl shadow-xl inline-block max-w-[200px]">
+                  <div className="bg-white rounded-xl overflow-hidden mb-4">
+                    <QRCode
+                      value="https://awc-connect.vercel.app/welcome"
+                      size={120}
+                      style={{ height: "auto", maxWidth: "100%", width: "100%" }}
+                      viewBox={`0 0 256 256`}
+                    />
+                  </div>
+                  <p className="text-church-burgundy text-[10px] font-black uppercase tracking-widest text-center mb-2">
+                    Scan to Download
+                  </p>
+                  <div className="border-t border-gray-100 pt-2 text-center">
+                    <a
+                      href="https://awc-connect.vercel.app/welcome"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-church-burgundy hover:text-church-gold text-[9px] font-bold underline transition-colors"
+                    >
+                      awc-connect.vercel.app
+                    </a>
+                  </div>
+                </div>
+
+                {/* Feature List */}
+                <div className="space-y-6">
+                  <div className="flex items-center gap-4 group">
+                    <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center group-hover:bg-church-gold group-hover:text-white transition-colors duration-300">
+                      <i className="fa-solid fa-mobile-screen text-sm"></i>
+                    </div>
+                    <span className="font-medium text-sm tracking-wide">Watch Live & Archives</span>
+                  </div>
+                  <div className="flex items-center gap-4 group">
+                    <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center group-hover:bg-church-gold group-hover:text-white transition-colors duration-300">
+                      <i className="fa-solid fa-heart text-sm"></i>
+                    </div>
+                    <span className="font-medium text-sm tracking-wide">Easy Mobile Giving</span>
+                  </div>
+                  <div className="flex items-center gap-4 group">
+                    <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center group-hover:bg-church-gold group-hover:text-white transition-colors duration-300">
+                      <i className="fa-solid fa-calendar-check text-sm"></i>
+                    </div>
+                    <span className="font-medium text-sm tracking-wide">Event Registration</span>
+                  </div>
+                  <div className="flex items-center gap-4 group">
+                    <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center group-hover:bg-church-gold group-hover:text-white transition-colors duration-300">
+                      <i className="fa-solid fa-bell text-sm"></i>
+                    </div>
+                    <span className="font-medium text-sm tracking-wide">Push Notifications</span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="pt-8 flex gap-4">
+                <button className="bg-black/30 hover:bg-black/50 border border-white/20 backdrop-blur-md px-6 py-3 rounded-xl flex items-center gap-3 transition-all group">
+                  <i className="fa-brands fa-apple text-2xl"></i>
+                  <div className="text-left">
+                    <div className="text-[9px] uppercase tracking-wider opacity-60">Download on the</div>
+                    <div className="text-sm font-bold">App Store</div>
+                  </div>
+                </button>
+                <button className="bg-black/30 hover:bg-black/50 border border-white/20 backdrop-blur-md px-6 py-3 rounded-xl flex items-center gap-3 transition-all group">
+                  <i className="fa-brands fa-google-play text-2xl"></i>
+                  <div className="text-left">
+                    <div className="text-[9px] uppercase tracking-wider opacity-60">Get it on</div>
+                    <div className="text-sm font-bold">Google Play</div>
+                  </div>
+                </button>
+              </div>
+            </div>
+
+            {/* Phone Mockup Side */}
+            <div className="relative flex justify-center lg:justify-end">
+              <div className="relative w-[300px] h-[600px] bg-black rounded-[3rem] border-8 border-slate-900 shadow-2xl overflow-hidden transform rotate-[-6deg] hover:rotate-0 transition-transform duration-700">
+                {/* Dynamic Island / Notch */}
+                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-7 bg-black rounded-b-2xl z-20"></div>
+
+                {/* Scrolling Screen Content */}
+                <div className="w-full h-full overflow-hidden bg-white">
+                  <img
+                    src="/images/awc-app-preview.png"
+                    alt="AWC App Preview"
+                    className="w-full h-auto object-cover"
+                  />
+                  {/* Overlay Gradient at Bottom */}
+                  <div className="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-black/50 to-transparent"></div>
+                </div>
+              </div>
+
+              {/* Decorative Elements around phone */}
+              <div className="absolute -z-10 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-church-gold/20 rounded-full blur-3xl animate-pulse-slow"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Gallery Section */}
+      {/* Daily Inspiration Section */}
+      <section className="py-24 relative overflow-hidden bg-[#fafafa]">
+        <div className="absolute top-0 right-0 w-96 h-96 bg-church-gold/5 rounded-full blur-3xl translate-x-1/2 -translate-y-1/2"></div>
+        <div className="absolute bottom-0 left-0 w-96 h-96 bg-church-burgundy/5 rounded-full blur-3xl -translate-x-1/2 translate-y-1/2"></div>
+
+        <div className="max-w-5xl mx-auto px-6 text-center relative z-10">
+          <span className="text-church-gold font-bold uppercase tracking-[0.4em] text-[10px] block mb-6">Daily Inspiration</span>
+
+          <div className="mb-8">
+            <i className="fa-solid fa-quote-left text-4xl text-church-gold/20"></i>
+          </div>
+
+          <h2 className="text-3xl md:text-5xl font-serif italic text-church-burgundy leading-relaxed mb-8">
+            "But they that wait upon the Lord shall renew their strength; they shall mount up with wings as eagles; they shall run, and not be weary; and they shall walk, and not faint."
+          </h2>
+
+          <div className="flex items-center justify-center gap-3 mb-12">
+            <div className="h-px w-12 bg-church-gold/30"></div>
+            <p className="text-slate-500 font-bold uppercase tracking-widest text-xs">Isaiah 40:31</p>
+            <div className="h-px w-12 bg-church-gold/30"></div>
+          </div>
+
+          <div className="flex justify-center gap-4">
+            <button className="bg-white border border-slate-200 hover:border-church-gold text-slate-600 hover:text-church-gold px-6 py-3 rounded-full text-xs font-bold uppercase tracking-widest transition-all shadow-sm hover:shadow-md flex items-center gap-2">
+              <i className="fa-solid fa-share-nodes"></i> Share
+            </button>
+            <Link to="/daily-devotional" className="bg-church-burgundy hover:bg-church-gold text-white px-8 py-3 rounded-full text-xs font-bold uppercase tracking-widest transition-all shadow-lg hover:shadow-xl flex items-center gap-2">
+              <i className="fa-solid fa-book-open"></i> Read Devotional
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Recent Messages Section */}
+      <section id="sermons-section" className="py-24 bg-white">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="flex justify-between items-end mb-16">
+            <div>
+              <span className="text-church-gold font-bold uppercase tracking-[0.4em] text-[10px] block mb-4">Digital Sanctuary</span>
+              <h2 className="text-4xl md:text-5xl font-bold text-church-burgundy serif">Recent Messages</h2>
+            </div>
+            <Link to="/sermons" className="text-church-burgundy font-bold uppercase tracking-widest text-[10px] flex items-center gap-3 border-b-2 border-church-gold/20 pb-1 hover:border-church-gold transition-colors">
+              Watch All <i className="fa-solid fa-arrow-right"></i>
+            </Link>
+          </div>
+          <div className="grid md:grid-cols-3 gap-10">
+            {recentVideos.length > 0 ? recentVideos.map((video) => {
+              // Extract YouTube video ID for thumbnail
+              const videoUrl = video.videoUrl || video.video_url; // Handle both types
+              const title = video.title;
+              const date = video.publishedAt || video.date;
+              const speaker = video.speaker || null;
+
+              const getYouTubeThumbnail = (url?: string) => {
+                if (video.thumbnail) return video.thumbnail; // Use provided thumbnail if available
+                if (!url) return 'https://images.unsplash.com/photo-1544427920-c49ccfb85579?auto=format&fit=crop&q=80';
+                const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+                const match = url.match(regExp);
+                if (match && match[2].length === 11) {
+                  return `https://img.youtube.com/vi/${match[2]}/maxresdefault.jpg`;
+                }
+                return 'https://images.unsplash.com/photo-1544427920-c49ccfb85579?auto=format&fit=crop&q=80';
+              };
+
+              const formatDate = (dateStr: string) => {
+                const date = new Date(dateStr);
+                return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+              };
+
+              return (
+                <div key={video.id || video.url} className="group cursor-pointer" onClick={() => videoUrl && window.open(videoUrl, '_blank')}>
+                  <div className="aspect-video bg-gray-100 rounded-3xl overflow-hidden mb-6 relative">
+                    <img
+                      src={getYouTubeThumbnail(videoUrl)}
+                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                      alt={title}
+                      onError={(e) => {
+                        const target = e.target as HTMLImageElement;
+                        target.src = 'https://images.unsplash.com/photo-1544427920-c49ccfb85579?auto=format&fit=crop&q=80';
+                      }}
+                    />
+                    <div className="absolute inset-0 bg-church-burgundy/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                      <div className="w-16 h-16 bg-white/90 rounded-full flex items-center justify-center">
+                        <div className="w-0 h-0 border-l-[16px] border-l-church-burgundy border-t-[10px] border-t-transparent border-b-[10px] border-b-transparent ml-1"></div>
+                      </div>
+                    </div>
+                  </div>
+                  <h3 className="text-2xl font-bold text-church-burgundy mb-2 group-hover:text-church-gold transition-colors">{title}</h3>
+                  <p className="text-slate-400 text-xs font-medium uppercase tracking-widest italic">
+                    {speaker ? `${speaker} • ` : ''}
+                    {formatDate(date)}
+                  </p>
+                </div>
+              );
+            }) : (
+              // Fallback while loading
+              [1, 2, 3].map(i => (
+                <div key={i} className="animate-pulse">
+                  <div className="aspect-video bg-gray-200 rounded-3xl mb-6"></div>
+                  <div className="h-6 bg-gray-200 rounded mb-2"></div>
+                  <div className="h-4 bg-gray-200 rounded w-2/3"></div>
+                </div>
+              ))
+            )}
+          </div>
+        </div>
+      </section>
+    </div>
+  );
+};
+
+export default Home;

@@ -1,0 +1,14 @@
+# Ignore server node_modules (we use root dependencies)
+server/node_modules
+
+# Ignore log files
+*.log
+server_*.log
+
+# Ignore local environment files (use Vercel dashboard for env vars)
+.env.local
+server/.env
+
+# Ignore development files
+node_modules/.cache
+.DS_Store
