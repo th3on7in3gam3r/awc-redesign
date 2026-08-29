@@ -75,6 +75,12 @@ export interface ChurchEvent {
     location: string;
     imageUrl: string;
     category: string;
+    /** ISO date (YYYY-MM-DD) when sourced from AWC Vault */
+    eventDate?: string;
+    endTime?: string | null;
+    signupUrl?: string;
+    /** Vault created_at — used to pick canonical duplicate cookout entries */
+    createdAt?: string;
 }
 
 export interface GalleryItem {

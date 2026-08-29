@@ -1,24 +1,71 @@
-
-import React, { useState } from 'react';
+import * as React from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { EVENTS } from '../../constants';
+import { ChurchEvent } from '../../types';
+import PublicEventsCalendar from '../../components/events/PublicEventsCalendar';
+import PublicEventCard from '../../components/events/PublicEventCard';
+import EventImageLightbox from '../../components/events/EventImageLightbox';
+import { fetchVaultEvents, getMonthDisplayEvents, getPublicDisplayEvents } from '../../services/vaultEventsService';
+
+type ViewMode = 'list' | 'calendar';
 
 const Events: React.FC = () => {
-  const [rsvpStatus, setRsvpStatus] = useState<Record<string, boolean>>({});
-  const [activeEvent, setActiveEvent] = useState<string | null>(null);
+  const [events, setEvents] = useState<ChurchEvent[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [usingFallback, setUsingFallback] = useState(false);
+  const [viewMode, setViewMode] = useState<ViewMode>('list');
   const [currentPage, setCurrentPage] = useState(1);
+  const [calendarDate, setCalendarDate] = useState(new Date());
   const [expandedEvents, setExpandedEvents] = useState<Record<string, boolean>>({});
+  const [selectedEvent, setSelectedEvent] = useState<ChurchEvent | null>(null);
+  const [previewImage, setPreviewImage] = useState<{ url: string; title: string } | null>(null);
   const eventsPerPage = 6;
 
-  // Calculate pagination
-  const totalPages = Math.ceil(EVENTS.length / eventsPerPage);
+  useEffect(() => {
+    let active = true;
+
+    fetchVaultEvents()
+      .then((vaultEvents) => {
+        if (!active) return;
+        setEvents(vaultEvents);
+        setUsingFallback(false);
+
+        const display = getPublicDisplayEvents(vaultEvents);
+        if (display[0]?.eventDate) {
+          const [year, month] = display[0].eventDate.split('-').map(Number);
+          setCalendarDate(new Date(year, month - 1, 1));
+        }
+      })
+      .catch(() => {
+        if (!active) return;
+        setEvents(EVENTS);
+        setUsingFallback(true);
+
+        const display = getPublicDisplayEvents(EVENTS);
+        if (display[0]?.eventDate) {
+          const [year, month] = display[0].eventDate.split('-').map(Number);
+          setCalendarDate(new Date(year, month - 1, 1));
+        }
+      })
+      .finally(() => {
+        if (active) setLoading(false);
+      });
+
+    return () => {
+      active = false;
+    };
+  }, []);
+
+  const displayEvents = useMemo(() => getPublicDisplayEvents(events), [events]);
+  const calendarEvents = useMemo(
+    () => getMonthDisplayEvents(events, calendarDate),
+    [events, calendarDate],
+  );
+
+  const totalPages = Math.max(1, Math.ceil(displayEvents.length / eventsPerPage));
   const indexOfLastEvent = currentPage * eventsPerPage;
   const indexOfFirstEvent = indexOfLastEvent - eventsPerPage;
-  const currentEvents = EVENTS.slice(indexOfFirstEvent, indexOfLastEvent);
-
-  const handleRSVP = (eventId: string) => {
-    setRsvpStatus(prev => ({ ...prev, [eventId]: true }));
-    setTimeout(() => setActiveEvent(null), 2000);
-  };
+  const currentEvents = displayEvents.slice(indexOfFirstEvent, indexOfLastEvent);
 
   const goToPage = (pageNumber: number) => {
     setCurrentPage(pageNumber);
@@ -26,213 +73,206 @@ const Events: React.FC = () => {
   };
 
   const toggleEventDetails = (eventId: string) => {
-    setExpandedEvents(prev => ({ ...prev, [eventId]: !prev[eventId] }));
+    setExpandedEvents((prev) => ({ ...prev, [eventId]: !prev[eventId] }));
   };
 
   return (
     <div className="pt-52 pb-20 bg-gray-50 min-h-screen">
       <div className="max-w-7xl mx-auto px-4">
-        <div className="text-center mb-16">
+        <div className="text-center mb-10">
           <span className="text-church-gold font-bold tracking-[0.3em] uppercase text-xs">Mark Your Calendar</span>
           <h1 className="text-5xl font-bold text-church-burgundy mt-4 serif">Upcoming Gatherings</h1>
-          <p className="text-slate-500 mt-4">
-            Showing {indexOfFirstEvent + 1}-{Math.min(indexOfLastEvent, EVENTS.length)} of {EVENTS.length} events
+          <p className="text-slate-500 mt-4 max-w-2xl mx-auto">
+            {usingFallback
+              ? 'Showing featured events while we reconnect to AWC Vault.'
+              : 'Live church calendar synced from AWC Vault.'}
           </p>
         </div>
 
-        <div className="space-y-8">
-          {currentEvents.map((event) => (
-            <div key={event.id} className="bg-white rounded-3xl overflow-hidden shadow-xl border border-gray-100 flex flex-col md:flex-row">
-              <div className="md:w-1/3 aspect-[4/3] relative">
-                <img src={event.imageUrl} className="w-full h-full object-cover" alt={event.title} />
-                <div className="absolute top-6 left-6 bg-white rounded-2xl p-4 shadow-xl text-center min-w-[80px]">
-                  <p className="text-church-gold text-2xl font-black leading-none">{event.date.split(' ')[1]?.replace(',', '') || event.date.split(' ')[0]}</p>
-                  <p className="text-church-burgundy text-[10px] font-bold uppercase tracking-widest mt-1">{event.date.split(' ')[0]}</p>
-                </div>
-              </div>
-
-              <div className="md:w-2/3 p-10 flex flex-col justify-center">
-                <div className="flex items-center gap-3 mb-4">
-                  <span className="px-3 py-1 bg-church-gold/10 text-church-gold text-[10px] font-black uppercase tracking-widest rounded-full">{event.category}</span>
-                </div>
-                <h3 className="text-4xl font-bold text-church-burgundy mb-4 serif">{event.title}</h3>
-                <p className="text-slate-600 text-lg mb-8 leading-relaxed max-w-2xl">{event.description}</p>
-
-                <div className="grid grid-cols-2 sm:flex sm:items-center gap-6 mb-10">
-                  <div className="flex items-center gap-3">
-                    <i className="fa-solid fa-clock text-church-gold"></i>
-                    <span className="text-sm font-bold text-church-burgundy">{event.time}</span>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <i className="fa-solid fa-location-dot text-church-gold"></i>
-                    <span className="text-sm font-bold text-church-burgundy">{event.location}</span>
-                  </div>
-                </div>
-
-                <div className="flex items-center gap-4">
-                  {rsvpStatus[event.id] ? (
-                    <div className="flex items-center gap-2 text-green-600 font-bold animate-fade-in bg-green-50 px-6 py-4 rounded-full">
-                      <i className="fa-solid fa-circle-check"></i>
-                      <span>Registered Successfully</span>
-                    </div>
-                  ) : (
-                    <>
-                      <button
-                        onClick={() => setActiveEvent(event.id)}
-                        className="bg-church-burgundy text-white px-10 py-4 rounded-full font-bold uppercase tracking-widest text-xs hover:bg-church-gold transition-all duration-300 shadow-xl"
-                      >
-                        RSVP Now
-                      </button>
-                      <button
-                        onClick={() => toggleEventDetails(event.id)}
-                        className="text-church-burgundy font-bold uppercase tracking-widest text-xs hover:text-church-gold flex items-center gap-2 transition-all"
-                      >
-                        {expandedEvents[event.id] ? 'Hide Details' : 'Details'}
-                        <i className={`fa-solid transition-transform duration-300 ${expandedEvents[event.id] ? 'fa-minus rotate-180' : 'fa-plus'}`}></i>
-                      </button>
-                    </>
-                  )}
-                </div>
-
-                {/* Expanded Details Section */}
-                {expandedEvents[event.id] && (
-                  <div className="mt-8 pt-8 border-t border-gray-100 animate-slide-down">
-                    <h4 className="text-xl font-bold text-church-burgundy mb-4 flex items-center gap-2">
-                      <i className="fa-solid fa-circle-info text-church-gold"></i>
-                      Additional Information
-                    </h4>
-                    <div className="grid md:grid-cols-2 gap-6">
-                      <div className="space-y-3">
-                        <div className="flex items-start gap-3">
-                          <i className="fa-solid fa-calendar-check text-church-gold mt-1"></i>
-                          <div>
-                            <p className="text-xs font-bold text-church-burgundy uppercase tracking-wider mb-1">Full Date</p>
-                            <p className="text-sm text-slate-600">{event.date}</p>
-                          </div>
-                        </div>
-                        <div className="flex items-start gap-3">
-                          <i className="fa-solid fa-clock text-church-gold mt-1"></i>
-                          <div>
-                            <p className="text-xs font-bold text-church-burgundy uppercase tracking-wider mb-1">Time</p>
-                            <p className="text-sm text-slate-600">{event.time}</p>
-                          </div>
-                        </div>
-                        <div className="flex items-start gap-3">
-                          <i className="fa-solid fa-map-pin text-church-gold mt-1"></i>
-                          <div>
-                            <p className="text-xs font-bold text-church-burgundy uppercase tracking-wider mb-1">Location</p>
-                            <p className="text-sm text-slate-600">{event.location}</p>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="space-y-3">
-                        <div className="flex items-start gap-3">
-                          <i className="fa-solid fa-tag text-church-gold mt-1"></i>
-                          <div>
-                            <p className="text-xs font-bold text-church-burgundy uppercase tracking-wider mb-1">Category</p>
-                            <p className="text-sm text-slate-600">{event.category}</p>
-                          </div>
-                        </div>
-                        <div className="flex items-start gap-3">
-                          <i className="fa-solid fa-users text-church-gold mt-1"></i>
-                          <div>
-                            <p className="text-xs font-bold text-church-burgundy uppercase tracking-wider mb-1">Who Should Attend</p>
-                            <p className="text-sm text-slate-600">
-                              {event.category === 'Youth' ? 'Ages 13-18' :
-                                event.category === 'Children' ? 'Ages 5-12' :
-                                  event.category === 'Men' ? 'All men welcome' :
-                                    event.category === 'Women' ? 'All women welcome' :
-                                      event.category === 'Marriage' ? 'Married couples' :
-                                        'Everyone is welcome!'}
-                            </p>
-                          </div>
-                        </div>
-                        <div className="flex items-start gap-3">
-                          <i className="fa-solid fa-circle-question text-church-gold mt-1"></i>
-                          <div>
-                            <p className="text-xs font-bold text-church-burgundy uppercase tracking-wider mb-1">Questions?</p>
-                            <p className="text-sm text-slate-600">Contact us at events@awc.org</p>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                )}
-              </div>
-            </div>
-          ))}
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mb-12">
+          <button
+            type="button"
+            onClick={() => setViewMode('list')}
+            className={`px-5 py-2.5 rounded-full text-xs font-bold uppercase tracking-widest transition-colors ${
+              viewMode === 'list'
+                ? 'bg-church-gold text-church-burgundy'
+                : 'bg-white text-church-burgundy border border-gray-200 hover:border-church-gold'
+            }`}
+          >
+            List View
+          </button>
+          <button
+            type="button"
+            onClick={() => setViewMode('calendar')}
+            className={`px-5 py-2.5 rounded-full text-xs font-bold uppercase tracking-widest transition-colors ${
+              viewMode === 'calendar'
+                ? 'bg-church-gold text-church-burgundy'
+                : 'bg-white text-church-burgundy border border-gray-200 hover:border-church-gold'
+            }`}
+          >
+            Calendar View
+          </button>
         </div>
 
-        {/* Pagination Controls */}
-        {totalPages > 1 && (
-          <div className="mt-16 flex items-center justify-center gap-2">
-            {/* Previous Button */}
-            <button
-              onClick={() => goToPage(currentPage - 1)}
-              disabled={currentPage === 1}
-              className={`px-4 py-2 rounded-xl font-bold text-sm transition-all ${currentPage === 1
-                ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
-                : 'bg-white text-church-burgundy hover:bg-church-gold hover:text-white shadow-md'
-                }`}
-            >
-              <i className="fa-solid fa-chevron-left"></i>
-            </button>
-
-            {/* Page Numbers */}
-            {Array.from({ length: totalPages }, (_, i) => i + 1).map((pageNumber) => (
-              <button
-                key={pageNumber}
-                onClick={() => goToPage(pageNumber)}
-                className={`w-10 h-10 rounded-xl font-bold text-sm transition-all ${currentPage === pageNumber
-                  ? 'bg-church-gold text-white shadow-lg scale-110'
-                  : 'bg-white text-church-burgundy hover:bg-church-burgundy hover:text-white shadow-md'
-                  }`}
-              >
-                {pageNumber}
-              </button>
-            ))}
-
-            {/* Next Button */}
-            <button
-              onClick={() => goToPage(currentPage + 1)}
-              disabled={currentPage === totalPages}
-              className={`px-4 py-2 rounded-xl font-bold text-sm transition-all ${currentPage === totalPages
-                ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
-                : 'bg-white text-church-burgundy hover:bg-church-gold hover:text-white shadow-md'
-                }`}
-            >
-              <i className="fa-solid fa-chevron-right"></i>
-            </button>
+        {loading ? (
+          <div className="flex items-center justify-center py-24">
+            <div className="w-10 h-10 border-4 border-slate-200 border-t-church-gold rounded-full animate-spin"></div>
           </div>
+        ) : viewMode === 'calendar' ? (
+          <PublicEventsCalendar
+            events={calendarEvents}
+            currentDate={calendarDate}
+            onMonthChange={setCalendarDate}
+            onSelectEvent={setSelectedEvent}
+          />
+        ) : (
+          <>
+            <p className="text-center text-slate-500 mb-8">
+              Showing {displayEvents.length === 0 ? 0 : indexOfFirstEvent + 1}-
+              {Math.min(indexOfLastEvent, displayEvents.length)} of {displayEvents.length} upcoming events
+            </p>
+
+            {displayEvents.length === 0 ? (
+              <div className="text-center py-20 bg-white rounded-3xl border border-gray-100 shadow-xl">
+                <p className="text-church-burgundy font-bold text-xl serif mb-2">No upcoming events yet</p>
+                <p className="text-slate-500">Check back soon or visit AWC Vault for the latest updates.</p>
+              </div>
+            ) : (
+              <div className="space-y-8">
+                {currentEvents.map((event) => (
+                  <PublicEventCard
+                    key={event.id}
+                    event={event}
+                    expanded={!!expandedEvents[event.id]}
+                    onToggleDetails={() => toggleEventDetails(event.id)}
+                  />
+                ))}
+              </div>
+            )}
+
+            {totalPages > 1 && (
+              <div className="mt-16 flex items-center justify-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => goToPage(currentPage - 1)}
+                  disabled={currentPage === 1}
+                  className={`px-4 py-2 rounded-xl font-bold text-sm transition-all ${
+                    currentPage === 1
+                      ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                      : 'bg-white text-church-burgundy hover:bg-church-gold hover:text-white shadow-md'
+                  }`}
+                >
+                  <i className="fa-solid fa-chevron-left"></i>
+                </button>
+
+                {Array.from({ length: totalPages }, (_, i) => i + 1).map((pageNumber) => (
+                  <button
+                    key={pageNumber}
+                    type="button"
+                    onClick={() => goToPage(pageNumber)}
+                    className={`w-10 h-10 rounded-xl font-bold text-sm transition-all ${
+                      currentPage === pageNumber
+                        ? 'bg-church-gold text-white shadow-lg scale-110'
+                        : 'bg-white text-church-burgundy hover:bg-church-burgundy hover:text-white shadow-md'
+                    }`}
+                  >
+                    {pageNumber}
+                  </button>
+                ))}
+
+                <button
+                  type="button"
+                  onClick={() => goToPage(currentPage + 1)}
+                  disabled={currentPage === totalPages}
+                  className={`px-4 py-2 rounded-xl font-bold text-sm transition-all ${
+                    currentPage === totalPages
+                      ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                      : 'bg-white text-church-burgundy hover:bg-church-gold hover:text-white shadow-md'
+                  }`}
+                >
+                  <i className="fa-solid fa-chevron-right"></i>
+                </button>
+              </div>
+            )}
+          </>
         )}
       </div>
 
-      {/* RSVP Modal Mock */}
-      {activeEvent && !rsvpStatus[activeEvent] && (
+      {selectedEvent && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
-          <div className="absolute inset-0 bg-church-burgundy/80 backdrop-blur-sm" onClick={() => setActiveEvent(null)}></div>
-          <div className="bg-white rounded-[40px] shadow-2xl p-10 max-w-lg w-full relative z-10 animate-slide-up">
-            <h3 className="text-3xl font-bold text-church-burgundy mb-2 serif">Register for {EVENTS.find(e => e.id === activeEvent)?.title}</h3>
-            <p className="text-slate-500 mb-8">We're excited to see you! Please provide your details below.</p>
-            <div className="space-y-4">
-              <input type="text" placeholder="Full Name" className="w-full bg-gray-50 border border-gray-100 rounded-2xl px-6 py-4 focus:outline-none focus:ring-1 focus:ring-church-gold" />
-              <input type="email" placeholder="Email Address" className="w-full bg-gray-50 border border-gray-100 rounded-2xl px-6 py-4 focus:outline-none focus:ring-1 focus:ring-church-gold" />
-              <select className="w-full bg-gray-50 border border-gray-100 rounded-2xl px-6 py-4 focus:outline-none focus:ring-1 focus:ring-church-gold">
-                <option>Number of Attendees: 1</option>
-                <option>2</option>
-                <option>3</option>
-                <option>4+</option>
-              </select>
+          <button
+            type="button"
+            className="absolute inset-0 bg-church-burgundy/80 backdrop-blur-sm"
+            onClick={() => setSelectedEvent(null)}
+            aria-label="Close event details"
+          />
+          <div className="bg-white rounded-[2rem] shadow-2xl max-w-lg w-full relative z-10 animate-slide-up overflow-hidden">
+            <button
+              type="button"
+              onClick={() =>
+                setPreviewImage({ url: selectedEvent.imageUrl, title: selectedEvent.title })
+              }
+              className="relative block w-full aspect-[16/10] cursor-zoom-in group"
+              aria-label={`View larger image for ${selectedEvent.title}`}
+            >
+              <img
+                src={selectedEvent.imageUrl}
+                alt={selectedEvent.title}
+                className="w-full h-full object-cover"
+              />
+              <span className="absolute inset-0 bg-church-burgundy/0 group-hover:bg-church-burgundy/20 transition-colors flex items-center justify-center">
+                <span className="opacity-0 group-hover:opacity-100 transition-opacity bg-white/90 text-church-burgundy text-[10px] font-bold uppercase tracking-widest px-3 py-2 rounded-full">
+                  Enlarge
+                </span>
+              </span>
+            </button>
+            <div className="p-8">
+            <span className="px-3 py-1 bg-church-gold/10 text-church-gold text-[10px] font-black uppercase tracking-widest rounded-full">
+              {selectedEvent.category}
+            </span>
+            <h3 className="text-3xl font-bold text-church-burgundy mt-4 mb-2 serif">{selectedEvent.title}</h3>
+            <p className="text-slate-500 mb-6">{selectedEvent.date}</p>
+            <p className="text-slate-600 mb-6 leading-relaxed">{selectedEvent.description}</p>
+            <div className="space-y-3 text-sm text-church-burgundy font-semibold mb-8">
+              <p className="flex items-center gap-2">
+                <i className="fa-solid fa-clock text-church-gold"></i>
+                {selectedEvent.time}
+              </p>
+              <p className="flex items-center gap-2">
+                <i className="fa-solid fa-location-dot text-church-gold"></i>
+                {selectedEvent.location}
+              </p>
+            </div>
+            <div className="flex flex-wrap gap-3">
+              {selectedEvent.signupUrl ? (
+                <a
+                  href={selectedEvent.signupUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center justify-center bg-church-gold hover:bg-white text-church-burgundy px-6 py-3 rounded-lg font-semibold text-[12px] tracking-wide transition-colors"
+                >
+                  Sign Up
+                </a>
+              ) : null}
               <button
-                onClick={() => handleRSVP(activeEvent)}
-                className="w-full bg-church-gold text-white py-5 rounded-2xl font-black uppercase tracking-widest text-sm hover:shadow-2xl transition-all"
+                type="button"
+                onClick={() => setSelectedEvent(null)}
+                className="inline-flex items-center justify-center border border-gray-200 text-church-burgundy px-6 py-3 rounded-lg font-semibold text-[12px] tracking-wide transition-colors hover:border-church-gold"
               >
-                Confirm RSVP
+                Close
               </button>
+            </div>
             </div>
           </div>
         </div>
       )}
+
+      <EventImageLightbox
+        imageUrl={previewImage?.url ?? ''}
+        title={previewImage?.title ?? ''}
+        isOpen={!!previewImage}
+        onClose={() => setPreviewImage(null)}
+      />
     </div>
   );
 };

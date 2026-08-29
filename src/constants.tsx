@@ -175,6 +175,7 @@ export const BLOG_POSTS: BlogPost[] = [
 export const AWC_VAULT_URL = 'https://awc-vault.vercel.app';
 export const AWC_VAULT_LOGIN_URL = `${AWC_VAULT_URL}/#/login`;
 export const AWC_VAULT_FELLOWSHIP_COOKOUT_URL = `${AWC_VAULT_URL}/#/fellowship-cookout`;
+export const AWC_VAULT_EVENTS_API = `${AWC_VAULT_URL}/api/vault?resource=events`;
 export const AWC_CONNECT_URL = 'https://awc-connect.vercel.app/welcome';
 
 export const FELLOWSHIP_COOKOUT = {
@@ -310,14 +311,27 @@ export const EVENTS: ChurchEvent[] = [
     category: "Leadership"
   },
   {
+    id: "e14",
+    title: "An Evening by the Fire Event",
+    description: "A special evening gathering by the fire — worship, fellowship, and community.",
+    date: "September 6, 2026",
+    time: "3:00 PM - 7:00 PM",
+    location: "Private Location (Soon to be announced)",
+    imageUrl: "https://yrpwdrioomdihjlmcfnu.supabase.co/storage/v1/object/public/avatars/events/1787686885695-4wgv3352r45.jpg",
+    category: "Meeting",
+    eventDate: "2026-09-06",
+  },
+  {
     id: "e13",
     title: "AWC Fellowship Cookout",
     description: "Join us for food, fellowship, and community as we celebrate together at our first fellowship cookout of the season.",
     date: "September 20, 2026",
     time: "2:00 PM - 6:00 PM",
     location: "Main Campus Grounds",
-    imageUrl: "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&q=80&w=800",
-    category: "Fellowship"
+    imageUrl: "https://yrpwdrioomdihjlmcfnu.supabase.co/storage/v1/object/public/avatars/events/1787686538179-96c4zkjnj64.jpg",
+    category: "Fellowship",
+    eventDate: "2026-09-20",
+    signupUrl: AWC_VAULT_FELLOWSHIP_COOKOUT_URL,
   }
 ];
 
