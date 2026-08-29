@@ -174,6 +174,7 @@ export const BLOG_POSTS: BlogPost[] = [
 
 export const AWC_VAULT_URL = 'https://awc-vault.vercel.app';
 export const AWC_VAULT_LOGIN_URL = `${AWC_VAULT_URL}/#/login`;
+export const AWC_VAULT_FELLOWSHIP_COOKOUT_URL = `${AWC_VAULT_URL}/#/fellowship-cookout`;
 export const AWC_CONNECT_URL = 'https://awc-connect.vercel.app/welcome';
 
 export const FELLOWSHIP_COOKOUT = {
@@ -183,15 +184,9 @@ export const FELLOWSHIP_COOKOUT = {
   time: '2:00 PM - 6:00 PM',
   description: 'Join us for food, fellowship, and community as we celebrate together.',
   location: 'Main Campus Grounds',
-  /** Paste the public form UUID from AWC Vault when the sign-up form is ready */
-  signupFormId: '',
+  signupUrl: AWC_VAULT_FELLOWSHIP_COOKOUT_URL,
   signupPath: '/events/fellowship-cookout/signup',
 };
-
-export function getFellowshipCookoutSignupUrl(): string {
-  if (!FELLOWSHIP_COOKOUT.signupFormId) return '';
-  return `${AWC_VAULT_URL}/#/forms/public/${FELLOWSHIP_COOKOUT.signupFormId}`;
-}
 
 export const EVENTS: ChurchEvent[] = [
   {

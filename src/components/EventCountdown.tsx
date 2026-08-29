@@ -95,13 +95,15 @@ const EventCountdown: React.FC = () => {
             Mark Your Calendar
             <i className="fa-solid fa-arrow-right text-[10px]"></i>
           </Link>
-          <Link
-            to={FELLOWSHIP_COOKOUT.signupPath}
+          <a
+            href={FELLOWSHIP_COOKOUT.signupUrl}
+            target="_blank"
+            rel="noopener noreferrer"
             className="inline-flex items-center gap-2 bg-transparent border border-church-gold/50 text-church-gold hover:bg-church-gold hover:text-church-burgundy px-6 py-3 rounded-lg font-semibold text-[12px] tracking-wide transition-colors"
           >
             <i className="fa-solid fa-user-plus text-[10px]"></i>
             Sign Up
-          </Link>
+          </a>
         </div>
       </div>
     </div>
