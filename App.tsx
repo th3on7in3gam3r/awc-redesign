@@ -21,6 +21,8 @@ import Sermons from './src/pages/public/Sermons';
 import Community from './src/pages/public/Community';
 import Events from './src/pages/public/Events';
 import FellowshipCookoutSignup from './src/pages/public/FellowshipCookoutSignup';
+import Giving from './src/pages/public/Giving';
+import GivingConfirmation from './src/pages/public/GivingConfirmation';
 import Visit from './src/pages/public/Visit';
 import GallerySection from './src/components/ui/GallerySection';
 import Gallery from './src/pages/public/Gallery';
@@ -83,6 +85,8 @@ const App: React.FC = () => {
             <Route path="/sermons" element={<Sermons />} />
             <Route path="/events" element={<Events />} />
             <Route path="/events/fellowship-cookout/signup" element={<FellowshipCookoutSignup />} />
+            <Route path="/giving" element={<Giving />} />
+            <Route path="/giving/confirmation" element={<GivingConfirmation />} />
             <Route path="/community" element={<Community />} />
             <Route path="/gallery" element={<Gallery />} />
             <Route path="/daily-devotional" element={<DailyDevotional />} />

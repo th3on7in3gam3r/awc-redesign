@@ -27,6 +27,7 @@ const Header: React.FC = () => {
   ];
 
   const rightNavItems = [
+    { path: '/giving', label: 'Give' },
     { path: '/events', label: 'Events' },
     { path: '/store', label: 'Store' },
     { path: '/community', label: 'Community' },

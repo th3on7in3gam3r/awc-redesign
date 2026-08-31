@@ -16,6 +16,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import multer from 'multer';
 import storeRoutes from './routes/store.js';
+import { registerDcbGivingRoutes } from './routes/dcbGiving.js';
 
 dotenv.config();
 
@@ -76,6 +77,7 @@ app.get('/', (req, res) => {
 
 // AWC Store
 app.use('/api/store', storeRoutes);
+registerDcbGivingRoutes(app);
 
 // Health check
 app.get('/api/health', async (req, res) => {

@@ -1,5 +1,4 @@
-import * as React from 'react';
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { SERVICE_TIMES } from '../../constants';
 import GallerySection from '../../components/ui/GallerySection';
@@ -171,13 +170,13 @@ const Home: React.FC = () => {
                 <i className="fa-solid fa-play text-[10px]"></i>
                 Watch Sermons
               </button>
-              <button
-                onClick={() => setShowGivingModal(true)}
+              <Link
+                to="/giving"
                 className="group bg-transparent border border-church-gold/50 text-church-gold hover:bg-church-gold hover:text-church-burgundy px-6 py-3 rounded-lg font-semibold text-[12px] tracking-wide transition-colors flex items-center justify-center gap-2"
               >
                 <i className="fa-solid fa-hand-holding-heart text-[10px]"></i>
                 Give
-              </button>
+              </Link>
             </div>
 
             {/* Quick Stats */}
