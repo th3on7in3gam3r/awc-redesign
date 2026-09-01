@@ -20,6 +20,13 @@ const getVideoThumbnail = (video: YouTubeVideo): string => {
   return 'https://images.unsplash.com/photo-1544427920-c49ccfb85579?auto=format&fit=crop&q=80';
 };
 
+const CHURCH_STATS = {
+  establishedDisplay: 'Since 2009',
+  establishedLabel: 'Established',
+  members: '200+',
+  ministries: '10',
+};
+
 const Home: React.FC = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -180,17 +187,19 @@ const Home: React.FC = () => {
             </div>
 
             {/* Quick Stats */}
-            <div className={`grid grid-cols-3 gap-6 max-w-md transition-all duration-700 delay-500 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}`}>
-              <div className="text-left">
-                <div className="text-2xl md:text-3xl font-bold text-church-gold">20+</div>
-                <div className="text-white/45 text-[11px] uppercase tracking-wider mt-1">Years</div>
+            <div className={`grid grid-cols-3 gap-4 sm:gap-6 max-w-md transition-all duration-700 delay-500 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}`}>
+              <div className="text-left min-w-0">
+                <div className="text-lg sm:text-2xl md:text-3xl font-bold text-church-gold leading-tight whitespace-nowrap">
+                  {CHURCH_STATS.establishedDisplay}
+                </div>
+                <div className="text-white/45 text-[11px] uppercase tracking-wider mt-1">{CHURCH_STATS.establishedLabel}</div>
               </div>
               <div className="text-left">
-                <div className="text-2xl md:text-3xl font-bold text-church-gold">500+</div>
+                <div className="text-2xl md:text-3xl font-bold text-church-gold">{CHURCH_STATS.members}</div>
                 <div className="text-white/45 text-[11px] uppercase tracking-wider mt-1">Members</div>
               </div>
               <div className="text-left">
-                <div className="text-2xl md:text-3xl font-bold text-church-gold">30+</div>
+                <div className="text-2xl md:text-3xl font-bold text-church-gold">{CHURCH_STATS.ministries}</div>
                 <div className="text-white/45 text-[11px] uppercase tracking-wider mt-1">Ministries</div>
               </div>
             </div>
@@ -313,10 +322,12 @@ const Home: React.FC = () => {
             <div className="lg:col-span-7 space-y-8 md:space-y-10">
               <div className="space-y-6">
                 <div className="inline-flex items-center gap-3 rounded-full border border-church-burgundy/10 bg-white px-4 py-2 shadow-sm">
-                  <span className="text-church-burgundy text-xl md:text-2xl font-bold serif leading-none">20+</span>
+                  <span className="text-church-burgundy text-lg sm:text-xl md:text-2xl font-bold serif leading-none whitespace-nowrap">
+                    {CHURCH_STATS.establishedDisplay}
+                  </span>
                   <span className="h-8 w-px bg-church-burgundy/15" aria-hidden="true" />
                   <span className="text-[11px] font-bold uppercase tracking-[0.22em] text-slate-500">
-                    Years of Ministry
+                    {CHURCH_STATS.establishedLabel}
                   </span>
                 </div>
 
@@ -326,7 +337,7 @@ const Home: React.FC = () => {
                 </h2>
 
                 <p className="text-slate-600 text-base md:text-lg leading-relaxed max-w-2xl">
-                  For over two decades, Anointed Worship Center has been a beacon of light in Acton, MA.
+                  {CHURCH_STATS.establishedDisplay}, Anointed Worship Center has been a beacon of light in Acton, MA.
                   We are a multi-generational, diverse family of believers dedicated to the radical love of
                   Christ and the transformation of our community.
                 </p>
