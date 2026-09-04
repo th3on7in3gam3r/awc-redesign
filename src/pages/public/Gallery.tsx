@@ -6,11 +6,32 @@ import { allChurchMedia, isNativeVideoUrl } from '../../data/churchMedia';
 
 const ITEMS_PER_PAGE = 9;
 
+/** Old promotional / ministry graphic assets — not real church event photography */
+const LEGACY_PROMO_URL_SNIPPETS = [
+    '/images/home-hero',
+    '/images/mens-ministry',
+    '/images/womens-ministry',
+    '/images/youth-ministry',
+    '/images/children-ministry',
+    '/images/worship-arts',
+    '/images/community-outreach',
+    '/images/awc-welcome',
+    'youtube.com/embed/dQw4w9WgXcQ',
+];
+
+function isLegacyPromoItem(item: MediaItem): boolean {
+    const url = item.url || '';
+    const thumb = item.thumbnail || '';
+    return LEGACY_PROMO_URL_SNIPPETS.some(
+        (snippet) => url.includes(snippet) || thumb.includes(snippet)
+    );
+}
+
 const Gallery: React.FC = () => {
     const [filter, setFilter] = useState<'all' | 'image' | 'video'>('all');
     const [selectedMedia, setSelectedMedia] = useState<MediaItem | null>(null);
     const [currentPage, setCurrentPage] = useState(1);
-    const [galleryItems, setGalleryItems] = useState<MediaItem[]>([]);
+    const [galleryItems, setGalleryItems] = useState<MediaItem[]>(allChurchMedia);
     const [isLoading, setIsLoading] = useState(true);
     const scrollRef = useRef<HTMLDivElement>(null);
 
@@ -21,12 +42,11 @@ const Gallery: React.FC = () => {
                 if (!res.ok) throw new Error('Failed to fetch');
                 const data = await res.json();
                 const apiItems: MediaItem[] = Array.isArray(data) ? data : [];
-                const seen = new Set(apiItems.map((item) => item.url));
-                const merged = [
-                    ...allChurchMedia.filter((item) => !seen.has(item.url)),
-                    ...apiItems,
-                ];
-                setGalleryItems(merged);
+                const seen = new Set(allChurchMedia.map((item) => item.url));
+                const extraFromApi = apiItems.filter(
+                    (item) => !seen.has(item.url) && !isLegacyPromoItem(item)
+                );
+                setGalleryItems([...allChurchMedia, ...extraFromApi]);
             } catch (err) {
                 console.error('Error fetching gallery:', err);
                 setGalleryItems(allChurchMedia);
