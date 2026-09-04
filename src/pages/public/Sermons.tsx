@@ -102,94 +102,101 @@ const Sermons: React.FC = () => {
   };
 
   return (
-    <div className="pt-28 md:pt-52 pb-20 bg-gray-50 min-h-screen">
+    <div className="pt-28 md:pt-32 pb-16 md:pb-20 bg-gray-50 min-h-screen">
       <div className="max-w-7xl mx-auto px-4">
-        <div className="text-center mb-16">
-          <span className="text-church-gold font-bold tracking-[0.4em] uppercase text-xs mb-4 block animate-fade-in">Digital Library</span>
-          <h1 className="text-6xl font-bold text-church-burgundy mb-6 serif leading-tight">Watch & Listen</h1>
-          <p className="text-xl text-slate-500 max-w-2xl mx-auto font-light leading-relaxed">
+        <div className="text-center mb-10 md:mb-12">
+          <span className="text-church-gold font-bold tracking-[0.35em] uppercase text-[10px] mb-3 block">
+            Digital Library
+          </span>
+          <h1 className="text-4xl md:text-5xl font-bold text-church-burgundy mb-3 serif leading-tight">
+            Watch &amp; Listen
+          </h1>
+          <p className="text-base md:text-lg text-slate-500 max-w-2xl mx-auto font-light leading-relaxed">
             Missed a service? Catch up on our latest messages or dive into our archives to find spiritual nourishment.
           </p>
         </div>
 
         {/* Live Stream Section */}
         {liveStream.isLive ? (
-          <div className="mb-16 bg-gradient-to-br from-red-600 to-red-700 rounded-[3rem] overflow-hidden shadow-2xl border-4 border-red-500 animate-fade-in">
+          <div className="mb-10 md:mb-12 rounded-2xl overflow-hidden border border-red-500/40 shadow-sm bg-red-600 animate-fade-in">
             <div className="relative">
-              <div className="absolute top-6 left-6 z-10 flex items-center gap-3">
-                <div className="relative">
-                  <span className="flex h-4 w-4">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
-                    <span className="relative inline-flex rounded-full h-4 w-4 bg-white"></span>
+              <div className="absolute top-4 left-4 z-10">
+                <span className="inline-flex items-center gap-2 bg-white text-red-600 px-3 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-widest shadow-sm">
+                  <span className="relative flex h-2 w-2">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-500 opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-2 w-2 bg-red-600"></span>
                   </span>
-                </div>
-                <span className="bg-white text-red-600 px-4 py-2 rounded-full text-xs font-black uppercase tracking-widest shadow-lg">
-                  🔴 LIVE NOW
+                  Live Now
                 </span>
               </div>
 
-              <div
-                className="cursor-pointer group"
+              <button
+                type="button"
+                className="w-full text-left cursor-pointer group"
                 onClick={() => window.open(`https://www.youtube.com/watch?v=${liveStream.videoId}`, '_blank')}
               >
-                <div className="aspect-video relative overflow-hidden">
+                <div className="aspect-video relative overflow-hidden bg-black">
                   <img
                     src={liveStream.thumbnail}
-                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.02]"
                     alt="Live Stream"
                   />
-                  <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                    <div className="w-20 h-20 bg-white rounded-full flex items-center justify-center text-red-600 shadow-2xl scale-75 group-hover:scale-100 transition-transform duration-500">
-                      <i className="fa-solid fa-play ml-1 text-2xl"></i>
+                  <div className="absolute inset-0 bg-black/30 flex items-center justify-center">
+                    <div className="w-14 h-14 bg-white rounded-full flex items-center justify-center text-red-600 shadow-md">
+                      <i className="fa-solid fa-play ml-0.5 text-lg"></i>
                     </div>
                   </div>
                 </div>
 
-                <div className="p-10 bg-red-600">
-                  <h2 className="text-white text-3xl font-bold serif mb-2">{liveStream.title}</h2>
+                <div className="p-5 md:p-6 bg-red-600">
+                  <h2 className="text-white text-xl md:text-2xl font-bold serif mb-1">{liveStream.title}</h2>
                   {liveStream.viewerCount && (
                     <p className="text-red-100 text-sm">
                       <i className="fa-solid fa-eye mr-2"></i>
                       {youtubeService.formatViewCount(liveStream.viewerCount)} watching now
                     </p>
                   )}
-                  <p className="text-red-100 text-sm mt-4">Click to join the live stream on YouTube</p>
+                  <p className="text-red-100/90 text-sm mt-2">Click to join the live stream on YouTube</p>
                 </div>
-              </div>
+              </button>
             </div>
           </div>
         ) : (
-          <div className="mb-16 bg-gradient-to-br from-church-burgundy to-church-burgundy/90 rounded-[3rem] p-12 text-center shadow-xl">
-            <div className="max-w-2xl mx-auto">
-              <div className="w-16 h-16 bg-church-gold/20 text-church-gold rounded-full flex items-center justify-center mx-auto mb-6">
-                <i className="fa-solid fa-calendar-day text-2xl"></i>
+          <div className="mb-10 md:mb-12 bg-church-burgundy rounded-3xl p-6 md:p-8 shadow-sm">
+            <div className="flex flex-col md:flex-row md:items-center gap-5 md:gap-8">
+              <div className="flex items-start gap-4 flex-1 min-w-0">
+                <div className="shrink-0 w-11 h-11 bg-church-gold/15 text-church-gold rounded-xl flex items-center justify-center">
+                  <i className="fa-solid fa-calendar-day text-lg"></i>
+                </div>
+                <div className="min-w-0">
+                  <h3 className="text-white text-xl md:text-2xl font-bold serif mb-1">Join Us Live Every Sunday</h3>
+                  <p className="text-white/65 text-sm md:text-base">
+                    {liveStream.scheduledStartTime
+                      ? `Next service scheduled: ${new Date(liveStream.scheduledStartTime).toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', hour: 'numeric', minute: '2-digit' })}`
+                      : 'Sundays at 10:00 AM EST'}
+                  </p>
+                </div>
               </div>
-              <h3 className="text-white text-2xl font-bold serif mb-3">Join Us Live Every Sunday</h3>
-              <p className="text-gray-300 text-lg mb-6">
-                {liveStream.scheduledStartTime
-                  ? `Next service scheduled: ${new Date(liveStream.scheduledStartTime).toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', hour: 'numeric', minute: '2-digit' })}`
-                  : 'Sundays at 10:00 AM EST'}
-              </p>
               <a
                 href={YOUTUBE_CHANNEL_URL}
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex items-center gap-3 bg-church-gold hover:bg-white text-white hover:text-church-burgundy px-8 py-4 rounded-full font-black uppercase tracking-[0.2em] text-xs transition-all duration-500 shadow-xl"
+                className="inline-flex items-center justify-center gap-2 bg-church-gold hover:bg-white text-white hover:text-church-burgundy px-6 py-3 rounded-full font-bold uppercase tracking-[0.18em] text-[10px] transition-colors duration-300 shrink-0"
               >
-                <i className="fa-brands fa-youtube text-lg"></i> Set Reminder
+                <i className="fa-brands fa-youtube text-sm"></i> Set Reminder
               </a>
             </div>
           </div>
         )}
 
         {loading ? (
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-10">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6">
             {[1, 2, 3, 4, 5, 6].map(i => (
-              <div key={i} className="animate-pulse bg-white rounded-[2.5rem] overflow-hidden shadow-xl border border-gray-100">
+              <div key={i} className="animate-pulse bg-white rounded-2xl overflow-hidden border border-slate-200/80 shadow-sm">
                 <div className="aspect-video bg-gray-200"></div>
-                <div className="p-10">
-                  <div className="h-4 bg-gray-200 rounded mb-4 w-1/3"></div>
-                  <div className="h-6 bg-gray-200 rounded mb-4"></div>
+                <div className="p-4 md:p-5">
+                  <div className="h-3 bg-gray-200 rounded mb-3 w-1/3"></div>
+                  <div className="h-4 bg-gray-200 rounded mb-2"></div>
                   <div className="h-4 bg-gray-200 rounded w-2/3"></div>
                 </div>
               </div>
@@ -197,132 +204,133 @@ const Sermons: React.FC = () => {
           </div>
         ) : useYouTube && youtubeVideos.length > 0 ? (
           <>
-            <div className="flex items-center gap-6 mb-8">
-              <h2 className="text-3xl font-bold text-church-burgundy serif">Recent Sermons</h2>
-              <div className="h-[1px] flex-1 bg-gradient-to-r from-church-gold/40 to-transparent"></div>
+            <div className="flex items-center gap-4 mb-6 md:mb-8">
+              <h2 className="text-2xl md:text-3xl font-bold text-church-burgundy serif">Recent Sermons</h2>
+              <div className="h-px flex-1 bg-gradient-to-r from-church-gold/40 to-transparent"></div>
             </div>
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-10">
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6">
               {youtubeVideos.map((video) => (
-                <div
+                <button
                   key={video.id}
-                  className="group bg-white rounded-[2.5rem] overflow-hidden shadow-xl border border-gray-100 cursor-pointer hover:-translate-y-2 transition-all duration-500"
+                  type="button"
+                  className="group text-left bg-white rounded-2xl overflow-hidden border border-slate-200/80 shadow-sm hover:shadow-md hover:border-church-gold/40 transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-church-gold/50"
                   onClick={() => setSelectedYouTubeVideo(video)}
                 >
-                  <div className="relative aspect-video overflow-hidden">
+                  <div className="relative aspect-video overflow-hidden bg-slate-100">
                     <img
                       src={video.thumbnail}
-                      className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
-                      alt={video.title}
+                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+                      alt=""
                       onError={(e) => {
                         const target = e.target as HTMLImageElement;
                         target.src = 'https://images.unsplash.com/photo-1544427920-c49ccfb85579?auto=format&fit=crop&q=80';
                       }}
                     />
-                    <div className="absolute inset-0 bg-church-burgundy/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                      <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center text-church-burgundy shadow-2xl scale-75 group-hover:scale-100 transition-transform duration-500">
-                        <i className="fa-solid fa-play ml-1 text-xl"></i>
+                    <div className="absolute inset-0 bg-black/15 group-hover:bg-black/25 transition-colors duration-300 flex items-center justify-center">
+                      <div className="w-11 h-11 bg-white/95 rounded-full flex items-center justify-center text-church-burgundy shadow-sm">
+                        <i className="fa-solid fa-play ml-0.5 text-sm"></i>
                       </div>
                     </div>
                     {video.duration && (
-                      <div className="absolute bottom-3 right-3 bg-black/80 text-white px-2 py-1 rounded text-xs font-bold">
+                      <div className="absolute bottom-2.5 right-2.5 bg-black/80 text-white px-2 py-0.5 rounded text-[10px] font-bold">
                         {video.duration}
                       </div>
                     )}
                   </div>
-                  <div className="p-10">
-                    <p className="text-xs text-church-gold font-black uppercase tracking-tighter mb-4">
-                      {new Date(video.publishedAt).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
-                    </p>
-                    <h3 className="text-2xl font-bold text-church-burgundy mb-4 serif group-hover:text-church-gold transition-colors line-clamp-2">
+                  <div className="p-4 md:p-5">
+                    <div className="flex items-center gap-2 text-[11px] text-slate-500 mb-2">
+                      <span className="text-church-gold font-bold uppercase tracking-wider">
+                        {new Date(video.publishedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                      </span>
+                      {video.viewCount && (
+                        <>
+                          <span className="text-slate-300">·</span>
+                          <span>{youtubeService.formatViewCount(video.viewCount)} views</span>
+                        </>
+                      )}
+                    </div>
+                    <h3 className="text-base md:text-lg font-bold text-church-burgundy serif leading-snug line-clamp-2 group-hover:text-church-gold transition-colors">
                       {video.title}
                     </h3>
-                    {video.viewCount && (
-                      <p className="text-sm text-slate-500 mb-3">
-                        <i className="fa-solid fa-eye mr-2"></i>
-                        {youtubeService.formatViewCount(video.viewCount)} views
-                      </p>
-                    )}
                   </div>
-                </div>
+                </button>
               ))}
             </div>
           </>
         ) : sermons.length > 0 ? (
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-10">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6">
             {sermons.map((sermon) => (
-              <div
+              <button
                 key={sermon.id}
-                className="group bg-white rounded-[2.5rem] overflow-hidden shadow-xl border border-gray-100 cursor-pointer hover:-translate-y-2 transition-all duration-500"
+                type="button"
+                className="group text-left bg-white rounded-2xl overflow-hidden border border-slate-200/80 shadow-sm hover:shadow-md hover:border-church-gold/40 transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-church-gold/50"
                 onClick={() => setSelectedSermon(sermon)}
               >
-                <div className="relative aspect-video overflow-hidden">
+                <div className="relative aspect-video overflow-hidden bg-slate-100">
                   <img
                     src={getYouTubeThumbnail(sermon.video_url)}
-                    className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
-                    alt={sermon.title}
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+                    alt=""
                     onError={(e) => {
                       const target = e.target as HTMLImageElement;
                       target.src = 'https://images.unsplash.com/photo-1544427920-c49ccfb85579?auto=format&fit=crop&q=80';
                     }}
                   />
-                  <div className="absolute inset-0 bg-church-burgundy/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                    <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center text-church-burgundy shadow-2xl scale-75 group-hover:scale-100 transition-transform duration-500">
-                      <i className="fa-solid fa-play ml-1 text-xl"></i>
+                  <div className="absolute inset-0 bg-black/15 group-hover:bg-black/25 transition-colors duration-300 flex items-center justify-center">
+                    <div className="w-11 h-11 bg-white/95 rounded-full flex items-center justify-center text-church-burgundy shadow-sm">
+                      <i className="fa-solid fa-play ml-0.5 text-sm"></i>
                     </div>
                   </div>
-                  <div className="absolute top-6 left-6">
-                    <span className={`${getTypeColor(sermon.type)} text-white px-4 py-1 rounded-full text-[10px] font-black uppercase tracking-widest shadow-lg`}>
+                  <div className="absolute top-3 left-3">
+                    <span className={`${getTypeColor(sermon.type)} text-white px-2.5 py-1 rounded-full text-[9px] font-bold uppercase tracking-widest`}>
                       {sermon.type}
                     </span>
                   </div>
                 </div>
-                <div className="p-10">
-                  <p className="text-xs text-church-gold font-black uppercase tracking-tighter mb-4">{formatDate(sermon.date)}</p>
-                  <h3 className="text-2xl font-bold text-church-burgundy mb-4 serif group-hover:text-church-gold transition-colors">{sermon.title}</h3>
+                <div className="p-4 md:p-5">
+                  <p className="text-[11px] text-church-gold font-bold uppercase tracking-wider mb-2">{formatDate(sermon.date)}</p>
+                  <h3 className="text-base md:text-lg font-bold text-church-burgundy serif leading-snug line-clamp-2 mb-2 group-hover:text-church-gold transition-colors">
+                    {sermon.title}
+                  </h3>
                   {sermon.scripture && (
-                    <p className="text-sm text-slate-500 mb-3 italic">{sermon.scripture}</p>
+                    <p className="text-sm text-slate-500 mb-2 italic line-clamp-1">{sermon.scripture}</p>
                   )}
-                  <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-full border-2 border-church-gold/20 overflow-hidden bg-church-gold/10 flex items-center justify-center">
-                      <span className="text-church-gold text-xs font-bold">{sermon.speaker.charAt(0)}</span>
+                  <div className="flex items-center gap-2">
+                    <div className="w-7 h-7 rounded-full border border-church-gold/20 bg-church-gold/10 flex items-center justify-center">
+                      <span className="text-church-gold text-[10px] font-bold">{sermon.speaker.charAt(0)}</span>
                     </div>
-                    <p className="text-slate-500 text-sm font-medium italic">{sermon.speaker}</p>
+                    <p className="text-slate-500 text-sm">{sermon.speaker}</p>
                   </div>
                 </div>
-              </div>
+              </button>
             ))}
           </div>
         ) : (
-          <div className="text-center py-20">
-            <div className="w-20 h-20 bg-slate-100 text-slate-300 rounded-full flex items-center justify-center mx-auto mb-6">
-              <i className="fa-solid fa-video text-3xl"></i>
+          <div className="text-center py-14">
+            <div className="w-14 h-14 bg-slate-100 text-slate-300 rounded-full flex items-center justify-center mx-auto mb-4">
+              <i className="fa-solid fa-video text-xl"></i>
             </div>
-            <h3 className="text-2xl font-bold text-slate-400 mb-2">No Sermons Available</h3>
-            <p className="text-slate-300">Check back soon for new messages!</p>
+            <h3 className="text-xl font-bold text-slate-400 mb-1">No Sermons Available</h3>
+            <p className="text-slate-300 text-sm">Check back soon for new messages!</p>
           </div>
         )}
 
         {/* Featured Archive Section */}
-        <div className="mt-32 bg-church-burgundy rounded-[4rem] p-16 md:p-24 relative overflow-hidden text-center shadow-2xl">
-          <div className="absolute inset-0 opacity-10">
-            <div className="absolute top-0 left-0 w-64 h-64 bg-church-gold rounded-full blur-[100px] -translate-x-1/2 -translate-y-1/2"></div>
-            <div className="absolute bottom-0 right-0 w-96 h-96 bg-church-gold rounded-full blur-[150px] translate-x-1/3 translate-y-1/3"></div>
-          </div>
-          <div className="relative z-10">
-            <h2 className="text-white text-4xl md:text-5xl font-bold mb-8 serif">Looking for older messages?</h2>
-            <p className="text-gray-400 text-lg mb-12 font-light max-w-xl mx-auto leading-relaxed">
+        <div className="mt-14 md:mt-16 bg-church-burgundy rounded-3xl p-10 md:p-14 relative overflow-hidden text-center">
+          <div className="absolute top-0 right-0 w-1/3 h-full bg-church-gold/5 -skew-x-12 translate-x-1/2 pointer-events-none"></div>
+          <div className="relative z-10 max-w-2xl mx-auto">
+            <h2 className="text-white text-2xl md:text-3xl font-bold mb-4 serif">Looking for older messages?</h2>
+            <p className="text-white/60 text-base mb-8 font-light leading-relaxed">
               Explore our full digital archive on YouTube. Subscribe to stay notified whenever we go live!
             </p>
-            <div className="flex flex-col sm:flex-row gap-6 justify-center">
-              <a
-                href={YOUTUBE_CHANNEL_URL}
-                target="_blank"
-                rel="noreferrer"
-                className="bg-church-gold hover:bg-white text-white hover:text-church-burgundy px-12 py-5 rounded-full font-black uppercase tracking-[0.2em] text-xs transition-all duration-500 shadow-xl inline-flex items-center gap-3 justify-center"
-              >
-                <i className="fa-brands fa-youtube text-lg"></i> YouTube Channel
-              </a>
-            </div>
+            <a
+              href={YOUTUBE_CHANNEL_URL}
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex items-center justify-center gap-2 bg-church-gold hover:bg-white text-white hover:text-church-burgundy px-8 py-3.5 rounded-full font-bold uppercase tracking-[0.2em] text-[10px] transition-colors duration-300"
+            >
+              <i className="fa-brands fa-youtube text-sm"></i> YouTube Channel
+            </a>
           </div>
         </div>
       </div>
@@ -335,13 +343,14 @@ const Sermons: React.FC = () => {
             onClick={() => setSelectedSermon(null)}
           ></div>
 
-          <div className="relative w-full max-w-5xl bg-black rounded-[2.5rem] overflow-hidden shadow-[0_0_100px_rgba(212,175,55,0.2)] animate-slide-up">
-            <div className="absolute top-6 right-6 z-10">
+          <div className="relative w-full max-w-5xl bg-black rounded-2xl overflow-hidden shadow-2xl animate-slide-up">
+            <div className="absolute top-4 right-4 z-10">
               <button
+                type="button"
                 onClick={() => setSelectedSermon(null)}
-                className="w-12 h-12 bg-white/10 hover:bg-white/20 text-white rounded-full flex items-center justify-center backdrop-blur-md transition-all group"
+                className="w-10 h-10 bg-white/10 hover:bg-white/20 text-white rounded-full flex items-center justify-center backdrop-blur-md transition-colors"
               >
-                <i className="fa-solid fa-xmark text-lg group-hover:rotate-90 transition-transform"></i>
+                <i className="fa-solid fa-xmark text-base"></i>
               </button>
             </div>
 
@@ -356,40 +365,40 @@ const Sermons: React.FC = () => {
                   allowFullScreen
                 ></iframe>
               ) : (
-                <div className="w-full h-full flex flex-col items-center justify-center text-white p-10 text-center">
-                  <div className="w-20 h-20 bg-church-gold/20 text-church-gold rounded-full flex items-center justify-center mb-6 text-3xl">
+                <div className="w-full h-full flex flex-col items-center justify-center text-white p-8 text-center">
+                  <div className="w-14 h-14 bg-church-gold/20 text-church-gold rounded-full flex items-center justify-center mb-4 text-2xl">
                     <i className="fa-solid fa-video-slash"></i>
                   </div>
-                  <h3 className="text-3xl font-bold mb-4 serif">Video Unavailable</h3>
-                  <p className="text-gray-400 max-w-sm">This sermon video is not yet available. Check back soon or visit our YouTube channel.</p>
+                  <h3 className="text-2xl font-bold mb-2 serif">Video Unavailable</h3>
+                  <p className="text-gray-400 max-w-sm text-sm">This sermon video is not yet available. Check back soon or visit our YouTube channel.</p>
                 </div>
               )}
             </div>
 
-            <div className="p-10 bg-church-burgundy border-t border-white/10">
-              <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+            <div className="p-6 md:p-8 bg-church-burgundy border-t border-white/10">
+              <div className="flex flex-col md:flex-row md:items-center justify-between gap-5">
                 <div>
                   <div className="flex items-center gap-3 mb-2">
-                    <span className="text-church-gold font-black uppercase tracking-[0.2em] text-[10px]">{selectedSermon.type}</span>
+                    <span className="text-church-gold font-bold uppercase tracking-[0.2em] text-[10px]">{selectedSermon.type}</span>
                     <span className="w-1 h-1 bg-white/20 rounded-full"></span>
                     <span className="text-gray-400 text-xs font-medium">{formatDate(selectedSermon.date)}</span>
                   </div>
-                  <h2 className="text-3xl font-bold text-white serif">{selectedSermon.title}</h2>
+                  <h2 className="text-2xl md:text-3xl font-bold text-white serif">{selectedSermon.title}</h2>
                   {selectedSermon.scripture && (
                     <p className="text-church-gold text-sm mt-2 italic">{selectedSermon.scripture}</p>
                   )}
                   <p className="text-gray-400 mt-2 font-light">{selectedSermon.speaker}</p>
                   {selectedSermon.summary && (
-                    <p className="text-gray-300 mt-4 leading-relaxed">{selectedSermon.summary}</p>
+                    <p className="text-gray-300 mt-3 leading-relaxed text-sm">{selectedSermon.summary}</p>
                   )}
                 </div>
-                <div className="flex gap-4">
+                <div className="flex gap-3">
                   {selectedSermon.video_url && (
                     <a
                       href={selectedSermon.video_url}
                       target="_blank"
                       rel="noreferrer"
-                      className="flex items-center gap-2 bg-white/5 hover:bg-white/10 text-white px-6 py-3 rounded-xl transition-all text-xs font-bold uppercase tracking-widest"
+                      className="flex items-center gap-2 bg-white/5 hover:bg-white/10 text-white px-5 py-2.5 rounded-xl transition-colors text-[10px] font-bold uppercase tracking-widest"
                     >
                       <i className="fa-brands fa-youtube"></i> YouTube
                     </a>
@@ -409,13 +418,14 @@ const Sermons: React.FC = () => {
             onClick={() => setSelectedYouTubeVideo(null)}
           ></div>
 
-          <div className="relative w-full max-w-5xl bg-black rounded-[2.5rem] overflow-hidden shadow-[0_0_100px_rgba(212,175,55,0.2)] animate-slide-up">
-            <div className="absolute top-6 right-6 z-10">
+          <div className="relative w-full max-w-5xl bg-black rounded-2xl overflow-hidden shadow-2xl animate-slide-up">
+            <div className="absolute top-4 right-4 z-10">
               <button
+                type="button"
                 onClick={() => setSelectedYouTubeVideo(null)}
-                className="w-12 h-12 bg-white/10 hover:bg-white/20 text-white rounded-full flex items-center justify-center backdrop-blur-md transition-all group"
+                className="w-10 h-10 bg-white/10 hover:bg-white/20 text-white rounded-full flex items-center justify-center backdrop-blur-md transition-colors"
               >
-                <i className="fa-solid fa-xmark text-lg group-hover:rotate-90 transition-transform"></i>
+                <i className="fa-solid fa-xmark text-base"></i>
               </button>
             </div>
 
@@ -430,17 +440,17 @@ const Sermons: React.FC = () => {
               ></iframe>
             </div>
 
-            <div className="p-10 bg-church-burgundy border-t border-white/10">
-              <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+            <div className="p-6 md:p-8 bg-church-burgundy border-t border-white/10">
+              <div className="flex flex-col md:flex-row md:items-center justify-between gap-5">
                 <div>
                   <div className="flex items-center gap-3 mb-2">
-                    <span className="text-church-gold font-black uppercase tracking-[0.2em] text-[10px]">SERMON</span>
+                    <span className="text-church-gold font-bold uppercase tracking-[0.2em] text-[10px]">SERMON</span>
                     <span className="w-1 h-1 bg-white/20 rounded-full"></span>
                     <span className="text-gray-400 text-xs font-medium">
                       {new Date(selectedYouTubeVideo.publishedAt).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
                     </span>
                   </div>
-                  <h2 className="text-3xl font-bold text-white serif">{selectedYouTubeVideo.title}</h2>
+                  <h2 className="text-2xl md:text-3xl font-bold text-white serif">{selectedYouTubeVideo.title}</h2>
                   {selectedYouTubeVideo.viewCount && (
                     <p className="text-gray-400 mt-2 text-sm">
                       <i className="fa-solid fa-eye mr-2"></i>
@@ -448,15 +458,15 @@ const Sermons: React.FC = () => {
                     </p>
                   )}
                   {selectedYouTubeVideo.description && (
-                    <p className="text-gray-300 mt-4 leading-relaxed line-clamp-3">{selectedYouTubeVideo.description}</p>
+                    <p className="text-gray-300 mt-3 leading-relaxed text-sm line-clamp-3">{selectedYouTubeVideo.description}</p>
                   )}
                 </div>
-                <div className="flex gap-4">
+                <div className="flex gap-3">
                   <a
                     href={selectedYouTubeVideo.videoUrl}
                     target="_blank"
                     rel="noreferrer"
-                    className="flex items-center gap-2 bg-white/5 hover:bg-white/10 text-white px-6 py-3 rounded-xl transition-all text-xs font-bold uppercase tracking-widest"
+                    className="flex items-center gap-2 bg-white/5 hover:bg-white/10 text-white px-5 py-2.5 rounded-xl transition-colors text-[10px] font-bold uppercase tracking-widest"
                   >
                     <i className="fa-brands fa-youtube"></i> YouTube
                   </a>
