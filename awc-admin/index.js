@@ -830,6 +830,62 @@ app.post('/api/me/prayers', auth, async (req, res) => {
     }
 });
 
+// POST /api/public/prayer-requests — guest prayer from Fellowship / Get Connected page
+app.post('/api/public/prayer-requests', async (req, res) => {
+    const { name, email, requestText, website } = req.body || {};
+
+    // Honeypot: bots fill "website"; real users leave it empty
+    if (website) {
+        return res.status(201).json({ success: true });
+    }
+
+    const guestName = typeof name === 'string' ? name.trim() : '';
+    const guestEmail = typeof email === 'string' ? email.trim() : '';
+    const text = typeof requestText === 'string' ? requestText.trim() : '';
+
+    if (!guestName || guestName.length < 2) {
+        return res.status(400).json({ message: 'Please enter your name.' });
+    }
+    if (!text || text.length < 5) {
+        return res.status(400).json({ message: 'Please share a bit more about how we can pray.' });
+    }
+    if (text.length > 4000) {
+        return res.status(400).json({ message: 'Prayer request is too long.' });
+    }
+    if (guestEmail && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(guestEmail)) {
+        return res.status(400).json({ message: 'Please enter a valid email address.' });
+    }
+
+    const storedText = guestEmail
+        ? `Contact: ${guestEmail}\n\n${text}`
+        : text;
+
+    try {
+        const result = await query(
+            `INSERT INTO prayer_requests (guest_name, request_text, status)
+             VALUES ($1, $2, $3)
+             RETURNING id, created_at`,
+            [guestName, storedText, 'active']
+        );
+        res.status(201).json({ success: true, id: result.rows[0]?.id });
+    } catch (err) {
+        console.error('Public prayer request error:', err);
+        // Fallback if guest_name column is missing on older schemas
+        try {
+            const fallback = await query(
+                `INSERT INTO prayer_requests (request_text, status, is_anonymous)
+                 VALUES ($1, $2, true)
+                 RETURNING id`,
+                [`[Guest: ${guestName}] ${storedText}`, 'active']
+            );
+            res.status(201).json({ success: true, id: fallback.rows[0]?.id });
+        } catch (fallbackErr) {
+            console.error('Public prayer fallback error:', fallbackErr);
+            res.status(500).json({ message: 'Unable to submit your prayer request right now.' });
+        }
+    }
+});
+
 // --- Legacy Profile Endpoint (Redirect/Alias) ---
 // Kept for backward compatibility with older frontend components if they exist
 app.get('/api/profile', auth, async (req, res) => {

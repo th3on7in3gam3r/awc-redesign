@@ -30,7 +30,7 @@ const Header: React.FC = () => {
     { path: '/giving', label: 'Give' },
     { path: '/events', label: 'Events' },
     { path: '/store', label: 'Store' },
-    { path: '/community', label: 'Community' },
+    { path: '/fellowship', label: 'Fellowship' },
   ];
 
   const mobileNavItems = [

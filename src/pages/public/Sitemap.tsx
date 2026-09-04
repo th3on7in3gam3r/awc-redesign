@@ -21,10 +21,10 @@ const Sitemap: React.FC = () => {
             ]
         },
         {
-            title: "Community",
+            title: "Fellowship",
             links: [
                 { name: "Events", path: "/events" },
-                { name: "Community Center", path: "/community" },
+                { name: "Get Connected", path: "/fellowship" },
                 { name: "AWC Store", path: "/store" },
                 { name: "Youth Collection", path: "/store/youth" },
             ]
