@@ -4,7 +4,7 @@ import { query } from '../db.mjs';
 // Configuration
 const BASE_URL = 'http://localhost:3002'; // Assuming api runs on 3002
 const EMAIL = 'testmember@example.com'; // Need a valid email
-const PASSWORD = 'password123'; // Need a valid password
+const PASSWORD = process.env.PASSWORD ?? '' /* moved to env */; // Need a valid password
 
 async function runTest() {
     try {
