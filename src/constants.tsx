@@ -191,6 +191,8 @@ export const FELLOWSHIP_COOKOUT = {
   location: 'Main Campus Grounds',
   signupUrl: AWC_VAULT_FELLOWSHIP_COOKOUT_URL,
   signupPath: '/events/fellowship-cookout/signup',
+  /** Static share page with Open Graph image for WhatsApp / social link previews */
+  sharePath: '/fellowship-cookout/',
 };
 
 export const EVENTS: ChurchEvent[] = [

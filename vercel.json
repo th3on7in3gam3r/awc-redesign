@@ -21,7 +21,7 @@
       "destination": "https://awc-vault.vercel.app/:path*"
     },
     {
-      "source": "/((?!api/).*)",
+      "source": "/((?!api/|fellowship-cookout(?:/|$)|images/|favicon\\.svg|music/|video/).*)",
       "destination": "/index.html"
     }
   ]
