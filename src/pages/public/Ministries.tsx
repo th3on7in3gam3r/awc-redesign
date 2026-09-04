@@ -7,7 +7,7 @@ interface TeamMember {
   name: string;
   role: string;
   bio: string;
-  imageUrl: string;
+  imageUrl?: string;
 }
 
 const LEADER_TEAM: TeamMember[] = [
@@ -44,8 +44,17 @@ const MINISTRY_TEAM: TeamMember[] = [
   { name: "Moses Agwisagye", role: "The Administrator", bio: "", imageUrl: "/images/brother-admin.jpg" },
   { name: "Denis Kwesiga", role: "Men's Leader", bio: "", imageUrl: "/images/denis-k.png" },
   { name: "Ezra Tindyebwa & Victoria Kamya", role: "Married Ministry Leaders", bio: "", imageUrl: "/images/marrieds-about-pic.png" },
-  { name: "Lorna Sekamwa", role: "Teen Ministry", bio: "", imageUrl: "https://via.placeholder.com/300x300/8B4513/FFFFFF?text=Teen+Ministry" },
+  { name: "Lorna Sekamwa", role: "Teen Ministry", bio: "" },
 ];
+
+function memberInitials(name: string): string {
+  return name
+    .split(/[\s&]+/)
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((part) => part[0]?.toUpperCase() ?? "")
+    .join("");
+}
 
 const Ministries: React.FC = () => {
   const [selectedMinistry, setSelectedMinistry] = useState<Ministry | null>(null);
@@ -326,7 +335,23 @@ const Ministries: React.FC = () => {
                 <div key={i} className="text-center group">
                   <div className="relative mb-4 mx-auto w-24 h-24 lg:w-32 lg:h-32">
                     <div className="absolute inset-0 rounded-full bg-church-gold scale-0 group-hover:scale-110 transition-transform duration-500 opacity-20"></div>
-                    <img src={member.imageUrl} className="w-full h-full object-cover rounded-full border-4 border-white shadow-xl relative z-10" alt={member.name} />
+                    {member.imageUrl ? (
+                      <img
+                        src={member.imageUrl}
+                        className="w-full h-full object-cover rounded-full border-4 border-white shadow-xl relative z-10"
+                        alt={member.name}
+                      />
+                    ) : (
+                      <div
+                        className="w-full h-full rounded-full border-4 border-white shadow-xl relative z-10 flex items-center justify-center bg-gradient-to-br from-church-burgundy to-[#2d0202] ring-1 ring-church-gold/30"
+                        aria-label={member.name}
+                        role="img"
+                      >
+                        <span className="serif text-2xl lg:text-3xl font-bold text-church-gold tracking-wide select-none">
+                          {memberInitials(member.name)}
+                        </span>
+                      </div>
+                    )}
                   </div>
                   <h4 className="text-church-burgundy font-bold text-[13px] leading-tight px-2">{member.name}</h4>
                   <p className="text-church-gold font-black uppercase tracking-widest text-[8px] mt-2 block opacity-80">{member.role}</p>
