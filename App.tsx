@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './src/context/AuthContext';
 import { CartProvider } from './src/context/CartContext';
 import MainLayout from './src/layouts/MainLayout';
+import ScrollToTop from './src/components/ScrollToTop';
 import StoreHub from './src/pages/public/store/StoreHub';
 import StoreCatalog from './src/pages/public/store/StoreCatalog';
 import StoreProduct from './src/pages/public/store/StoreProduct';
@@ -76,6 +77,7 @@ const App: React.FC = () => {
     <AuthProvider>
       <CartProvider>
       <BrowserRouter>
+        <ScrollToTop />
         <Routes>
           {/* Public Routes */}
           <Route element={<MainLayout />}>
