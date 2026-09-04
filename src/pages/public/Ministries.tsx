@@ -160,79 +160,51 @@ const Ministries: React.FC = () => {
 
   return (
     <div className="bg-gray-50 min-h-screen">
-      {/* MODERN HERO SECTION */}
-      <section className="relative h-[70vh] min-h-[600px] flex items-center justify-center overflow-hidden bg-church-burgundy">
-        {/* Background Pattern */}
-        <div className="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')]"></div>
+      {/* Page header */}
+      <section className="relative overflow-hidden bg-church-burgundy pt-28 pb-14 md:pt-32 md:pb-16">
+        <div className="absolute inset-0 bg-gradient-to-br from-church-burgundy via-church-burgundy to-[#2a0202]"></div>
+        <div className="absolute inset-y-0 right-0 w-1/2 bg-gradient-to-l from-church-gold/10 to-transparent pointer-events-none"></div>
 
-        {/* Gradient Overlays */}
-        <div className="absolute inset-0 bg-gradient-to-br from-church-burgundy via-church-burgundy/95 to-black/80"></div>
-        <div className="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-church-gold/20 to-transparent"></div>
-
-        {/* Floating Shapes */}
-        <div className="absolute top-20 right-20 w-64 h-64 bg-church-gold/10 rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute bottom-20 left-20 w-96 h-96 bg-white/5 rounded-full blur-3xl"></div>
-
-        {/* Content */}
-        <div className="container mx-auto px-6 relative z-10 text-center">
-          <div className="max-w-4xl mx-auto">
-            {/* Badge */}
-            <div className="inline-flex items-center gap-3 bg-white/10 backdrop-blur-md border border-white/20 rounded-full px-6 py-2 mb-8">
-              <div className="w-2 h-2 bg-church-gold rounded-full animate-pulse"></div>
-              <span className="text-white text-xs font-bold uppercase tracking-widest">Discover Your Purpose</span>
-            </div>
-
-            {/* Main Heading */}
-            <h1 className="text-6xl md:text-7xl lg:text-8xl font-black text-white mb-8 leading-tight">
-              Our <span className="text-transparent bg-clip-text bg-gradient-to-r from-church-gold to-yellow-200">Ministries</span>
-            </h1>
-
-            {/* Subtitle */}
-            <p className="text-xl md:text-2xl text-white/80 font-light mb-12 max-w-3xl mx-auto leading-relaxed">
-              Every member has a unique calling. Find where you belong and make an eternal impact in the Kingdom.
-            </p>
-
-            {/* CTA Buttons */}
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <button
-                onClick={() => {
-                  const ministriesSection = document.querySelector('.ministries-section');
-                  if (ministriesSection) {
-                    ministriesSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                  }
-                }}
-                className="bg-church-gold hover:bg-white text-white hover:text-church-burgundy px-10 py-4 rounded-full font-bold uppercase tracking-widest text-xs transition-all duration-300 shadow-lg hover:shadow-church-gold/50"
-              >
-                Explore Ministries
-              </button>
-              <a
-                href="/visit"
-                className="bg-white/10 backdrop-blur-sm border border-white/20 text-white hover:bg-white hover:text-church-burgundy px-10 py-4 rounded-full font-bold uppercase tracking-widest text-xs transition-all duration-300 text-center"
-              >
-                Plan A Visit
-              </a>
-            </div>
-          </div>
-        </div>
-
-        {/* Scroll Indicator */}
-        <div className="absolute bottom-10 left-1/2 -translate-x-1/2 animate-bounce">
-          <div className="w-6 h-10 border-2 border-white/30 rounded-full flex items-start justify-center p-2">
-            <div className="w-1 h-2 bg-white/50 rounded-full"></div>
+        <div className="relative z-10 max-w-7xl mx-auto px-4 md:px-6 text-center">
+          <p className="text-church-gold font-bold uppercase tracking-[0.35em] text-[10px] mb-3">
+            Discover Your Purpose
+          </p>
+          <h1 className="text-4xl md:text-5xl lg:text-[3.25rem] font-bold text-white serif leading-tight mb-4">
+            Our Ministries
+          </h1>
+          <p className="text-base md:text-lg text-white/70 font-light max-w-2xl mx-auto leading-relaxed mb-8">
+            Every member has a unique calling. Find where you belong and make an eternal impact in the Kingdom.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-3 justify-center">
+            <button
+              type="button"
+              onClick={() => {
+                document.querySelector('.ministries-section')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+              }}
+              className="bg-church-gold hover:bg-white text-white hover:text-church-burgundy px-8 py-3 rounded-full font-bold uppercase tracking-widest text-[10px] transition-colors duration-300"
+            >
+              Explore Ministries
+            </button>
+            <a
+              href="/visit"
+              className="border border-white/25 text-white hover:bg-white hover:text-church-burgundy px-8 py-3 rounded-full font-bold uppercase tracking-widest text-[10px] transition-colors duration-300 text-center"
+            >
+              Plan A Visit
+            </a>
           </div>
         </div>
       </section>
 
       {/* MAIN CONTENT */}
-      <div className="pt-20 pb-20">
+      <div className="pt-14 md:pt-16 pb-20">
         <div className="max-w-7xl mx-auto px-4">
 
           {/* Core Ministries Section */}
-          <div className="mb-32 ministries-section">
-            <div className="text-center mb-14">
-              <span className="text-church-gold font-black tracking-[0.4em] uppercase text-xs mb-4 block">Get Involved</span>
-              <h2 className="text-5xl md:text-6xl font-bold text-church-burgundy serif mb-6">Core Ministries</h2>
-              <p className="text-xl text-slate-500 max-w-2xl mx-auto font-light">
+          <div className="mb-24 ministries-section">
+            <div className="text-center mb-10 md:mb-12">
+              <span className="text-church-gold font-black tracking-[0.4em] uppercase text-xs mb-3 block">Get Involved</span>
+              <h2 className="text-3xl md:text-4xl font-bold text-church-burgundy serif mb-3">Core Ministries</h2>
+              <p className="text-base md:text-lg text-slate-500 max-w-2xl mx-auto font-light">
                 Discover where your gifts and passions can make a difference in our community.
               </p>
             </div>
