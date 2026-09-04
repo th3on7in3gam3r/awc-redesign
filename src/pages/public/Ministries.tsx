@@ -15,35 +15,35 @@ const LEADER_TEAM: TeamMember[] = [
     name: "Pastor Kenneth Mutegyeki",
     role: "Senior Pastor",
     bio: "Visionary leader dedicated to spiritual growth and community transformation through the radical power of the Word.",
-    imageUrl: "https://anointedworshipcenter.com/images/pastor-ken.png"
+    imageUrl: "/images/leadership/pastor-ken.png"
   },
   {
     name: "First Lady Sania Mutegyeki",
     role: "First Lady",
     bio: "A pillar of grace and wisdom, leading our women's initiatives and community outreach with a heart for service.",
-    imageUrl: "https://anointedworshipcenter.com/profiles/sania.png"
+    imageUrl: "/images/leadership/first-lady-sania.jpg"
   },
   {
     name: "Pastor Janet Mukarrumongi",
     role: "Pastor (Nalongo)",
     bio: "Deeply committed to spiritual mentorship and nurturing the next generation of believers in Acton, MA.",
-    imageUrl: "https://anointedworshipcenter.com/images/pastor-janet.jpeg"
+    imageUrl: "/images/leadership/pastor-janet.jpeg"
   },
   {
     name: "Elder Ezra Tindyebwa",
     role: "Church Elder",
     bio: "Serving as a faithful guardian of the church's spiritual foundations and providing wise counsel to our family.",
-    imageUrl: "https://anointedworshipcenter.com/images/elder-ezra.jpeg"
+    imageUrl: "/images/leadership/elder-ezra.jpeg"
   },
 ];
 
 const MINISTRY_TEAM: TeamMember[] = [
-  { name: "Joel Kiwanuka", role: "Music Director", bio: "", imageUrl: "https://anointedworshipcenter.com/images/joelk.jpeg" },
-  { name: "Paul Njenga", role: "Youth Minister", bio: "", imageUrl: "https://anointedworshipcenter.com/images/paul-n.jpg" },
-  { name: "Gertrude Mutakubwa", role: "Children's Leader", bio: "", imageUrl: "https://anointedworshipcenter.com/images/gertrudem.jpeg" },
-  { name: "Moses Agwisagye", role: "The Administrator", bio: "", imageUrl: "https://anointedworshipcenter.com/images/brother-admin.jpg" },
-  { name: "Denis Kwesiga", role: "Men's Leader", bio: "", imageUrl: "https://anointedworshipcenter.com/images/denis-k.png" },
-  { name: "Ezra Tindyebwa & Victoria Kamya", role: "Married Ministry Leaders", bio: "", imageUrl: "https://www.anointedworshipcenter.com/images/marrieds-about-pic.png" },
+  { name: "Joel Kiwanuka", role: "Music Director", bio: "", imageUrl: "/images/joelk.jpeg" },
+  { name: "Paul Njenga", role: "Youth Minister", bio: "", imageUrl: "/images/paul-n.jpg" },
+  { name: "Gertrude Mutakubwa", role: "Children's Leader", bio: "", imageUrl: "/images/gertrudem.jpeg" },
+  { name: "Moses Agwisagye", role: "The Administrator", bio: "", imageUrl: "/images/brother-admin.jpg" },
+  { name: "Denis Kwesiga", role: "Men's Leader", bio: "", imageUrl: "/images/denis-k.png" },
+  { name: "Ezra Tindyebwa & Victoria Kamya", role: "Married Ministry Leaders", bio: "", imageUrl: "/images/marrieds-about-pic.png" },
   { name: "Lorna Sekamwa", role: "Teen Ministry", bio: "", imageUrl: "https://via.placeholder.com/300x300/8B4513/FFFFFF?text=Teen+Ministry" },
 ];
 
