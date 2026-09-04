@@ -21,7 +21,7 @@ const LEADER_TEAM: TeamMember[] = [
     name: "First Lady Sania Mutegyeki",
     role: "First Lady",
     bio: "A pillar of grace and wisdom, leading our women's initiatives and community outreach with a heart for service.",
-    imageUrl: "/images/leadership/first-lady-sania.jpg"
+    imageUrl: "/images/leadership/first-lady-sania.png"
   },
   {
     name: "Pastor Janet Mukarrumongi",
