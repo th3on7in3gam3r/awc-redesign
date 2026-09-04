@@ -256,81 +256,93 @@ const Ministries: React.FC = () => {
           </div>
 
           {/* Pastoral Leadership Section */}
-          <div className="mb-32">
-            <div className="text-center mb-16">
-              <span className="text-church-gold font-black tracking-[0.4em] uppercase text-xs mb-4 block">Our Leaders</span>
-              <h2 className="text-5xl md:text-6xl font-bold text-church-burgundy serif mb-6">Pastoral Leadership</h2>
-              <p className="text-xl text-slate-500 max-w-2xl mx-auto font-light">
+          <div className="mb-24">
+            <div className="text-center mb-10 md:mb-12">
+              <span className="text-church-gold font-black tracking-[0.4em] uppercase text-xs mb-3 block">Our Leaders</span>
+              <h2 className="text-3xl md:text-4xl font-bold text-church-burgundy serif mb-3">Pastoral Leadership</h2>
+              <p className="text-base md:text-lg text-slate-500 max-w-2xl mx-auto font-light">
                 Meet the shepherds guiding our spiritual journey with wisdom and compassion.
               </p>
             </div>
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5 md:gap-6">
               {LEADER_TEAM.map((leader, i) => (
-                <div key={i} className="group bg-white rounded-[2.5rem] overflow-hidden shadow-xl border border-gray-100 transition-all duration-500 hover:-translate-y-3">
-                  <div className="aspect-[3/4] overflow-hidden relative">
-                    <img src={leader.imageUrl} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" alt={leader.name} />
-                    <div className="absolute inset-0 bg-gradient-to-t from-church-burgundy via-transparent to-transparent opacity-60"></div>
-                    <div className="absolute bottom-6 left-6 right-6">
-                      <p className="text-church-gold font-black uppercase tracking-[0.2em] text-[9px] mb-1">{leader.role}</p>
-                      <h3 className="text-white text-xl font-bold serif leading-tight">{leader.name}</h3>
-                    </div>
+                <article
+                  key={i}
+                  className="bg-white rounded-2xl overflow-hidden border border-slate-200/80 shadow-sm"
+                >
+                  <div className="aspect-[4/5] overflow-hidden bg-slate-100">
+                    <img
+                      src={leader.imageUrl}
+                      className="w-full h-full object-cover object-top"
+                      alt={leader.name}
+                    />
                   </div>
-                  <div className="p-6">
-                    <p className="text-slate-500 text-sm leading-relaxed">{leader.bio}</p>
+                  <div className="p-4 md:p-5">
+                    <p className="text-church-gold font-bold uppercase tracking-[0.18em] text-[9px] mb-1">
+                      {leader.role}
+                    </p>
+                    <h3 className="text-church-burgundy text-base md:text-lg font-bold serif leading-snug mb-2">
+                      {leader.name}
+                    </h3>
+                    <p className="text-slate-500 text-sm leading-relaxed line-clamp-3">
+                      {leader.bio}
+                    </p>
                   </div>
-                </div>
+                </article>
               ))}
             </div>
           </div>
 
           {/* Ministry Leaders Section */}
-          <div className="mb-32">
-            <div className="text-center mb-16">
-              <span className="text-church-gold font-black tracking-[0.4em] uppercase text-xs mb-4 block">Our Team</span>
-              <h2 className="text-5xl md:text-6xl font-bold text-church-burgundy serif mb-6">Ministry Leaders</h2>
-              <p className="text-xl text-slate-500 max-w-2xl mx-auto font-light">
+          <div className="mb-24">
+            <div className="text-center mb-10 md:mb-12">
+              <span className="text-church-gold font-black tracking-[0.4em] uppercase text-xs mb-3 block">Our Team</span>
+              <h2 className="text-3xl md:text-4xl font-bold text-church-burgundy serif mb-3">Ministry Leaders</h2>
+              <p className="text-base md:text-lg text-slate-500 max-w-2xl mx-auto font-light">
                 Dedicated servants leading with passion and purpose in their areas of calling.
               </p>
             </div>
-            <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-y-12 gap-x-6">
+            <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-y-10 gap-x-5">
               {MINISTRY_TEAM.map((member, i) => (
                 <div key={i} className="text-center group">
-                  <div className="relative mb-4 mx-auto w-24 h-24 lg:w-32 lg:h-32">
-                    <div className="absolute inset-0 rounded-full bg-church-gold scale-0 group-hover:scale-110 transition-transform duration-500 opacity-20"></div>
+                  <div className="relative mb-3 mx-auto w-20 h-20 lg:w-24 lg:h-24">
                     {member.imageUrl ? (
                       <img
                         src={member.imageUrl}
-                        className="w-full h-full object-cover rounded-full border-4 border-white shadow-xl relative z-10"
+                        className="w-full h-full object-cover rounded-full border-[3px] border-white shadow-md ring-1 ring-slate-200/80"
                         alt={member.name}
                       />
                     ) : (
                       <div
-                        className="w-full h-full rounded-full border-4 border-white shadow-xl relative z-10 flex items-center justify-center bg-gradient-to-br from-church-burgundy to-[#2d0202] ring-1 ring-church-gold/30"
+                        className="w-full h-full rounded-full border-[3px] border-white shadow-md ring-1 ring-slate-200/80 flex items-center justify-center bg-gradient-to-br from-church-burgundy to-[#2d0202]"
                         aria-label={member.name}
                         role="img"
                       >
-                        <span className="serif text-2xl lg:text-3xl font-bold text-church-gold tracking-wide select-none">
+                        <span className="serif text-xl lg:text-2xl font-bold text-church-gold tracking-wide select-none">
                           {memberInitials(member.name)}
                         </span>
                       </div>
                     )}
                   </div>
-                  <h4 className="text-church-burgundy font-bold text-[13px] leading-tight px-2">{member.name}</h4>
-                  <p className="text-church-gold font-black uppercase tracking-widest text-[8px] mt-2 block opacity-80">{member.role}</p>
+                  <h4 className="text-church-burgundy font-bold text-[12px] leading-tight px-1">{member.name}</h4>
+                  <p className="text-church-gold font-bold uppercase tracking-widest text-[8px] mt-1.5 block opacity-80">{member.role}</p>
                 </div>
               ))}
             </div>
           </div>
 
           {/* Help Finding Ministry CTA */}
-          <div className="mt-32 bg-church-burgundy rounded-[4rem] p-16 md:p-24 relative overflow-hidden shadow-2xl">
-            <div className="absolute top-0 right-0 w-1/3 h-full bg-church-gold/5 -skew-x-12 translate-x-1/2"></div>
-            <div className="relative z-10 text-center max-w-3xl mx-auto">
-              <h2 className="text-white text-4xl md:text-5xl font-bold mb-8 serif">Discover Your Giftedness</h2>
-              <p className="text-gray-400 text-lg mb-12 font-light leading-relaxed">
+          <div className="mt-8 bg-church-burgundy rounded-3xl p-10 md:p-14 relative overflow-hidden">
+            <div className="absolute top-0 right-0 w-1/3 h-full bg-church-gold/5 -skew-x-12 translate-x-1/2 pointer-events-none"></div>
+            <div className="relative z-10 text-center max-w-2xl mx-auto">
+              <h2 className="text-white text-2xl md:text-3xl font-bold mb-4 serif">Discover Your Giftedness</h2>
+              <p className="text-white/60 text-base mb-8 font-light leading-relaxed">
                 Every member has a unique part to play in the body of Christ. Let us help you find yours.
               </p>
-              <button className="bg-church-gold hover:bg-white text-white hover:text-church-burgundy px-12 py-5 rounded-full font-black uppercase tracking-[0.2em] text-xs transition-all duration-500">
+              <button
+                type="button"
+                className="bg-church-gold hover:bg-white text-white hover:text-church-burgundy px-8 py-3.5 rounded-full font-bold uppercase tracking-[0.2em] text-[10px] transition-colors duration-300"
+              >
                 Spiritual Gifts Assessment
               </button>
             </div>
