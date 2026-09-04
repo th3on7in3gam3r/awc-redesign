@@ -24,20 +24,17 @@ const Header: React.FC = () => {
     { path: '/', label: 'Home' },
     { path: '/ministries', label: 'Ministries' },
     { path: '/sermons', label: 'Sermons' },
+    { path: '/events', label: 'Events' },
   ];
 
   const rightNavItems = [
     { path: '/giving', label: 'Give' },
-    { path: '/events', label: 'Events' },
     { path: '/store', label: 'Store' },
     { path: '/fellowship', label: 'Fellowship' },
+    { path: '/gallery', label: 'Gallery' },
   ];
 
-  const mobileNavItems = [
-    ...leftNavItems,
-    { path: '/gallery', label: 'Gallery' },
-    ...rightNavItems,
-  ];
+  const mobileNavItems = [...leftNavItems, ...rightNavItems];
 
   const mobileLinkClass =
     'text-[12px] font-semibold uppercase tracking-[0.16em] text-center py-2.5 text-white/85 hover:text-church-gold';
@@ -58,7 +55,7 @@ const Header: React.FC = () => {
     >
       <div className="max-w-[1400px] mx-auto px-5 lg:px-8">
         <div className="flex items-center justify-between h-[72px] gap-4">
-          <div className="hidden lg:flex items-center justify-end gap-7 flex-1 min-w-0">
+          <div className="hidden lg:flex items-center justify-end gap-5 xl:gap-7 flex-1 min-w-0">
             {leftNavItems.map((item) => (
               <NavLink key={item.path} to={item.path} className={linkClass}>
                 {item.label}
@@ -72,8 +69,8 @@ const Header: React.FC = () => {
             </div>
           </Link>
 
-          <div className="hidden lg:flex items-center justify-start gap-7 flex-1 min-w-0">
-            <div className="flex items-center gap-7">
+          <div className="hidden lg:flex items-center justify-start gap-5 xl:gap-7 flex-1 min-w-0">
+            <div className="flex items-center gap-5 xl:gap-7">
               {rightNavItems.map((item) => (
                 <NavLink key={item.path} to={item.path} className={linkClass}>
                   {item.label}
