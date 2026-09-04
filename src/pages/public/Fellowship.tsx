@@ -6,6 +6,7 @@ import {
   AWC_VAULT_MEMBER_SETUP_URL,
   FELLOWSHIP_COOKOUT,
 } from '../../constants';
+import { churchPhotos, churchVideos, type ChurchMediaItem } from '../../data/churchMedia';
 
 const NEXT_STEPS = [
   {
@@ -42,6 +43,7 @@ const Fellowship: React.FC = () => {
   const [submitting, setSubmitting] = useState(false);
   const [status, setStatus] = useState<'idle' | 'success' | 'error'>('idle');
   const [errorMessage, setErrorMessage] = useState('');
+  const [selectedMedia, setSelectedMedia] = useState<ChurchMediaItem | null>(null);
 
   const handlePrayerSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -116,6 +118,80 @@ const Fellowship: React.FC = () => {
                   <i className="fa-solid fa-arrow-right text-[9px] transition-transform group-hover:translate-x-1"></i>
                 </span>
               </Link>
+            ))}
+          </div>
+        </section>
+
+        <section className="mb-14 md:mb-16">
+          <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 mb-6 md:mb-8">
+            <div className="flex items-center gap-4 flex-1 min-w-0">
+              <h2 className="text-2xl md:text-3xl font-bold text-church-burgundy serif shrink-0">Photo Gallery</h2>
+              <div className="h-px flex-1 bg-gradient-to-r from-church-gold/40 to-transparent"></div>
+            </div>
+            <Link
+              to="/gallery"
+              className="text-church-gold font-bold uppercase tracking-[0.18em] text-[10px] inline-flex items-center gap-2 shrink-0"
+            >
+              See full Gallery
+              <i className="fa-solid fa-arrow-right text-[9px]"></i>
+            </Link>
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-4">
+            {churchPhotos.map((photo) => (
+              <button
+                key={photo.id}
+                type="button"
+                onClick={() => setSelectedMedia(photo)}
+                className="group relative aspect-[4/3] overflow-hidden rounded-2xl border border-slate-200/80 bg-slate-100 shadow-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-church-gold/50"
+              >
+                <img
+                  src={photo.thumbnail}
+                  alt={photo.title}
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+                />
+                <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 to-transparent p-3 md:p-4 text-left">
+                  <p className="text-white text-sm font-bold serif leading-snug line-clamp-1">{photo.title}</p>
+                </div>
+              </button>
+            ))}
+          </div>
+        </section>
+
+        <section className="mb-14 md:mb-16">
+          <div className="flex items-center gap-4 mb-6 md:mb-8">
+            <h2 className="text-2xl md:text-3xl font-bold text-church-burgundy serif">Video Gallery</h2>
+            <div className="h-px flex-1 bg-gradient-to-r from-church-gold/40 to-transparent"></div>
+          </div>
+          <div className="grid sm:grid-cols-2 gap-5 md:gap-6">
+            {churchVideos.map((video) => (
+              <button
+                key={video.id}
+                type="button"
+                onClick={() => setSelectedMedia(video)}
+                className="group text-left bg-white rounded-2xl overflow-hidden border border-slate-200/80 shadow-sm hover:shadow-md hover:border-church-gold/40 transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-church-gold/50"
+              >
+                <div className="relative aspect-video overflow-hidden bg-slate-900">
+                  <img
+                    src={video.thumbnail}
+                    alt=""
+                    className="w-full h-full object-cover opacity-90 transition-transform duration-500 group-hover:scale-[1.03]"
+                  />
+                  <div className="absolute inset-0 bg-black/25 flex items-center justify-center">
+                    <div className="w-12 h-12 rounded-full bg-white/95 text-church-burgundy flex items-center justify-center shadow-sm">
+                      <i className="fa-solid fa-play ml-0.5 text-sm"></i>
+                    </div>
+                  </div>
+                </div>
+                <div className="p-4 md:p-5">
+                  <p className="text-church-gold font-bold uppercase tracking-[0.18em] text-[10px] mb-1">
+                    {video.category}
+                  </p>
+                  <h3 className="text-lg font-bold text-church-burgundy serif leading-snug">{video.title}</h3>
+                  {video.description && (
+                    <p className="text-slate-500 text-sm mt-1 line-clamp-2">{video.description}</p>
+                  )}
+                </div>
+              </button>
             ))}
           </div>
         </section>
@@ -216,7 +292,6 @@ const Fellowship: React.FC = () => {
                     rows={5}
                     className="w-full bg-gray-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-church-gold/30 resize-y"
                   />
-                  {/* Honeypot — leave empty */}
                   <input
                     type="text"
                     name="website"
@@ -274,6 +349,54 @@ const Fellowship: React.FC = () => {
           </div>
         </section>
       </div>
+
+      {selectedMedia && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+          <button
+            type="button"
+            className="absolute inset-0 bg-church-burgundy/90 backdrop-blur-sm"
+            aria-label="Close media"
+            onClick={() => setSelectedMedia(null)}
+          />
+          <div className="relative z-10 w-full max-w-5xl bg-black rounded-2xl overflow-hidden shadow-2xl">
+            <button
+              type="button"
+              onClick={() => setSelectedMedia(null)}
+              className="absolute top-4 right-4 z-20 w-10 h-10 bg-white/10 hover:bg-white/20 text-white rounded-full flex items-center justify-center"
+            >
+              <i className="fa-solid fa-xmark"></i>
+            </button>
+            <div className="aspect-video bg-black flex items-center justify-center">
+              {selectedMedia.type === 'video' ? (
+                <video
+                  key={selectedMedia.id}
+                  src={selectedMedia.url}
+                  controls
+                  autoPlay
+                  playsInline
+                  className="w-full h-full"
+                  poster={selectedMedia.thumbnail}
+                />
+              ) : (
+                <img
+                  src={selectedMedia.url}
+                  alt={selectedMedia.title}
+                  className="w-full h-full object-contain"
+                />
+              )}
+            </div>
+            <div className="p-5 md:p-6 bg-church-burgundy border-t border-white/10">
+              <p className="text-church-gold font-bold uppercase tracking-[0.2em] text-[10px] mb-1">
+                {selectedMedia.category}
+              </p>
+              <h3 className="text-white text-xl md:text-2xl font-bold serif">{selectedMedia.title}</h3>
+              {selectedMedia.description && (
+                <p className="text-white/65 text-sm mt-2">{selectedMedia.description}</p>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

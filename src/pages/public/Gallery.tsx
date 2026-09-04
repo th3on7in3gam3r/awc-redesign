@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Play, X, Image as ImageIcon, Film, ChevronLeft, ChevronRight, Filter, Loader2 } from 'lucide-react';
 import { MediaItem } from '../../data/galleryData';
+import { allChurchMedia, isNativeVideoUrl } from '../../data/churchMedia';
 
 const ITEMS_PER_PAGE = 9;
 
@@ -19,10 +20,16 @@ const Gallery: React.FC = () => {
                 const res = await fetch('/api/gallery');
                 if (!res.ok) throw new Error('Failed to fetch');
                 const data = await res.json();
-                setGalleryItems(data);
+                const apiItems: MediaItem[] = Array.isArray(data) ? data : [];
+                const seen = new Set(apiItems.map((item) => item.url));
+                const merged = [
+                    ...allChurchMedia.filter((item) => !seen.has(item.url)),
+                    ...apiItems,
+                ];
+                setGalleryItems(merged);
             } catch (err) {
                 console.error('Error fetching gallery:', err);
-                setIsLoading(false);
+                setGalleryItems(allChurchMedia);
             } finally {
                 setIsLoading(false);
             }
@@ -292,12 +299,24 @@ const Gallery: React.FC = () => {
                                 {/* Media Content */}
                                 <div className="flex-[2] aspect-video lg:aspect-auto bg-slate-900 flex items-center justify-center relative">
                                     {selectedMedia.type === 'video' ? (
-                                        <iframe
-                                            src={selectedMedia.url}
-                                            className="w-full h-full absolute inset-0"
-                                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                            allowFullScreen
-                                        />
+                                        isNativeVideoUrl(selectedMedia.url) ? (
+                                            <video
+                                                key={selectedMedia.id}
+                                                src={selectedMedia.url}
+                                                controls
+                                                autoPlay
+                                                playsInline
+                                                className="w-full h-full absolute inset-0 bg-black"
+                                                poster={selectedMedia.thumbnail}
+                                            />
+                                        ) : (
+                                            <iframe
+                                                src={selectedMedia.url}
+                                                className="w-full h-full absolute inset-0"
+                                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                                allowFullScreen
+                                            />
+                                        )
                                     ) : (
                                         <img
                                             src={selectedMedia.url}
