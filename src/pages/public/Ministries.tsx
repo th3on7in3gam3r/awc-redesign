@@ -45,6 +45,7 @@ const MINISTRY_TEAM: TeamMember[] = [
   { name: "Denis Kwesiga", role: "Men's Leader", bio: "", imageUrl: "/images/denis-k.png" },
   { name: "Ezra Tindyebwa & Victoria Kamya", role: "Married Ministry Leaders", bio: "", imageUrl: "/images/marrieds-about-pic.png" },
   { name: "Lorna Sekamwa", role: "Teen Ministry", bio: "" },
+  { name: "Sheevon Mahabir", role: "Finance and Events", bio: "", imageUrl: "/images/sheevon-mahabir.jpg" },
 ];
 
 function memberInitials(name: string): string {
@@ -302,7 +303,7 @@ const Ministries: React.FC = () => {
                 Dedicated servants leading with passion and purpose in their areas of calling.
               </p>
             </div>
-            <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-y-10 gap-x-5">
+            <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-y-10 gap-x-5">
               {MINISTRY_TEAM.map((member, i) => (
                 <div key={i} className="text-center group">
                   <div className="relative mb-3 mx-auto w-20 h-20 lg:w-24 lg:h-24">
