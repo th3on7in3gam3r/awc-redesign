@@ -9,7 +9,7 @@ interface MediaCarouselProps {
   onSelect: (item: MediaItem) => void;
 }
 
-const CARD_SCROLL_PX = 260;
+const CARD_SCROLL_PX = 520;
 
 const MediaCarousel: React.FC<MediaCarouselProps> = ({ title, items, onSelect }) => {
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -49,14 +49,14 @@ const MediaCarousel: React.FC<MediaCarouselProps> = ({ title, items, onSelect })
 
       <div
         ref={scrollRef}
-        className="flex gap-3 overflow-x-auto snap-x snap-mandatory pb-2 -mx-1 px-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+        className="grid grid-flow-col grid-rows-2 auto-cols-[220px] md:auto-cols-[240px] gap-3 overflow-x-auto snap-x snap-mandatory pb-2 -mx-1 px-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
       >
         {items.map((item) => (
           <button
             key={item.id}
             type="button"
             onClick={() => onSelect(item)}
-            className="group w-[220px] md:w-[240px] flex-none snap-start text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-church-gold/50 rounded-2xl"
+            className="group w-full snap-start text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-church-gold/50 rounded-2xl"
           >
             <div className="relative aspect-[4/3] overflow-hidden rounded-2xl border border-slate-200/80 bg-slate-100 shadow-sm">
               <img
