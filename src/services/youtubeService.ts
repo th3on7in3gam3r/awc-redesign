@@ -27,6 +27,8 @@ const CACHE_DURATION = {
     VIDEOS: 5 * 60 * 1000, // 5 minutes
     LIVE: 60 * 1000, // 1 minute
 };
+/** Always pull at least this many for cache so Home(3) does not starve Sermons(12). */
+const VIDEO_CACHE_FETCH_SIZE = 12;
 
 let videosCache: { data: YouTubeVideo[]; timestamp: number } | null = null;
 let liveCache: { data: LiveStreamInfo; timestamp: number } | null = null;
@@ -156,21 +158,24 @@ class YouTubeService {
      * Fetch latest sermon videos from the channel
      */
     async getLatestVideos(maxResults: number = 12): Promise<YouTubeVideo[]> {
-        // Check cache first — only serve non-empty cached results
+        const needed = Math.min(Math.max(maxResults, 1), 25);
+        const fetchCount = Math.max(needed, VIDEO_CACHE_FETCH_SIZE);
+
+        // Only reuse cache when it has enough videos for this request
         if (videosCache && Date.now() - videosCache.timestamp < CACHE_DURATION.VIDEOS) {
-            if (videosCache.data.length > 0) {
-                return videosCache.data.slice(0, maxResults);
+            if (videosCache.data.length >= needed) {
+                return videosCache.data.slice(0, needed);
             }
             videosCache = null;
         }
 
         try {
-            const response = await fetch(`/api/youtube/latest?maxResults=${maxResults}`);
+            const response = await fetch(`/api/youtube/latest?maxResults=${fetchCount}`);
             if (response.ok) {
                 const payload = await response.json();
                 if (Array.isArray(payload) && payload.length > 0) {
                     videosCache = { data: payload, timestamp: Date.now() };
-                    return payload.slice(0, maxResults);
+                    return payload.slice(0, needed);
                 }
                 // Non-array (error object) or empty array — do not cache; try client API
                 console.warn('Server YouTube feed returned no videos:', Array.isArray(payload) ? 'empty array' : payload);
@@ -188,7 +193,7 @@ class YouTubeService {
 
         try {
             // Get latest uploads from the channel
-            const searchUrl = `${this.baseUrl}/search?part=snippet&channelId=${CHANNEL_ID}&order=date&type=video&maxResults=${maxResults}&key=${API_KEY}`;
+            const searchUrl = `${this.baseUrl}/search?part=snippet&channelId=${CHANNEL_ID}&order=date&type=video&maxResults=${fetchCount}&key=${API_KEY}`;
             const response = await fetch(searchUrl);
 
             if (!response.ok) {
@@ -227,10 +232,9 @@ class YouTubeService {
                 videoUrl: `https://www.youtube.com/watch?v=${video.id}`,
             }));
 
-            // Cache the results
             videosCache = { data: videos, timestamp: Date.now() };
 
-            return videos;
+            return videos.slice(0, needed);
         } catch (error) {
             console.error('Error fetching YouTube videos:', error);
             videosCache = null;
