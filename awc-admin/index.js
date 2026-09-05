@@ -2557,65 +2557,223 @@ function resolveYouTubeChannelIds() {
     return [...new Set(ids)];
 }
 
+/** Collect lockupViewModel nodes from YouTube innertube JSON (Videos tab). */
+function collectYouTubeLockups(node, acc = []) {
+    if (!node || typeof node !== 'object') return acc;
+    if (Array.isArray(node)) {
+        for (const item of node) collectYouTubeLockups(item, acc);
+        return acc;
+    }
+    if (node.lockupViewModel) {
+        acc.push(node.lockupViewModel);
+    }
+    for (const value of Object.values(node)) {
+        collectYouTubeLockups(value, acc);
+    }
+    return acc;
+}
+
+function mapLockupsToVideos(lockups, maxResults) {
+    const videos = [];
+    const seen = new Set();
+
+    for (const lockup of lockups) {
+        const id = lockup?.contentId;
+        if (!id || typeof id !== 'string' || id.length < 6 || seen.has(id)) continue;
+
+        const title =
+            lockup?.metadata?.lockupMetadataViewModel?.title?.content ||
+            'Untitled';
+        const publishedLabel =
+            lockup?.metadata?.lockupMetadataViewModel?.metadata?.contentMetadataViewModel
+                ?.metadataRows?.[0]?.metadataParts?.[1]?.text?.content ||
+            lockup?.metadata?.lockupMetadataViewModel?.metadata?.contentMetadataViewModel
+                ?.metadataRows?.[0]?.metadataParts?.[1]?.accessibilityLabel ||
+            undefined;
+
+        seen.add(id);
+        videos.push({
+            id,
+            title,
+            description: '',
+            thumbnail: `https://img.youtube.com/vi/${id}/hqdefault.jpg`,
+            publishedAt: publishedLabel,
+            videoUrl: `https://www.youtube.com/watch?v=${id}`,
+        });
+
+        if (videos.length >= maxResults) break;
+    }
+
+    return videos;
+}
+
+/**
+ * Fallback when Data API / RSS fail: YouTube innertube browse (Videos tab).
+ * Channel RSS currently 404s for @KMutegyekiOfficial even though the channel is live.
+ */
+async function fetchLatestYouTubeVideosViaInnertube(channelId, maxResults) {
+    const response = await fetch('https://www.youtube.com/youtubei/v1/browse?prettyPrint=false', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'User-Agent':
+                'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
+            'X-YouTube-Client-Name': '1',
+            'X-YouTube-Client-Version': '2.20240101.00.00',
+        },
+        body: JSON.stringify({
+            context: {
+                client: {
+                    clientName: 'WEB',
+                    clientVersion: '2.20240101.00.00',
+                    hl: 'en',
+                    gl: 'US',
+                },
+            },
+            browseId: channelId,
+            // Videos tab
+            params: 'EgZ2aWRlb3PyBgQKAjoA',
+        }),
+    });
+
+    if (!response.ok) {
+        throw new Error(`YouTube innertube browse failed for ${channelId}: ${response.status}`);
+    }
+
+    const data = await response.json();
+    const lockups = collectYouTubeLockups(data);
+    const videos = mapLockupsToVideos(lockups, maxResults);
+
+    if (videos.length === 0) {
+        throw new Error(`YouTube innertube returned no videos for ${channelId}`);
+    }
+
+    return videos;
+}
+
+/** Last-resort: scrape channel videos HTML for videoIds when innertube shape changes. */
+async function fetchLatestYouTubeVideosViaHtml(channelId, maxResults) {
+    const url = `https://www.youtube.com/channel/${channelId}/videos`;
+    const response = await fetch(url, {
+        headers: {
+            'User-Agent':
+                'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
+            'Accept-Language': 'en-US,en;q=0.9',
+        },
+    });
+
+    if (!response.ok) {
+        throw new Error(`YouTube HTML scrape failed for ${channelId}: ${response.status}`);
+    }
+
+    const html = await response.text();
+    const ids = [];
+    const seen = new Set();
+    const re = /"videoId":"([A-Za-z0-9_-]{11})"/g;
+    let match;
+    while ((match = re.exec(html)) !== null) {
+        const id = match[1];
+        if (seen.has(id)) continue;
+        seen.add(id);
+        ids.push(id);
+        if (ids.length >= maxResults) break;
+    }
+
+    if (ids.length === 0) {
+        throw new Error(`YouTube HTML scrape found no videoIds for ${channelId}`);
+    }
+
+    return ids.map((id) => ({
+        id,
+        title: 'Sermon',
+        description: '',
+        thumbnail: `https://img.youtube.com/vi/${id}/hqdefault.jpg`,
+        publishedAt: undefined,
+        videoUrl: `https://www.youtube.com/watch?v=${id}`,
+    }));
+}
+
 async function fetchLatestYouTubeVideosFromChannel(channelId, maxResults, apiKey) {
     if (apiKey) {
-        const searchUrl = `https://www.googleapis.com/youtube/v3/search?part=snippet&channelId=${channelId}&order=date&type=video&maxResults=${maxResults}&key=${apiKey}`;
-        const response = await fetch(searchUrl);
+        try {
+            const searchUrl = `https://www.googleapis.com/youtube/v3/search?part=snippet&channelId=${channelId}&order=date&type=video&maxResults=${maxResults}&key=${apiKey}`;
+            const response = await fetch(searchUrl);
 
-        if (response.ok) {
-            const data = await response.json();
+            if (response.ok) {
+                const data = await response.json();
 
-            if (data.items?.length) {
-                const videoIds = data.items.map((item) => item.id.videoId).join(',');
-                const detailsUrl = `https://www.googleapis.com/youtube/v3/videos?part=snippet,contentDetails,statistics&id=${videoIds}&key=${apiKey}`;
-                const detailsResponse = await fetch(detailsUrl);
+                if (data.items?.length) {
+                    const videoIds = data.items.map((item) => item.id.videoId).join(',');
+                    const detailsUrl = `https://www.googleapis.com/youtube/v3/videos?part=snippet,contentDetails,statistics&id=${videoIds}&key=${apiKey}`;
+                    const detailsResponse = await fetch(detailsUrl);
 
-                if (detailsResponse.ok) {
-                    const detailsData = await detailsResponse.json();
-                    const videos = detailsData.items.map((video) => ({
-                        id: video.id,
-                        title: video.snippet.title,
-                        description: video.snippet.description,
-                        thumbnail:
-                            video.snippet.thumbnails?.maxres?.url ||
-                            video.snippet.thumbnails?.high?.url ||
-                            video.snippet.thumbnails?.medium?.url,
-                        publishedAt: video.snippet.publishedAt,
-                        viewCount: video.statistics?.viewCount,
-                        videoUrl: `https://www.youtube.com/watch?v=${video.id}`,
-                    }));
+                    if (detailsResponse.ok) {
+                        const detailsData = await detailsResponse.json();
+                        const videos = detailsData.items.map((video) => ({
+                            id: video.id,
+                            title: video.snippet.title,
+                            description: video.snippet.description,
+                            thumbnail:
+                                video.snippet.thumbnails?.maxres?.url ||
+                                video.snippet.thumbnails?.high?.url ||
+                                video.snippet.thumbnails?.medium?.url,
+                            publishedAt: video.snippet.publishedAt,
+                            viewCount: video.statistics?.viewCount,
+                            videoUrl: `https://www.youtube.com/watch?v=${video.id}`,
+                        }));
 
-                    if (videos.length > 0) {
-                        return videos;
+                        if (videos.length > 0) {
+                            return videos;
+                        }
                     }
                 }
             }
+        } catch (error) {
+            console.warn(`YouTube Data API failed for ${channelId}:`, error.message);
         }
     }
 
-    const RSS_URL = `https://www.youtube.com/feeds/videos.xml?channel_id=${channelId}`;
-    const rssRes = await fetch(RSS_URL);
-    if (!rssRes.ok) {
-        throw new Error(`Failed to fetch YouTube RSS for ${channelId}: ${rssRes.status}`);
+    try {
+        const RSS_URL = `https://www.youtube.com/feeds/videos.xml?channel_id=${channelId}`;
+        const rssRes = await fetch(RSS_URL);
+        if (rssRes.ok) {
+            const { parseStringPromise } = await import('xml2js');
+            const result = await parseStringPromise(await rssRes.text());
+            const entries = (result.feed?.entry || []).slice(0, maxResults);
+
+            const videos = entries
+                .map((entry) => {
+                    const videoId = entry['yt:videoId']?.[0];
+                    if (!videoId) return null;
+                    const mediaGroup = entry['media:group']?.[0];
+
+                    return {
+                        id: videoId,
+                        title: entry.title?.[0] || 'Untitled',
+                        description: mediaGroup?.['media:description']?.[0] || '',
+                        thumbnail: `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`,
+                        publishedAt: entry.published?.[0],
+                        videoUrl: `https://www.youtube.com/watch?v=${videoId}`,
+                    };
+                })
+                .filter(Boolean);
+
+            if (videos.length > 0) {
+                return videos;
+            }
+        } else {
+            console.warn(`YouTube RSS unavailable for ${channelId}: ${rssRes.status}`);
+        }
+    } catch (error) {
+        console.warn(`YouTube RSS failed for ${channelId}:`, error.message);
     }
 
-    const { parseStringPromise } = await import('xml2js');
-    const result = await parseStringPromise(await rssRes.text());
-    const entries = (result.feed?.entry || []).slice(0, maxResults);
-
-    return entries.map((entry) => {
-        const videoId = entry['yt:videoId']?.[0];
-        const mediaGroup = entry['media:group']?.[0];
-
-        return {
-            id: videoId,
-            title: entry.title?.[0] || 'Untitled',
-            description: mediaGroup?.['media:description']?.[0] || '',
-            thumbnail: `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`,
-            publishedAt: entry.published?.[0],
-            videoUrl: `https://www.youtube.com/watch?v=${videoId}`,
-        };
-    });
+    try {
+        return await fetchLatestYouTubeVideosViaInnertube(channelId, maxResults);
+    } catch (innertubeError) {
+        console.warn(`YouTube innertube failed for ${channelId}:`, innertubeError.message);
+        return await fetchLatestYouTubeVideosViaHtml(channelId, maxResults);
+    }
 }
 
 async function fetchLatestYouTubeVideos(maxResults = 12) {

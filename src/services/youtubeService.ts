@@ -156,19 +156,26 @@ class YouTubeService {
      * Fetch latest sermon videos from the channel
      */
     async getLatestVideos(maxResults: number = 12): Promise<YouTubeVideo[]> {
-        // Check cache first
+        // Check cache first — only serve non-empty cached results
         if (videosCache && Date.now() - videosCache.timestamp < CACHE_DURATION.VIDEOS) {
-            return videosCache.data.slice(0, maxResults);
+            if (videosCache.data.length > 0) {
+                return videosCache.data.slice(0, maxResults);
+            }
+            videosCache = null;
         }
 
         try {
             const response = await fetch(`/api/youtube/latest?maxResults=${maxResults}`);
             if (response.ok) {
-                const videos = await response.json();
-                if (Array.isArray(videos) && videos.length > 0) {
-                    videosCache = { data: videos, timestamp: Date.now() };
-                    return videos.slice(0, maxResults);
+                const payload = await response.json();
+                if (Array.isArray(payload) && payload.length > 0) {
+                    videosCache = { data: payload, timestamp: Date.now() };
+                    return payload.slice(0, maxResults);
                 }
+                // Non-array (error object) or empty array — do not cache; try client API
+                console.warn('Server YouTube feed returned no videos:', Array.isArray(payload) ? 'empty array' : payload);
+            } else {
+                console.warn(`Server YouTube feed HTTP ${response.status}`);
             }
         } catch (error) {
             console.warn('Server YouTube feed unavailable, trying client API:', error);
@@ -226,6 +233,7 @@ class YouTubeService {
             return videos;
         } catch (error) {
             console.error('Error fetching YouTube videos:', error);
+            videosCache = null;
             return [];
         }
     }
