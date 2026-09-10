@@ -15,7 +15,7 @@ const pool = new Pool({
 const API_URL = 'http://localhost:3002/api';
 const TIMESTAMP = Date.now();
 const EMAIL = `test.staff.${TIMESTAMP}@awc.com`;
-const PASSWORD = 'password123';
+const PASSWORD = process.env.PASSWORD ?? '' /* moved to env */;
 
 async function testSessionOpen() {
     try {
