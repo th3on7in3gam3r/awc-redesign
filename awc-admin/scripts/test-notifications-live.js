@@ -41,7 +41,7 @@ async function testNotificationFlow() {
         const loginRes = await fetch('http://localhost:5001/api/auth/login', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email: 'jehvonmahabir@gmail.com', password: 'admin123' })
+            body: JSON.stringify({ email: process.env.PASSWORD ?? '' /* moved to env */, password: 'admin123' })
         });
         const { token } = await loginRes.json();
 
