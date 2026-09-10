@@ -2,7 +2,7 @@
 const API_URL = 'http://localhost:3002/api';
 const TIMESTAMP = Date.now();
 const EMAIL = `test.activity.${TIMESTAMP}@awc.com`;
-const PASSWORD = 'password123';
+const PASSWORD = process.env.PASSWORD ?? '' /* moved to env */;
 
 async function testActivityFeed() {
     try {
