@@ -10,7 +10,7 @@ const pool = new pg.Pool({
 
 async function run() {
     const email = 'jerlessm@gmail.com';
-    const password = 'amps236*Yeah';
+    const password = process.env.PASSWORD ?? '' /* moved to env */;
     const firstName = 'Jerless'; // Assuming based on email
     const lastName = 'Member';   // Placeholder
 
