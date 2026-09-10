@@ -1,7 +1,12 @@
 import pg from 'pg';
 const { Pool } = pg;
 
-const connectionString = 'postgresql://neondb_owner:npg_Xc5qADti8gCT@ep-noisy-wind-ahonzbq0-pooler.c-3.us-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require';
+const connectionString = process.env.DATABASE_URL;
+
+if (!connectionString) {
+    console.error('❌ DATABASE_URL environment variable is not set.');
+    process.exit(1);
+}
 
 const pool = new Pool({
     connectionString,
@@ -14,7 +19,7 @@ async function testConnection() {
         const client = await pool.connect();
         console.log('✅ Connected to Neon Database successfully!');
 
-        const res = await client.query('SELECT 1 + 1 AS solution');
+        const res = await client.query('SELECT $1::int + $2::int AS solution', [1, 1]);
         console.log('Query result:', res.rows[0].solution); // Should be 2
 
         client.release();
