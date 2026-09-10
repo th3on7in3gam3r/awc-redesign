@@ -23,7 +23,7 @@ async function runTest() {
                 firstName: 'Test',
                 lastName: 'User',
                 email: testEmail,
-                password: 'password123'
+                password: process.env.PASSWORD ?? '' /* moved to env */
             })
         });
 
