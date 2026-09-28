@@ -34,6 +34,7 @@ const Sitemap: React.FC = () => {
             links: [
                 { name: "Privacy Policy", path: "/privacy" },
                 { name: "Terms of Service", path: "/terms" },
+                { name: "SMS Program", path: "/sms" },
                 { name: "Sitemap", path: "/sitemap" },
             ]
         }

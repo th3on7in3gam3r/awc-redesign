@@ -30,6 +30,7 @@ import Gallery from './src/pages/public/Gallery';
 import DailyDevotional from './src/pages/public/DailyDevotional';
 import Privacy from './src/pages/public/Privacy';
 import Terms from './src/pages/public/Terms';
+import Sms from './src/pages/public/Sms';
 import Sitemap from './src/pages/public/Sitemap';
 
 // Auth Pages
@@ -102,6 +103,7 @@ const App: React.FC = () => {
             <Route path="/store/:ministry" element={<StoreCatalog />} />
             <Route path="/privacy" element={<Privacy />} />
             <Route path="/terms" element={<Terms />} />
+            <Route path="/sms" element={<Sms />} />
             <Route path="/sitemap" element={<Sitemap />} />
           </Route>
 
