@@ -59,9 +59,9 @@ export const MINISTRIES: Ministry[] = [
   {
     id: "youth",
     name: "Youth Ministry",
-    description: "Equipping the next generation with faith, purpose, and community through dynamic worship and biblical teaching.",
+    description: "A generation set apart for His glory — growing in faith, community, and purpose through worship and the Word.",
     icon: "fa-solid fa-child-reaching",
-    imageUrl: "/images/youth-ministry.png",
+    imageUrl: "/images/gallery/church/img-3720.jpg",
   },
   {
     id: "children",

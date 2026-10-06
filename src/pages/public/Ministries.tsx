@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { MINISTRIES } from '../../constants';
 import { Ministry } from '../../types';
+import YouthMinistryDetail from '../../components/ministries/YouthMinistryDetail';
 
 interface TeamMember {
   name: string;
@@ -71,6 +72,16 @@ const Ministries: React.FC = () => {
   };
 
   if (selectedMinistry) {
+    if (selectedMinistry.id === 'youth') {
+      return (
+        <YouthMinistryDetail
+          onBack={() => setSelectedMinistry(null)}
+          joined={joined}
+          onJoin={handleJoin}
+        />
+      );
+    }
+
     return (
       <div className="pt-32 pb-20 bg-white min-h-screen">
         <div className="max-w-7xl mx-auto px-4">
