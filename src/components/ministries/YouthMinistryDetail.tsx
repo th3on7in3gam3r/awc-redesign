@@ -14,7 +14,6 @@ type GalleryItem = {
   src: string;
   poster: string;
   alt: string;
-  featured?: boolean;
 };
 
 const PILLARS = [
@@ -34,7 +33,6 @@ const PHOTO_GALLERY: GalleryItem[] = [
     src: '/images/gallery/church/img-3720.jpg',
     poster: '/images/gallery/church/img-3720.jpg',
     alt: 'Youth dancers leaping in praise',
-    featured: true,
   },
   {
     id: 'photo-3705',
@@ -70,7 +68,6 @@ const PHOTO_GALLERY: GalleryItem[] = [
     src: '/images/gallery/church/img-3703.jpg',
     poster: '/images/gallery/church/img-3703.jpg',
     alt: 'Powerful ministry moment on stage',
-    featured: true,
   },
   {
     id: 'photo-3722',
@@ -93,16 +90,17 @@ const HERO_IMAGE = '/images/gallery/church/img-3720.jpg';
 const YouthMinistryDetail: React.FC<YouthMinistryDetailProps> = ({ onBack, joined, onJoin }) => {
   const [lightbox, setLightbox] = useState<GalleryItem | null>(null);
 
-  const gallery = useMemo<GalleryItem[]>(() => {
-    const videos: GalleryItem[] = churchVideos.map((video) => ({
-      id: video.id,
-      type: 'video',
-      src: video.url,
-      poster: video.thumbnail,
-      alt: video.title,
-    }));
-    return [...PHOTO_GALLERY, ...videos];
-  }, []);
+  const videos = useMemo<GalleryItem[]>(
+    () =>
+      churchVideos.map((video) => ({
+        id: video.id,
+        type: 'video' as const,
+        src: video.url,
+        poster: video.thumbnail,
+        alt: video.title,
+      })),
+    [],
+  );
 
   return (
     <div className="bg-slate-50 min-h-screen">
@@ -201,52 +199,89 @@ const YouthMinistryDetail: React.FC<YouthMinistryDetailProps> = ({ onBack, joine
 
       <section id="youth-gallery" className="bg-church-burgundy py-20 md:py-24 scroll-mt-24">
         <div className="max-w-7xl mx-auto px-4 md:px-6">
-          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-10 md:mb-12">
-            <div>
-              <p className="text-church-gold font-black uppercase tracking-[0.35em] text-xs mb-3">
-                Youth Conference 2026
-              </p>
-              <h2 className="font-serif text-3xl md:text-5xl text-white leading-tight">
-                Moments from the movement
-              </h2>
-            </div>
-            <p className="text-white/60 max-w-md font-light leading-relaxed">
+          <div className="max-w-3xl mb-12 md:mb-14">
+            <p className="text-church-gold font-black uppercase tracking-[0.35em] text-xs mb-3">
+              Youth Conference 2026
+            </p>
+            <h2 className="font-serif text-3xl md:text-5xl text-white leading-tight">
+              Moments from the movement
+            </h2>
+            <p className="mt-4 text-white/60 font-light leading-relaxed">
               Photos and video clips from AWC Youth Conference — worship, dance, teaching, and a
               generation set apart.
             </p>
           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
-            {gallery.map((item) => (
-              <button
-                key={item.id}
-                type="button"
-                onClick={() => setLightbox(item)}
-                className={`group relative overflow-hidden rounded-2xl focus:outline-none focus-visible:ring-2 focus-visible:ring-church-gold ${
-                  item.featured
-                    ? 'md:col-span-2 md:row-span-2 aspect-[4/3] md:aspect-auto md:min-h-[320px]'
-                    : 'aspect-[4/3]'
-                }`}
-                aria-label={
-                  item.type === 'video' ? `Play video: ${item.alt}` : `View larger: ${item.alt}`
-                }
-              >
-                <img
-                  src={item.poster}
-                  alt={item.alt}
-                  className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
-                  loading="lazy"
-                />
-                <span className="absolute inset-0 bg-church-burgundy/0 group-hover:bg-church-burgundy/25 transition-colors" />
-                {item.type === 'video' && (
-                  <span className="absolute inset-0 flex items-center justify-center">
-                    <span className="flex h-14 w-14 items-center justify-center rounded-full bg-church-gold text-church-burgundy shadow-lg transition-transform duration-300 group-hover:scale-110">
-                      <i className="fa-solid fa-play ml-0.5 text-lg" aria-hidden="true" />
+          <div className="space-y-12 md:space-y-14">
+            <div>
+              <div className="mb-5 flex items-center justify-between gap-4 border-b border-white/10 pb-3">
+                <h3 className="text-xs font-black uppercase tracking-[0.3em] text-white/70">
+                  Photos
+                </h3>
+                <span className="text-[11px] font-bold uppercase tracking-[0.2em] text-white/35">
+                  {PHOTO_GALLERY.length} images
+                </span>
+              </div>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
+                {PHOTO_GALLERY.map((item) => (
+                  <button
+                    key={item.id}
+                    type="button"
+                    onClick={() => setLightbox(item)}
+                    className="group relative aspect-[16/10] overflow-hidden rounded-xl focus:outline-none focus-visible:ring-2 focus-visible:ring-church-gold"
+                    aria-label={`View larger: ${item.alt}`}
+                  >
+                    <img
+                      src={item.poster}
+                      alt={item.alt}
+                      className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+                      loading="lazy"
+                    />
+                    <span className="absolute inset-0 bg-black/0 transition-colors group-hover:bg-black/20" />
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div>
+              <div className="mb-5 flex items-center justify-between gap-4 border-b border-white/10 pb-3">
+                <h3 className="text-xs font-black uppercase tracking-[0.3em] text-white/70">
+                  Videos
+                </h3>
+                <span className="text-[11px] font-bold uppercase tracking-[0.2em] text-white/35">
+                  {videos.length} clips
+                </span>
+              </div>
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4">
+                {videos.map((item) => (
+                  <button
+                    key={item.id}
+                    type="button"
+                    onClick={() => setLightbox(item)}
+                    className="group relative aspect-video overflow-hidden rounded-xl focus:outline-none focus-visible:ring-2 focus-visible:ring-church-gold"
+                    aria-label={`Play video: ${item.alt}`}
+                  >
+                    <img
+                      src={item.poster}
+                      alt={item.alt}
+                      className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+                      loading="lazy"
+                    />
+                    <span className="absolute inset-0 bg-black/25 transition-colors group-hover:bg-black/35" />
+                    <span className="absolute inset-0 flex items-center justify-center">
+                      <span className="flex h-10 w-10 items-center justify-center rounded-full border border-white/40 bg-black/45 text-white backdrop-blur-sm transition-transform duration-300 group-hover:scale-105 group-hover:border-church-gold group-hover:text-church-gold">
+                        <i className="fa-solid fa-play ml-0.5 text-xs" aria-hidden="true" />
+                      </span>
                     </span>
-                  </span>
-                )}
-              </button>
-            ))}
+                    <span className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent px-3 pb-2.5 pt-8 text-left">
+                      <span className="line-clamp-1 text-[11px] font-medium text-white/90">
+                        {item.alt}
+                      </span>
+                    </span>
+                  </button>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
       </section>
