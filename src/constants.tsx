@@ -176,7 +176,9 @@ export const AWC_VAULT_URL = 'https://awc-vault.vercel.app';
 export const AWC_VAULT_LOGIN_URL = `${AWC_VAULT_URL}/#/login`;
 export const AWC_VAULT_MEMBER_SETUP_URL = `${AWC_VAULT_URL}/#/help/member-setup`;
 export const AWC_VAULT_FELLOWSHIP_COOKOUT_URL = `${AWC_VAULT_URL}/#/fellowship-cookout`;
-export const AWC_VAULT_EVENTS_API = `${AWC_VAULT_URL}/api/vault?resource=events`;
+// Same-origin path uses the Vercel /vault rewrite (and Vite proxy locally)
+// so the browser avoids cross-origin CORS blocks on awc-vault.vercel.app.
+export const AWC_VAULT_EVENTS_API = '/vault/api/vault?resource=events';
 export const AWC_CONNECT_URL = 'https://awc-connect.vercel.app/welcome';
 
 export const YOUTUBE_CHANNEL_URL = 'https://www.youtube.com/@KMutegyekiOfficial';

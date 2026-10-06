@@ -138,12 +138,19 @@ function sortEvents(events: ChurchEvent[]): ChurchEvent[] {
 }
 
 export async function fetchVaultEvents(): Promise<ChurchEvent[]> {
-  const response = await fetch(AWC_VAULT_EVENTS_API);
+  const response = await fetch(AWC_VAULT_EVENTS_API, {
+    credentials: 'omit',
+    headers: { Accept: 'application/json' },
+  });
   if (!response.ok) {
     throw new Error(`Vault events request failed (${response.status})`);
   }
 
   const payload = await response.json();
+  if (payload?.ok === false) {
+    throw new Error(payload?.error || 'Vault events response was not ok');
+  }
+
   const records: VaultEventRecord[] = Array.isArray(payload?.events) ? payload.events : [];
 
   return sortEvents(records.map(mapVaultEventToChurchEvent));

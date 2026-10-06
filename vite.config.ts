@@ -17,6 +17,11 @@ export default defineConfig(({ mode }) => {
           target: 'http://localhost:5001',
           changeOrigin: true,
         },
+        '/vault': {
+          target: 'https://awc-vault.vercel.app',
+          changeOrigin: true,
+          rewrite: (path) => path.replace(/^\/vault/, ''),
+        },
       },
     },
     plugins: [react()],
