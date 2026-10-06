@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { MINISTRIES } from '../../constants';
 import { Ministry } from '../../types';
 import YouthMinistryDetail from '../../components/ministries/YouthMinistryDetail';
+import WorshipArtsDetail from '../../components/ministries/WorshipArtsDetail';
 
 interface TeamMember {
   name: string;
@@ -75,6 +76,16 @@ const Ministries: React.FC = () => {
     if (selectedMinistry.id === 'youth') {
       return (
         <YouthMinistryDetail
+          onBack={() => setSelectedMinistry(null)}
+          joined={joined}
+          onJoin={handleJoin}
+        />
+      );
+    }
+
+    if (selectedMinistry.id === 'worship') {
+      return (
+        <WorshipArtsDetail
           onBack={() => setSelectedMinistry(null)}
           joined={joined}
           onJoin={handleJoin}

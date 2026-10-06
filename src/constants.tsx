@@ -75,7 +75,7 @@ export const MINISTRIES: Ministry[] = [
     name: "Worship Arts",
     description: "Ushering in the presence of God through music, dance, and creative expression that glorifies His name.",
     icon: "fa-solid fa-music",
-    imageUrl: "/images/worship-arts.png",
+    imageUrl: "/images/worship/dsc-6118.jpg",
   },
   {
     id: "outreach",
