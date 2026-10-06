@@ -1,11 +1,21 @@
 import * as React from 'react';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
+import { churchVideos } from '../../data/churchMedia';
 
 interface YouthMinistryDetailProps {
   onBack: () => void;
   joined: boolean;
   onJoin: (e: React.FormEvent) => void;
 }
+
+type GalleryItem = {
+  id: string;
+  type: 'image' | 'video';
+  src: string;
+  poster: string;
+  alt: string;
+  featured?: boolean;
+};
 
 const PILLARS = [
   { icon: 'fa-book-bible', title: 'Bible Teaching', action: 'Know God' },
@@ -17,21 +27,82 @@ const PILLARS = [
 
 const ACTIONS = ['Grow', 'Connect', 'Serve', 'Lead'] as const;
 
-const GALLERY = [
-  { src: '/images/gallery/church/img-3720.jpg', alt: 'Youth dancers leaping in praise' },
-  { src: '/images/gallery/church/img-3705.jpg', alt: 'Youth speaking from the podium' },
-  { src: '/images/gallery/church/img-3695.jpg', alt: 'Hands raised in worship' },
-  { src: '/images/gallery/church/img-3719.jpg', alt: 'Dance before the cross' },
-  { src: '/images/gallery/church/img-3721.jpg', alt: 'Blue flags rising in praise' },
-  { src: '/images/gallery/church/img-3703.jpg', alt: 'Powerful ministry moment on stage' },
-  { src: '/images/gallery/church/img-3722.jpg', alt: 'Flags in motion during worship' },
-  { src: '/images/gallery/church/img-3698.jpg', alt: 'Youth in the Word together' },
-] as const;
+const PHOTO_GALLERY: GalleryItem[] = [
+  {
+    id: 'photo-3720',
+    type: 'image',
+    src: '/images/gallery/church/img-3720.jpg',
+    poster: '/images/gallery/church/img-3720.jpg',
+    alt: 'Youth dancers leaping in praise',
+    featured: true,
+  },
+  {
+    id: 'photo-3705',
+    type: 'image',
+    src: '/images/gallery/church/img-3705.jpg',
+    poster: '/images/gallery/church/img-3705.jpg',
+    alt: 'Youth speaking from the podium',
+  },
+  {
+    id: 'photo-3695',
+    type: 'image',
+    src: '/images/gallery/church/img-3695.jpg',
+    poster: '/images/gallery/church/img-3695.jpg',
+    alt: 'Hands raised in worship',
+  },
+  {
+    id: 'photo-3719',
+    type: 'image',
+    src: '/images/gallery/church/img-3719.jpg',
+    poster: '/images/gallery/church/img-3719.jpg',
+    alt: 'Dance before the cross',
+  },
+  {
+    id: 'photo-3721',
+    type: 'image',
+    src: '/images/gallery/church/img-3721.jpg',
+    poster: '/images/gallery/church/img-3721.jpg',
+    alt: 'Blue flags rising in praise',
+  },
+  {
+    id: 'photo-3703',
+    type: 'image',
+    src: '/images/gallery/church/img-3703.jpg',
+    poster: '/images/gallery/church/img-3703.jpg',
+    alt: 'Powerful ministry moment on stage',
+    featured: true,
+  },
+  {
+    id: 'photo-3722',
+    type: 'image',
+    src: '/images/gallery/church/img-3722.jpg',
+    poster: '/images/gallery/church/img-3722.jpg',
+    alt: 'Flags in motion during worship',
+  },
+  {
+    id: 'photo-3698',
+    type: 'image',
+    src: '/images/gallery/church/img-3698.jpg',
+    poster: '/images/gallery/church/img-3698.jpg',
+    alt: 'Youth in the Word together',
+  },
+];
 
 const HERO_IMAGE = '/images/gallery/church/img-3720.jpg';
 
 const YouthMinistryDetail: React.FC<YouthMinistryDetailProps> = ({ onBack, joined, onJoin }) => {
-  const [lightbox, setLightbox] = useState<{ src: string; alt: string } | null>(null);
+  const [lightbox, setLightbox] = useState<GalleryItem | null>(null);
+
+  const gallery = useMemo<GalleryItem[]>(() => {
+    const videos: GalleryItem[] = churchVideos.map((video) => ({
+      id: video.id,
+      type: 'video',
+      src: video.url,
+      poster: video.thumbnail,
+      alt: video.title,
+    }));
+    return [...PHOTO_GALLERY, ...videos];
+  }, []);
 
   return (
     <div className="bg-slate-50 min-h-screen">
@@ -78,7 +149,7 @@ const YouthMinistryDetail: React.FC<YouthMinistryDetailProps> = ({ onBack, joine
               href="#youth-gallery"
               className="inline-flex items-center justify-center border border-white/30 hover:border-church-gold hover:text-church-gold text-white px-8 py-4 rounded-full text-xs font-black uppercase tracking-[0.25em] transition-colors"
             >
-              See Conference Photos
+              See Conference Media
             </a>
           </div>
         </div>
@@ -140,29 +211,40 @@ const YouthMinistryDetail: React.FC<YouthMinistryDetailProps> = ({ onBack, joine
               </h2>
             </div>
             <p className="text-white/60 max-w-md font-light leading-relaxed">
-              Real photos from AWC Youth Conference — worship, dance, teaching, and a generation
-              set apart.
+              Photos and video clips from AWC Youth Conference — worship, dance, teaching, and a
+              generation set apart.
             </p>
           </div>
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
-            {GALLERY.map((photo, index) => (
+            {gallery.map((item) => (
               <button
-                key={photo.src}
+                key={item.id}
                 type="button"
-                onClick={() => setLightbox(photo)}
+                onClick={() => setLightbox(item)}
                 className={`group relative overflow-hidden rounded-2xl focus:outline-none focus-visible:ring-2 focus-visible:ring-church-gold ${
-                  index === 0 || index === 5 ? 'md:col-span-2 md:row-span-2 aspect-[4/3] md:aspect-auto md:min-h-[320px]' : 'aspect-[4/3]'
+                  item.featured
+                    ? 'md:col-span-2 md:row-span-2 aspect-[4/3] md:aspect-auto md:min-h-[320px]'
+                    : 'aspect-[4/3]'
                 }`}
-                aria-label={`View larger: ${photo.alt}`}
+                aria-label={
+                  item.type === 'video' ? `Play video: ${item.alt}` : `View larger: ${item.alt}`
+                }
               >
                 <img
-                  src={photo.src}
-                  alt={photo.alt}
+                  src={item.poster}
+                  alt={item.alt}
                   className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
                   loading="lazy"
                 />
                 <span className="absolute inset-0 bg-church-burgundy/0 group-hover:bg-church-burgundy/25 transition-colors" />
+                {item.type === 'video' && (
+                  <span className="absolute inset-0 flex items-center justify-center">
+                    <span className="flex h-14 w-14 items-center justify-center rounded-full bg-church-gold text-church-burgundy shadow-lg transition-transform duration-300 group-hover:scale-110">
+                      <i className="fa-solid fa-play ml-0.5 text-lg" aria-hidden="true" />
+                    </span>
+                  </span>
+                )}
               </button>
             ))}
           </div>
@@ -279,7 +361,7 @@ const YouthMinistryDetail: React.FC<YouthMinistryDetailProps> = ({ onBack, joine
             type="button"
             className="absolute inset-0 bg-church-burgundy/90 backdrop-blur-sm"
             onClick={() => setLightbox(null)}
-            aria-label="Close photo"
+            aria-label="Close media"
           />
           <div className="relative z-10 w-full max-w-5xl animate-fade-in">
             <button
@@ -289,11 +371,28 @@ const YouthMinistryDetail: React.FC<YouthMinistryDetailProps> = ({ onBack, joine
             >
               Close
             </button>
-            <img
-              src={lightbox.src}
-              alt={lightbox.alt}
-              className="max-h-[80vh] w-full rounded-2xl object-contain bg-black/40"
-            />
+            <div className="overflow-hidden rounded-2xl bg-black shadow-2xl">
+              {lightbox.type === 'video' ? (
+                <div className="relative aspect-video bg-black">
+                  <video
+                    key={lightbox.id}
+                    src={lightbox.src}
+                    poster={lightbox.poster}
+                    controls
+                    autoPlay
+                    playsInline
+                    className="absolute inset-0 h-full w-full bg-black"
+                  />
+                </div>
+              ) : (
+                <img
+                  src={lightbox.src}
+                  alt={lightbox.alt}
+                  className="max-h-[80vh] w-full object-contain bg-black/40"
+                />
+              )}
+            </div>
+            <p className="mt-4 text-center text-sm text-white/70">{lightbox.alt}</p>
           </div>
         </div>
       )}
