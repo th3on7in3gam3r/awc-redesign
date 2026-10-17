@@ -1,4 +1,8 @@
-import { AWC_VAULT_EVENTS_API, AWC_VAULT_FELLOWSHIP_COOKOUT_URL } from '../constants';
+import {
+  AWC_VAULT_EVENTS_API,
+  AWC_VAULT_FELLOWSHIP_COOKOUT_URL,
+  AWC_VAULT_THANKSGIVING_RSVP_URL,
+} from '../constants';
 import { ChurchEvent } from '../types';
 
 const DEFAULT_EVENT_IMAGE =
@@ -41,7 +45,14 @@ function formatTimeRange(time?: string | null, endTime?: string | null): string 
 }
 
 function resolveSignupUrl(event: VaultEventRecord): string | undefined {
+  if (event.id === 'a1b2c3d4-e5f6-4789-a012-202611221400') {
+    return AWC_VAULT_THANKSGIVING_RSVP_URL;
+  }
+
   const haystack = `${event.name} ${event.type} ${event.description ?? ''}`.toLowerCase();
+  if (haystack.includes('thanksgiving')) {
+    return AWC_VAULT_THANKSGIVING_RSVP_URL;
+  }
   if (haystack.includes('cookout') || haystack.includes('fellowship-cookout')) {
     return AWC_VAULT_FELLOWSHIP_COOKOUT_URL;
   }

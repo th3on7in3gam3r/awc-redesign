@@ -197,6 +197,22 @@ export const FELLOWSHIP_COOKOUT = {
   sharePath: '/fellowship-cookout/',
 };
 
+export const AWC_VAULT_THANKSGIVING_RSVP_URL =
+  `${AWC_VAULT_URL}/#/events/a1b2c3d4-e5f6-4789-a012-202611221400/rsvp`;
+
+export const THANKSGIVING_DINNER = {
+  title: 'AWC Thanksgiving Dinner 2026',
+  eyebrow: 'Table of Thanksgiving',
+  targetDate: '2026-11-22T14:00:00',
+  displayDate: 'November 22, 2026',
+  time: '2:00 PM - 7:00 PM',
+  description: 'Join us for food, fellowship, and gratitude as we gather around the table together.',
+  location: '2nd Floor Sanctuary, 4 School St, Acton, MA',
+  signupUrl: AWC_VAULT_THANKSGIVING_RSVP_URL,
+};
+
+export const FEATURED_HOME_EVENT = THANKSGIVING_DINNER;
+
 export const EVENTS: ChurchEvent[] = [
   {
     id: "e1",

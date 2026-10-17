@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { FELLOWSHIP_COOKOUT } from '../constants';
+import { FEATURED_HOME_EVENT } from '../constants';
 
 interface TimeLeft {
   days: number;
@@ -32,7 +32,8 @@ const TimeUnit: React.FC<{ value: number; label: string }> = ({ value, label }) 
 );
 
 const EventCountdown: React.FC = () => {
-  const target = new Date(FELLOWSHIP_COOKOUT.targetDate);
+  const event = FEATURED_HOME_EVENT;
+  const target = new Date(event.targetDate);
   const [timeLeft, setTimeLeft] = useState<TimeLeft | null>(() => getTimeLeft(target));
 
   useEffect(() => {
@@ -40,7 +41,7 @@ const EventCountdown: React.FC = () => {
     tick();
     const id = setInterval(tick, 1000);
     return () => clearInterval(id);
-  }, []);
+  }, [event.targetDate]);
 
   const hasPassed = timeLeft === null;
 
@@ -48,23 +49,23 @@ const EventCountdown: React.FC = () => {
     <div className="animate-fade-in bg-gradient-to-br from-church-burgundy to-black rounded-3xl shadow-xl border border-church-gold/20 overflow-hidden">
       <div className="p-8 md:p-12 text-center">
         <span className="text-church-gold font-bold tracking-[0.3em] uppercase text-xs">
-          {FELLOWSHIP_COOKOUT.eyebrow}
+          {event.eyebrow}
         </span>
 
         <h2 className="font-serif text-3xl md:text-4xl font-bold text-white mt-4 mb-3">
-          {FELLOWSHIP_COOKOUT.title}
+          {event.title}
         </h2>
 
         <p className="text-white/70 font-light max-w-xl mx-auto mb-2">
-          {FELLOWSHIP_COOKOUT.description}
+          {event.description}
         </p>
 
         <p className="text-white/50 text-sm mb-8 flex items-center justify-center gap-2 flex-wrap">
           <i className="fa-solid fa-location-dot text-church-gold text-xs"></i>
-          {FELLOWSHIP_COOKOUT.location}
+          {event.location}
           <span className="hidden sm:inline">&middot;</span>
           <i className="fa-solid fa-clock text-church-gold text-xs"></i>
-          September 20, 2026 &middot; {FELLOWSHIP_COOKOUT.time}
+          {event.displayDate} &middot; {event.time}
         </p>
 
         {hasPassed ? (
@@ -78,7 +79,7 @@ const EventCountdown: React.FC = () => {
           <div
             className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-lg mx-auto mb-10"
             aria-live="polite"
-            aria-label="Countdown to AWC Fellowship Cookout"
+            aria-label={`Countdown to ${event.title}`}
           >
             <TimeUnit value={timeLeft.days} label="Days" />
             <TimeUnit value={timeLeft.hours} label="Hours" />
@@ -96,7 +97,7 @@ const EventCountdown: React.FC = () => {
             <i className="fa-solid fa-arrow-right text-[10px]"></i>
           </Link>
           <a
-            href={FELLOWSHIP_COOKOUT.signupUrl}
+            href={event.signupUrl}
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 bg-transparent border border-church-gold/50 text-church-gold hover:bg-church-gold hover:text-church-burgundy px-6 py-3 rounded-lg font-semibold text-[12px] tracking-wide transition-colors"
