@@ -193,9 +193,9 @@ const ConnectAppPromo: React.FC = () => {
           </div>
 
           {/* Visual Side: big QR on computers, phone mockup on phones */}
-          <div className="relative flex flex-col md:flex-row items-center justify-center gap-8 md:gap-0">
+          <div className="relative flex flex-col md:flex-row items-center justify-center gap-8 lg:gap-6">
             {/* QR card — computers / tablets only (you can't scan your own phone screen) */}
-            <div className={`${isPhone ? 'hidden' : 'hidden md:flex'} flex-col items-center bg-white rounded-[2rem] shadow-2xl p-7 w-[290px] flex-shrink-0 relative z-20 lg:-mr-10`}>
+            <div className={`${isPhone ? 'hidden' : 'hidden md:flex'} flex-col items-center bg-white rounded-[2rem] shadow-2xl p-7 w-[290px] flex-shrink-0 relative z-20`}>
               <p className="text-church-burgundy text-xs font-black uppercase tracking-[0.25em] mb-1">Scan with your phone</p>
               <p className="text-gray-500 text-xs mb-5">Open your camera and point it here</p>
               {/* White padding = quiet zone so phone cameras can lock on */}
