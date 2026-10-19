@@ -37,7 +37,7 @@ const INSTALL_STEPS: Record<Platform, { icon: string; text: React.ReactNode }[]>
   android: [
     { icon: 'fa-brands fa-chrome', text: <>Tap <strong>Open AWC Connect</strong> (use <strong>Chrome</strong>)</> },
     { icon: 'fa-solid fa-ellipsis-vertical', text: <>Tap the <strong>⋮ menu</strong> in the top-right corner</> },
-    { icon: 'fa-solid fa-square-plus', text: <>Tap <strong>Install app</strong> or <strong>Add to Home screen</strong></> },
+    { icon: 'fa-solid fa-square-plus', text: <>Tap <strong>Install and create shortcut</strong> (some phones say <strong>Install app</strong> or <strong>Add to Home screen</strong>)</> },
   ],
 };
 
