@@ -13,6 +13,8 @@ import QRCode from 'react-qr-code';
 
 const CONNECT_URL = 'https://awc-connect.vercel.app/welcome';
 const CONNECT_DISPLAY = 'awc-connect.vercel.app';
+/** Big-text, step-by-step help page inside AWC Connect (iPhone and Android). */
+const INSTALL_GUIDE_URL = 'https://awc-connect.vercel.app/install';
 
 type Platform = 'ios' | 'android';
 
@@ -28,8 +30,9 @@ const detectPlatform = (): Platform | null => {
 const INSTALL_STEPS: Record<Platform, { icon: string; text: React.ReactNode }[]> = {
   ios: [
     { icon: 'fa-solid fa-compass', text: <>Tap <strong>Open AWC Connect</strong> (use <strong>Safari</strong>)</> },
-    { icon: 'fa-solid fa-arrow-up-from-bracket', text: <>Tap the <strong>Share</strong> button at the bottom of the screen</> },
-    { icon: 'fa-solid fa-square-plus', text: <>Scroll down and tap <strong>Add to Home Screen</strong>, then <strong>Add</strong></> },
+    { icon: 'fa-solid fa-ellipsis', text: <>Tap the <strong>three dots •••</strong> at the bottom right, then <strong>Share</strong>. (Older iPhones: tap the <strong>Share</strong> button at the bottom.)</> },
+    { icon: 'fa-solid fa-square-plus', text: <>Scroll down and tap <strong>Add to Home Screen</strong>. Don't see it? Tap <strong>View More</strong> first.</> },
+    { icon: 'fa-solid fa-check', text: <>Tap <strong>Add</strong> in the top right</> },
   ],
   android: [
     { icon: 'fa-brands fa-chrome', text: <>Tap <strong>Open AWC Connect</strong> (use <strong>Chrome</strong>)</> },
@@ -189,6 +192,15 @@ const ConnectAppPromo: React.FC = () => {
                 ))}
               </ol>
               <p className="text-xs text-white/60 mt-4">The AWC Connect icon will appear on your home screen like any other app.</p>
+              <a
+                href={INSTALL_GUIDE_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-4 inline-flex items-center gap-2 min-h-[44px] text-sm font-bold text-church-gold hover:text-white underline underline-offset-4 transition-colors"
+              >
+                <i className="fa-solid fa-circle-question"></i>
+                Need more help? See the step-by-step guide
+              </a>
             </div>
           </div>
 
