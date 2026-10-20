@@ -1,6 +1,9 @@
 import * as React from 'react';
 import { useMemo, useState } from 'react';
-import { churchVideos } from '../../data/churchMedia';
+import { churchPhotos, churchVideos } from '../../data/churchMedia';
+import type { MediaItem } from '../../data/galleryData';
+import { YOUTH_CONFERENCE_2026_PHOTOS } from '../../data/youthConference';
+import Lightbox from '../gallery/Lightbox';
 
 interface YouthMinistryDetailProps {
   onBack: () => void;
@@ -14,6 +17,8 @@ type GalleryItem = {
   src: string;
   poster: string;
   alt: string;
+  width?: number;
+  height?: number;
 };
 
 const PILLARS = [
@@ -26,7 +31,7 @@ const PILLARS = [
 
 const ACTIONS = ['Grow', 'Connect', 'Serve', 'Lead'] as const;
 
-const PHOTO_GALLERY: GalleryItem[] = [
+const EARLIER_PHOTOS: GalleryItem[] = [
   {
     id: 'photo-3720',
     type: 'image',
@@ -85,10 +90,39 @@ const PHOTO_GALLERY: GalleryItem[] = [
   },
 ];
 
+const churchDims = new Map(churchPhotos.map((p) => [p.url, { width: p.width, height: p.height }]));
+
+const PHOTO_GALLERY: GalleryItem[] = [
+  ...YOUTH_CONFERENCE_2026_PHOTOS.map((p) => ({
+    id: p.id,
+    type: 'image' as const,
+    src: p.src,
+    poster: p.thumb,
+    alt: p.alt,
+    width: p.width,
+    height: p.height,
+  })),
+  ...EARLIER_PHOTOS.map((p) => ({ ...p, ...churchDims.get(p.src) })),
+];
+
+const PHOTOS_SHOWN_AT_FIRST = 12;
+
+const toMediaItem = (item: GalleryItem): MediaItem => ({
+  id: item.id,
+  type: item.type,
+  url: item.src,
+  thumbnail: item.poster,
+  title: item.alt,
+  category: 'Youth Conference 2026',
+  width: item.width,
+  height: item.height,
+});
+
 const HERO_IMAGE = '/images/gallery/church/img-3720.jpg';
 
 const YouthMinistryDetail: React.FC<YouthMinistryDetailProps> = ({ onBack, joined, onJoin }) => {
-  const [lightbox, setLightbox] = useState<GalleryItem | null>(null);
+  const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
+  const [showAllPhotos, setShowAllPhotos] = useState(false);
 
   const videos = useMemo<GalleryItem[]>(
     () =>
@@ -101,6 +135,13 @@ const YouthMinistryDetail: React.FC<YouthMinistryDetailProps> = ({ onBack, joine
       })),
     [],
   );
+
+  // Photos first, then videos — the viewer can page straight through both.
+  const lightboxItems = useMemo(
+    () => [...PHOTO_GALLERY, ...videos].map(toMediaItem),
+    [videos],
+  );
+  const visiblePhotos = showAllPhotos ? PHOTO_GALLERY : PHOTO_GALLERY.slice(0, PHOTOS_SHOWN_AT_FIRST);
 
   return (
     <div className="bg-slate-50 min-h-screen">
@@ -222,25 +263,37 @@ const YouthMinistryDetail: React.FC<YouthMinistryDetailProps> = ({ onBack, joine
                   {PHOTO_GALLERY.length} images
                 </span>
               </div>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
-                {PHOTO_GALLERY.map((item) => (
+              <div className="columns-2 md:columns-3 lg:columns-4 gap-3 md:gap-4">
+                {visiblePhotos.map((item, i) => (
                   <button
                     key={item.id}
                     type="button"
-                    onClick={() => setLightbox(item)}
-                    className="group relative aspect-[16/10] overflow-hidden rounded-xl focus:outline-none focus-visible:ring-2 focus-visible:ring-church-gold"
+                    onClick={() => setLightboxIndex(i)}
+                    className="group mb-3 md:mb-4 block w-full break-inside-avoid overflow-hidden rounded-xl bg-white/5 focus:outline-none focus-visible:ring-2 focus-visible:ring-church-gold"
+                    style={{ aspectRatio: item.width && item.height ? `${item.width} / ${item.height}` : '4 / 5' }}
                     aria-label={`View larger: ${item.alt}`}
                   >
                     <img
                       src={item.poster}
                       alt={item.alt}
-                      className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+                      className="h-full w-full object-cover md:transition-opacity md:duration-300 md:group-hover:opacity-90"
                       loading="lazy"
+                      decoding="async"
                     />
-                    <span className="absolute inset-0 bg-black/0 transition-colors group-hover:bg-black/20" />
                   </button>
                 ))}
               </div>
+              {!showAllPhotos && PHOTO_GALLERY.length > PHOTOS_SHOWN_AT_FIRST && (
+                <div className="mt-6 flex justify-center">
+                  <button
+                    type="button"
+                    onClick={() => setShowAllPhotos(true)}
+                    className="rounded-full border border-white/30 px-7 py-3 text-sm font-semibold text-white hover:border-church-gold hover:text-church-gold transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-church-gold"
+                  >
+                    Show all {PHOTO_GALLERY.length} photos
+                  </button>
+                </div>
+              )}
             </div>
 
             <div>
@@ -253,11 +306,11 @@ const YouthMinistryDetail: React.FC<YouthMinistryDetailProps> = ({ onBack, joine
                 </span>
               </div>
               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4">
-                {videos.map((item) => (
+                {videos.map((item, i) => (
                   <button
                     key={item.id}
                     type="button"
-                    onClick={() => setLightbox(item)}
+                    onClick={() => setLightboxIndex(PHOTO_GALLERY.length + i)}
                     className="group relative aspect-video overflow-hidden rounded-xl focus:outline-none focus-visible:ring-2 focus-visible:ring-church-gold"
                     aria-label={`Play video: ${item.alt}`}
                   >
@@ -390,47 +443,7 @@ const YouthMinistryDetail: React.FC<YouthMinistryDetailProps> = ({ onBack, joine
         </div>
       </section>
 
-      {lightbox && (
-        <div className="fixed inset-0 z-[120] flex items-center justify-center p-4">
-          <button
-            type="button"
-            className="absolute inset-0 bg-church-burgundy/90 backdrop-blur-sm"
-            onClick={() => setLightbox(null)}
-            aria-label="Close media"
-          />
-          <div className="relative z-10 w-full max-w-5xl animate-fade-in">
-            <button
-              type="button"
-              onClick={() => setLightbox(null)}
-              className="absolute -top-12 right-0 text-white/80 hover:text-white text-xs font-bold uppercase tracking-[0.25em]"
-            >
-              Close
-            </button>
-            <div className="overflow-hidden rounded-2xl bg-black shadow-2xl">
-              {lightbox.type === 'video' ? (
-                <div className="relative aspect-video bg-black">
-                  <video
-                    key={lightbox.id}
-                    src={lightbox.src}
-                    poster={lightbox.poster}
-                    controls
-                    autoPlay
-                    playsInline
-                    className="absolute inset-0 h-full w-full bg-black"
-                  />
-                </div>
-              ) : (
-                <img
-                  src={lightbox.src}
-                  alt={lightbox.alt}
-                  className="max-h-[80vh] w-full object-contain bg-black/40"
-                />
-              )}
-            </div>
-            <p className="mt-4 text-center text-sm text-white/70">{lightbox.alt}</p>
-          </div>
-        </div>
-      )}
+      <Lightbox items={lightboxItems} index={lightboxIndex} onIndexChange={setLightboxIndex} />
     </div>
   );
 };
