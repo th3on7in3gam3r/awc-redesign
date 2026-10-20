@@ -1,15 +1,15 @@
-import { useState, useEffect } from 'react';
-import { AnimatePresence, motion } from 'framer-motion';
-import { X, Loader2 } from 'lucide-react';
-import { MediaItem } from '../../data/galleryData';
-import { allChurchMedia, isNativeVideoUrl } from '../../data/churchMedia';
-import MediaCarousel from '../../components/gallery/MediaCarousel';
+import { useEffect, useMemo, useState } from 'react';
+import { Play } from 'lucide-react';
+import type { MediaItem } from '../../data/galleryData';
+import { churchPhotos, churchVideos } from '../../data/churchMedia';
 import {
   loadPixiesetPhotos,
   pixiesetSnapshotPhotos,
-  PIXIESET_GALLERY_URL,
   PIXIESET_CREDIT,
+  PIXIESET_GALLERY_URL,
+  PIXIESET_HERO_KEYS,
 } from '../../data/pixieset';
+import Lightbox from '../../components/gallery/Lightbox';
 
 /** Old promotional / ministry graphic assets — not real church event photography */
 const LEGACY_PROMO_URL_SNIPPETS = [
@@ -27,208 +27,301 @@ const LEGACY_PROMO_URL_SNIPPETS = [
 function isLegacyPromoItem(item: MediaItem): boolean {
   const url = item.url || '';
   const thumb = item.thumbnail || '';
-  return LEGACY_PROMO_URL_SNIPPETS.some(
-    (snippet) => url.includes(snippet) || thumb.includes(snippet)
-  );
+  return LEGACY_PROMO_URL_SNIPPETS.some((s) => url.includes(s) || thumb.includes(s));
 }
 
-const Gallery: React.FC = () => {
-  const [filter, setFilter] = useState<'all' | 'image' | 'video'>('all');
-  const [selectedMedia, setSelectedMedia] = useState<MediaItem | null>(null);
-  const [galleryItems, setGalleryItems] = useState<MediaItem[]>(allChurchMedia);
-  const [pixiesetPhotos, setPixiesetPhotos] = useState<MediaItem[]>(pixiesetSnapshotPhotos);
-  const [isLoading, setIsLoading] = useState(true);
+type FilterKey = 'all' | 'leah' | 'church' | 'video';
 
+const PAGE_SIZE = 36;
+
+const Gallery: React.FC = () => {
+  const [filter, setFilter] = useState<FilterKey>('all');
+  const [leahPhotos, setLeahPhotos] = useState<MediaItem[]>(pixiesetSnapshotPhotos);
+  const [uploads, setUploads] = useState<MediaItem[]>([]);
+  const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
+  const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
+
+  // Leah's Pixieset collection (live sync, snapshot fallback).
   useEffect(() => {
     let cancelled = false;
     loadPixiesetPhotos().then((items) => {
-      if (!cancelled) setPixiesetPhotos(items);
+      if (!cancelled) setLeahPhotos(items);
     });
     return () => {
       cancelled = true;
     };
   }, []);
 
+  // Anything staff uploaded through the admin gallery.
   useEffect(() => {
-    const fetchGallery = async () => {
-      try {
-        const res = await fetch('/api/gallery');
-        if (!res.ok) throw new Error('Failed to fetch');
-        const data = await res.json();
-        const apiItems: MediaItem[] = Array.isArray(data) ? data : [];
-        const seen = new Set(allChurchMedia.map((item) => item.url));
-        const extraFromApi = apiItems.filter(
-          (item) => !seen.has(item.url) && !isLegacyPromoItem(item)
+    let cancelled = false;
+    fetch('/api/gallery')
+      .then((res) => (res.ok ? res.json() : []))
+      .then((data) => {
+        if (cancelled || !Array.isArray(data)) return;
+        const known = new Set([...churchPhotos, ...churchVideos].map((i) => i.url));
+        setUploads(
+          (data as MediaItem[]).filter((i) => i?.url && !known.has(i.url) && !isLegacyPromoItem(i))
         );
-        setGalleryItems([...allChurchMedia, ...extraFromApi]);
-      } catch (err) {
-        console.error('Error fetching gallery:', err);
-        setGalleryItems(allChurchMedia);
-      } finally {
-        setIsLoading(false);
-      }
+      })
+      .catch(() => {});
+    return () => {
+      cancelled = true;
     };
-    fetchGallery();
   }, []);
 
-  const photos = galleryItems.filter((item) => item.type === 'image');
-  const videos = galleryItems.filter((item) => item.type === 'video');
+  const churchMoments = useMemo(
+    () => [...churchPhotos, ...uploads.filter((i) => i.type === 'image')],
+    [uploads]
+  );
+  const videos = useMemo(
+    () => [...churchVideos, ...uploads.filter((i) => i.type === 'video')],
+    [uploads]
+  );
 
-  const showPhotos = filter === 'all' || filter === 'image';
-  const showVideos = filter === 'all' || filter === 'video';
+  const filters: { key: FilterKey; label: string; count: number }[] = [
+    { key: 'all', label: 'All', count: leahPhotos.length + churchMoments.length + videos.length },
+    { key: 'leah', label: `Photography by ${PIXIESET_CREDIT}`, count: leahPhotos.length },
+    { key: 'church', label: 'Church moments', count: churchMoments.length },
+    { key: 'video', label: 'Videos', count: videos.length },
+  ];
+
+  const showVideoStrip = filter === 'all' && videos.length > 0;
+  const wallItems = useMemo<MediaItem[]>(() => {
+    switch (filter) {
+      case 'leah':
+        return leahPhotos;
+      case 'church':
+        return churchMoments;
+      case 'video':
+        return videos;
+      default:
+        return [...leahPhotos, ...churchMoments];
+    }
+  }, [filter, leahPhotos, churchMoments, videos]);
+
+  // The lightbox walks through exactly what's on screen, in on-screen order.
+  const lightboxItems = useMemo(
+    () => (showVideoStrip ? [...videos, ...wallItems] : wallItems),
+    [showVideoStrip, videos, wallItems]
+  );
+  const wallOffset = showVideoStrip ? videos.length : 0;
+
+  const visibleWall = wallItems.slice(0, visibleCount);
+  const remaining = wallItems.length - visibleWall.length;
+
+  const heroPhotos = useMemo(() => {
+    const byKey = new Map(leahPhotos.map((p) => [p.id.replace('pixieset-', ''), p]));
+    const picked = PIXIESET_HERO_KEYS.map((k) => byKey.get(k)).filter(Boolean) as MediaItem[];
+    return picked.length === 4 ? picked : leahPhotos.slice(0, 4);
+  }, [leahPhotos]);
+
+  const chooseFilter = (key: FilterKey) => {
+    setFilter(key);
+    setVisibleCount(PAGE_SIZE);
+  };
+
+  const openFromWall = (i: number) => setLightboxIndex(wallOffset + i);
 
   return (
-    <div className="min-h-screen bg-gray-50 pt-28 md:pt-32 pb-16 md:pb-20">
-      <div className="max-w-7xl mx-auto px-4 md:px-6">
-        <div className="text-center mb-8 md:mb-10">
-          <span className="text-church-gold font-bold tracking-[0.35em] uppercase text-[10px] mb-3 block">
-            Visual Journey
-          </span>
-          <h1 className="text-4xl md:text-5xl font-bold text-church-burgundy mb-3 serif leading-tight">
-            Gallery
-          </h1>
-          <p className="text-base md:text-lg text-slate-500 max-w-2xl mx-auto font-light leading-relaxed">
-            Witness the beauty of our church family, worship, and community through the lens.
-          </p>
-        </div>
+    <div className="min-h-screen bg-white">
+      {/* Hero */}
+      <section className="bg-church-burgundy-dark text-white pt-[72px]">
+        <div className="max-w-7xl mx-auto px-4 md:px-6 pt-10 md:pt-16 pb-10 md:pb-14 grid gap-8 lg:gap-12 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] items-end">
+          <div className="max-w-md">
+            <h1 className="serif text-5xl md:text-7xl leading-[0.95] tracking-tight">Gallery</h1>
+            <p className="mt-5 text-base md:text-lg text-white/75 leading-relaxed font-light">
+              Worship, fellowship and family life at Anointed Worship Center. New photos from {PIXIESET_CREDIT}'s
+              collection appear here as soon as she adds them.
+            </p>
+            <a
+              href={PIXIESET_GALLERY_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-6 inline-block text-sm text-church-gold hover:text-church-gold-light underline underline-offset-4 decoration-church-gold/40"
+            >
+              Order prints from {PIXIESET_CREDIT}'s gallery
+            </a>
+          </div>
 
-        <div className="flex justify-center mb-8 md:mb-10">
-          <div className="inline-flex items-center gap-1 rounded-full border border-slate-200 bg-white p-1 shadow-sm">
-            {([
-              { key: 'all', label: 'All' },
-              { key: 'image', label: 'Photos' },
-              { key: 'video', label: 'Videos' },
-            ] as const).map((option) => (
+          {heroPhotos.length === 4 && (
+            <div className="grid grid-cols-6 grid-rows-[repeat(2,minmax(0,1fr))] gap-2 md:gap-3 h-[300px] sm:h-[380px] md:h-[440px]">
+              {heroPhotos.map((photo, i) => {
+                const layout = [
+                  'col-span-4 row-span-1',
+                  'col-span-2 row-span-2',
+                  'col-span-2 row-span-1',
+                  'col-span-2 row-span-1',
+                ][i];
+                return (
+                  <button
+                    key={photo.id}
+                    type="button"
+                    onClick={() => {
+                      setFilter('leah');
+                      setVisibleCount(PAGE_SIZE);
+                      setLightboxIndex(Math.max(0, leahPhotos.indexOf(photo)));
+                    }}
+                    className={`${layout} relative overflow-hidden rounded-md bg-church-burgundy focus:outline-none focus-visible:ring-2 focus-visible:ring-church-gold`}
+                    aria-label={`Open photo ${i + 1} from ${PIXIESET_CREDIT}'s collection`}
+                  >
+                    <img
+                      src={photo.url}
+                      alt=""
+                      className="absolute inset-0 h-full w-full object-cover"
+                      fetchPriority={i === 0 ? 'high' : 'auto'}
+                    />
+                  </button>
+                );
+              })}
+            </div>
+          )}
+        </div>
+      </section>
+
+      {/* Filters */}
+      <div className="sticky top-[72px] z-30 bg-white/95 backdrop-blur border-b border-slate-200">
+        <div
+          role="tablist"
+          aria-label="Filter gallery"
+          className="max-w-7xl mx-auto px-4 md:px-6 flex gap-6 md:gap-8 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+        >
+          {filters.map((f) => {
+            const active = filter === f.key;
+            return (
               <button
-                key={option.key}
+                key={f.key}
+                role="tab"
                 type="button"
-                onClick={() => setFilter(option.key)}
-                className={`px-4 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-[0.16em] transition-colors ${
-                  filter === option.key
-                    ? 'bg-church-burgundy text-white'
-                    : 'text-slate-500 hover:text-church-burgundy'
+                aria-selected={active}
+                onClick={() => chooseFilter(f.key)}
+                className={`relative shrink-0 py-4 text-sm md:text-[15px] transition-colors focus:outline-none focus-visible:text-church-burgundy ${
+                  active ? 'text-church-burgundy font-semibold' : 'text-slate-500 hover:text-church-burgundy'
                 }`}
               >
-                {option.label}
+                {f.label}
+                <span className="ml-1.5 text-xs tabular-nums text-slate-400">{f.count}</span>
+                <span
+                  className={`absolute left-0 right-0 -bottom-px h-[3px] rounded-full ${
+                    active ? 'bg-church-gold' : 'bg-transparent'
+                  }`}
+                />
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
+      <div className="max-w-7xl mx-auto px-4 md:px-6 py-10 md:py-14">
+        {/* Videos strip (All view only) */}
+        {showVideoStrip && (
+          <section className="mb-12 md:mb-16" aria-labelledby="gallery-videos">
+            <div className="flex items-baseline justify-between mb-4">
+              <h2 id="gallery-videos" className="serif text-2xl md:text-3xl text-church-burgundy">
+                Videos
+              </h2>
+              <button
+                type="button"
+                onClick={() => chooseFilter('video')}
+                className="text-sm text-slate-500 hover:text-church-burgundy underline-offset-4 hover:underline"
+              >
+                See all {videos.length}
+              </button>
+            </div>
+            <div className="flex gap-3 md:gap-4 overflow-x-auto snap-x snap-mandatory pb-2 -mx-4 px-4 md:mx-0 md:px-0 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+              {videos.map((video, i) => (
+                <VideoCard key={video.id} item={video} onOpen={() => setLightboxIndex(i)} className="w-[240px] md:w-[280px] shrink-0 snap-start" />
+              ))}
+            </div>
+          </section>
+        )}
+
+        {showVideoStrip && (
+          <h2 className="serif text-2xl md:text-3xl text-church-burgundy mb-4">Photos</h2>
+        )}
+
+        {wallItems.length === 0 ? (
+          <p className="text-center text-slate-500 py-20">
+            Nothing here yet. Photos added in the admin gallery will show up in this section.
+          </p>
+        ) : filter === 'video' ? (
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {visibleWall.map((video, i) => (
+              <VideoCard key={video.id} item={video} onOpen={() => openFromWall(i)} />
+            ))}
+          </div>
+        ) : (
+          <div className="columns-2 md:columns-3 xl:columns-4 gap-2 md:gap-3">
+            {visibleWall.map((photo, i) => (
+              <button
+                key={photo.id}
+                type="button"
+                onClick={() => openFromWall(i)}
+                className="group mb-2 md:mb-3 block w-full break-inside-avoid overflow-hidden rounded-md bg-slate-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-church-gold focus-visible:ring-offset-2"
+                style={{ aspectRatio: photo.width && photo.height ? `${photo.width} / ${photo.height}` : '4 / 5' }}
+                aria-label={photo.credit ? `Open photo by ${photo.credit.name}` : `Open ${photo.title}`}
+              >
+                <img
+                  src={photo.thumbnail || photo.url}
+                  alt={photo.credit ? '' : photo.description || photo.title}
+                  loading="lazy"
+                  decoding="async"
+                  className="h-full w-full object-cover transition-opacity duration-300 group-hover:opacity-90"
+                />
               </button>
             ))}
           </div>
-        </div>
+        )}
 
-        {isLoading ? (
-          <div className="flex flex-col items-center justify-center py-16 text-slate-300">
-            <Loader2 className="animate-spin mb-3" size={28} />
-            <p className="text-[10px] font-bold uppercase tracking-widest">Loading gallery…</p>
+        {remaining > 0 && (
+          <div className="mt-10 flex flex-col items-center gap-2">
+            <button
+              type="button"
+              onClick={() => setVisibleCount((n) => n + PAGE_SIZE)}
+              className="rounded-full bg-church-burgundy px-7 py-3 text-sm font-semibold text-white hover:bg-church-burgundy-light focus:outline-none focus-visible:ring-2 focus-visible:ring-church-gold focus-visible:ring-offset-2"
+            >
+              Show more photos
+            </button>
+            <p className="text-xs text-slate-400 tabular-nums">
+              Showing {visibleWall.length} of {wallItems.length}
+            </p>
           </div>
-        ) : (
-          <>
-            {showPhotos && pixiesetPhotos.length > 0 && (
-              <MediaCarousel
-                title="Photography"
-                items={pixiesetPhotos}
-                onSelect={setSelectedMedia}
-                footer={
-                  <>
-                    Photos by {PIXIESET_CREDIT} ·{' '}
-                    <a
-                      href={PIXIESET_GALLERY_URL}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="font-semibold text-church-burgundy hover:text-church-gold underline-offset-2 hover:underline"
-                    >
-                      View the full gallery
-                    </a>
-                  </>
-                }
-              />
-            )}
-            {showPhotos && (
-              <MediaCarousel title="Photos" items={photos} onSelect={setSelectedMedia} />
-            )}
-            {showVideos && (
-              <MediaCarousel title="Videos" items={videos} onSelect={setSelectedMedia} />
-            )}
-            {((showPhotos && photos.length === 0 && pixiesetPhotos.length === 0) || !showPhotos) &&
-              ((showVideos && videos.length === 0) || !showVideos) && (
-                <p className="text-center text-slate-400 text-sm py-12">No media in this filter yet.</p>
-              )}
-          </>
         )}
       </div>
 
-      <AnimatePresence>
-        {selectedMedia && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[100] flex items-center justify-center bg-church-burgundy/90 backdrop-blur-sm p-4"
-          >
-            <button
-              type="button"
-              aria-label="Close"
-              className="absolute inset-0"
-              onClick={() => setSelectedMedia(null)}
-            />
-            <motion.div
-              initial={{ scale: 0.96, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.96, opacity: 0 }}
-              className="relative z-10 w-full max-w-5xl overflow-hidden rounded-2xl bg-black shadow-2xl"
-            >
-              <button
-                type="button"
-                onClick={() => setSelectedMedia(null)}
-                className="absolute top-4 right-4 z-20 w-10 h-10 bg-white/10 hover:bg-white/20 text-white rounded-full flex items-center justify-center"
-              >
-                <X size={18} />
-              </button>
-
-              <div className="aspect-video bg-black flex items-center justify-center relative">
-                {selectedMedia.type === 'video' ? (
-                  isNativeVideoUrl(selectedMedia.url) ? (
-                    <video
-                      key={selectedMedia.id}
-                      src={selectedMedia.url}
-                      controls
-                      autoPlay
-                      playsInline
-                      className="w-full h-full absolute inset-0 bg-black"
-                      poster={selectedMedia.thumbnail}
-                    />
-                  ) : (
-                    <iframe
-                      src={selectedMedia.url}
-                      className="w-full h-full absolute inset-0"
-                      title={selectedMedia.title}
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                      allowFullScreen
-                    />
-                  )
-                ) : (
-                  <img
-                    src={selectedMedia.url}
-                    alt={selectedMedia.title}
-                    className="w-full h-full object-contain"
-                  />
-                )}
-              </div>
-
-              <div className="p-5 md:p-6 bg-church-burgundy border-t border-white/10">
-                <p className="text-church-gold font-bold uppercase tracking-[0.2em] text-[10px] mb-1">
-                  {selectedMedia.category}
-                </p>
-                <h2 className="text-white text-xl md:text-2xl font-bold serif">{selectedMedia.title}</h2>
-                {selectedMedia.description && (
-                  <p className="text-white/65 text-sm mt-2">{selectedMedia.description}</p>
-                )}
-              </div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      <Lightbox items={lightboxItems} index={lightboxIndex} onIndexChange={setLightboxIndex} />
     </div>
   );
 };
+
+const VideoCard: React.FC<{ item: MediaItem; onOpen: () => void; className?: string }> = ({
+  item,
+  onOpen,
+  className = '',
+}) => (
+  <button
+    type="button"
+    onClick={onOpen}
+    className={`group text-left focus:outline-none ${className}`}
+    aria-label={`Play video: ${item.title}`}
+  >
+    <div className="relative aspect-video overflow-hidden rounded-md bg-church-burgundy-dark group-focus-visible:ring-2 group-focus-visible:ring-church-gold group-focus-visible:ring-offset-2">
+      {item.thumbnail && (
+        <img
+          src={item.thumbnail}
+          alt=""
+          loading="lazy"
+          decoding="async"
+          className="h-full w-full object-cover opacity-90 transition-opacity group-hover:opacity-100"
+        />
+      )}
+      <span className="absolute left-3 bottom-3 flex h-10 w-10 items-center justify-center rounded-full bg-white text-church-burgundy shadow">
+        <Play size={15} fill="currentColor" className="ml-0.5" />
+      </span>
+    </div>
+    <p className="mt-2 serif text-base text-church-burgundy leading-snug">{item.title}</p>
+    {item.description && <p className="text-sm text-slate-500 line-clamp-1">{item.description}</p>}
+  </button>
+);
 
 export default Gallery;

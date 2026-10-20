@@ -147,15 +147,17 @@ async function fetchPixiesetPhotos() {
     return all
         .filter((p) => !p.isPrivate && (p.pathXlarge || p.pathLarge))
         .map((p) => {
-            const name = String(p.name || '').replace(/\.(jpe?g|png)$/i, '');
+            const url = pixiesetUrl(p.pathXlarge || p.pathLarge);
+            const key = (url.match(/\/([0-9a-f]{16,})-[a-z]+\.jpg/i) || [])[1] || String(p.id);
             return {
-                id: `pixieset-${p.id}`,
+                id: `pixieset-${key}`,
                 type: 'image',
-                url: pixiesetUrl(p.pathXlarge || p.pathLarge),
+                url,
                 thumbnail: pixiesetUrl(p.pathMedium || p.pathSmall || p.pathLarge),
                 title: 'Anointed Worship Center',
                 category: 'Photography',
-                description: `Photo by ${PIXIESET.credit}${name ? ` · ${name}` : ''}`,
+                width: Number(p.width) || undefined,
+                height: Number(p.height) || undefined,
             };
         });
 }

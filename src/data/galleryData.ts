@@ -6,6 +6,11 @@ export interface MediaItem {
     title: string;
     category: string;
     description?: string;
+    /** Intrinsic size, used to reserve space in the masonry grid. */
+    width?: number;
+    height?: number;
+    /** Photographer credit + link shown in the lightbox. */
+    credit?: { name: string; url: string };
 }
 
 export const galleryData: MediaItem[] = [

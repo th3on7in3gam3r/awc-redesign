@@ -10,7 +10,7 @@ const MainLayout: React.FC = () => {
         <div className="min-h-screen flex flex-col font-sans selection:bg-church-gold selection:text-white scroll-smooth relative">
             <Header />
 
-            <main className="flex-grow overflow-x-hidden">
+            <main className="flex-grow overflow-x-clip">
                 <Outlet />
             </main>
 
