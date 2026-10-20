@@ -109,6 +109,75 @@ app.get('/api/gallery', async (req, res) => {
     }
 });
 
+// GET /api/gallery/pixieset - Live sync of Leah's Pixieset collection (shared with permission).
+// New photos Leah adds show up automatically; results are cached for an hour.
+const PIXIESET = {
+    host: 'https://leah6583.pixieset.com',
+    cuk: 'anointedworshipcenter',
+    cid: '122229815',
+    gs: 'awc',
+    credit: 'Leah',
+};
+const PIXIESET_TTL_MS = 60 * 60 * 1000;
+let pixiesetCache = { at: 0, items: null };
+
+const pixiesetUrl = (p) => (p ? (p.startsWith('//') ? `https:${p}` : p) : '');
+
+async function fetchPixiesetPhotos() {
+    const all = [];
+    for (let page = 1; page <= 50; page++) {
+        const url = `${PIXIESET.host}/client/loadphotos/?cuk=${PIXIESET.cuk}&cid=${PIXIESET.cid}&gs=${PIXIESET.gs}&fk=&clientDownloads=false&page=${page}&size=48`;
+        const r = await fetch(url, {
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest',
+                Accept: 'application/json, text/javascript, */*; q=0.01',
+                Referer: `${PIXIESET.host}/${PIXIESET.cuk}/`,
+                'User-Agent': 'Mozilla/5.0 (compatible; AWC-Gallery-Sync/1.0; +https://www.anointedworshipcenter.com)',
+            },
+        });
+        if (!r.ok) throw new Error(`Pixieset HTTP ${r.status}`);
+        const text = await r.text();
+        if (!text) throw new Error('Pixieset returned an empty response');
+        const json = JSON.parse(text);
+        const photos = typeof json.content === 'string' ? JSON.parse(json.content || '[]') : json.content || [];
+        if (!Array.isArray(photos) || photos.length === 0) break;
+        all.push(...photos);
+        if (json.isLastPage) break;
+    }
+    return all
+        .filter((p) => !p.isPrivate && (p.pathXlarge || p.pathLarge))
+        .map((p) => {
+            const name = String(p.name || '').replace(/\.(jpe?g|png)$/i, '');
+            return {
+                id: `pixieset-${p.id}`,
+                type: 'image',
+                url: pixiesetUrl(p.pathXlarge || p.pathLarge),
+                thumbnail: pixiesetUrl(p.pathMedium || p.pathSmall || p.pathLarge),
+                title: 'Anointed Worship Center',
+                category: 'Photography',
+                description: `Photo by ${PIXIESET.credit}${name ? ` · ${name}` : ''}`,
+            };
+        });
+}
+
+app.get('/api/gallery/pixieset', async (req, res) => {
+    const fresh = pixiesetCache.items && Date.now() - pixiesetCache.at < PIXIESET_TTL_MS;
+    if (!fresh) {
+        try {
+            const items = await fetchPixiesetPhotos();
+            if (items.length > 0) pixiesetCache = { at: Date.now(), items };
+        } catch (err) {
+            console.error('Pixieset sync failed:', err.message);
+        }
+    }
+    if (!pixiesetCache.items) {
+        // Client falls back to its committed snapshot.
+        return res.status(502).json({ items: [], message: 'Pixieset sync unavailable' });
+    }
+    res.set('Cache-Control', 'public, s-maxage=3600, stale-while-revalidate=86400');
+    res.json({ items: pixiesetCache.items, syncedAt: new Date(pixiesetCache.at).toISOString() });
+});
+
 // POST /api/gallery/upload - Managed local upload + Supabase record
 app.post('/api/gallery/upload', auth, upload.single('media'), async (req, res) => {
     try {

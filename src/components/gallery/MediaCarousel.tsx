@@ -7,11 +7,13 @@ interface MediaCarouselProps {
   title: string;
   items: MediaItem[];
   onSelect: (item: MediaItem) => void;
+  /** Optional line under the row (e.g. a photographer credit). */
+  footer?: React.ReactNode;
 }
 
 const CARD_SCROLL_PX = 520;
 
-const MediaCarousel: React.FC<MediaCarouselProps> = ({ title, items, onSelect }) => {
+const MediaCarousel: React.FC<MediaCarouselProps> = ({ title, items, onSelect, footer }) => {
   const scrollRef = useRef<HTMLDivElement>(null);
 
   if (items.length === 0) return null;
@@ -62,6 +64,8 @@ const MediaCarousel: React.FC<MediaCarouselProps> = ({ title, items, onSelect })
               <img
                 src={item.thumbnail || item.url}
                 alt={item.title}
+                loading="lazy"
+                decoding="async"
                 className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
               />
               {item.type === 'video' && (
@@ -88,6 +92,7 @@ const MediaCarousel: React.FC<MediaCarouselProps> = ({ title, items, onSelect })
           </button>
         ))}
       </div>
+      {footer && <div className="mt-2 text-xs text-slate-400">{footer}</div>}
     </section>
   );
 };

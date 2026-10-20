@@ -4,6 +4,12 @@ import { X, Loader2 } from 'lucide-react';
 import { MediaItem } from '../../data/galleryData';
 import { allChurchMedia, isNativeVideoUrl } from '../../data/churchMedia';
 import MediaCarousel from '../../components/gallery/MediaCarousel';
+import {
+  loadPixiesetPhotos,
+  pixiesetSnapshotPhotos,
+  PIXIESET_GALLERY_URL,
+  PIXIESET_CREDIT,
+} from '../../data/pixieset';
 
 /** Old promotional / ministry graphic assets — not real church event photography */
 const LEGACY_PROMO_URL_SNIPPETS = [
@@ -30,7 +36,18 @@ const Gallery: React.FC = () => {
   const [filter, setFilter] = useState<'all' | 'image' | 'video'>('all');
   const [selectedMedia, setSelectedMedia] = useState<MediaItem | null>(null);
   const [galleryItems, setGalleryItems] = useState<MediaItem[]>(allChurchMedia);
+  const [pixiesetPhotos, setPixiesetPhotos] = useState<MediaItem[]>(pixiesetSnapshotPhotos);
   const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    let cancelled = false;
+    loadPixiesetPhotos().then((items) => {
+      if (!cancelled) setPixiesetPhotos(items);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   useEffect(() => {
     const fetchGallery = async () => {
@@ -105,13 +122,33 @@ const Gallery: React.FC = () => {
           </div>
         ) : (
           <>
+            {showPhotos && pixiesetPhotos.length > 0 && (
+              <MediaCarousel
+                title="Photography"
+                items={pixiesetPhotos}
+                onSelect={setSelectedMedia}
+                footer={
+                  <>
+                    Photos by {PIXIESET_CREDIT} ·{' '}
+                    <a
+                      href={PIXIESET_GALLERY_URL}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="font-semibold text-church-burgundy hover:text-church-gold underline-offset-2 hover:underline"
+                    >
+                      View the full gallery
+                    </a>
+                  </>
+                }
+              />
+            )}
             {showPhotos && (
               <MediaCarousel title="Photos" items={photos} onSelect={setSelectedMedia} />
             )}
             {showVideos && (
               <MediaCarousel title="Videos" items={videos} onSelect={setSelectedMedia} />
             )}
-            {((showPhotos && photos.length === 0) || !showPhotos) &&
+            {((showPhotos && photos.length === 0 && pixiesetPhotos.length === 0) || !showPhotos) &&
               ((showVideos && videos.length === 0) || !showVideos) && (
                 <p className="text-center text-slate-400 text-sm py-12">No media in this filter yet.</p>
               )}
