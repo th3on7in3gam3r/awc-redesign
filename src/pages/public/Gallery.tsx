@@ -45,7 +45,13 @@ const Gallery: React.FC = () => {
   useEffect(() => {
     let cancelled = false;
     loadPixiesetPhotos().then((items) => {
-      if (!cancelled) setLeahPhotos(items);
+      if (cancelled) return;
+      // Only swap if Leah's collection actually changed, so nothing re-renders mid-view.
+      setLeahPhotos((current) => {
+        const same =
+          current.length === items.length && current.every((p, i) => p.url === items[i].url);
+        return same ? current : items;
+      });
     });
     return () => {
       cancelled = true;
@@ -266,7 +272,7 @@ const Gallery: React.FC = () => {
                   alt={photo.credit ? '' : photo.description || photo.title}
                   loading="lazy"
                   decoding="async"
-                  className="h-full w-full object-cover transition-opacity duration-300 group-hover:opacity-90"
+                  className="h-full w-full object-cover md:transition-opacity md:duration-300 md:group-hover:opacity-90"
                 />
               </button>
             ))}

@@ -42,7 +42,11 @@ export async function loadPixiesetPhotos(): Promise<MediaItem[]> {
     const data = await res.json();
     const items: MediaItem[] = Array.isArray(data?.items) ? data.items : [];
     if (items.length === 0) return pixiesetSnapshotPhotos;
-    return items.map((item) => ({ ...item, credit }));
+    return items.map((item) => {
+      // Key ids off the image hash so they match the snapshot (stable React keys).
+      const key = item.url.match(/\/([0-9a-f]{16,})-[a-z]+\.jpg/i)?.[1];
+      return { ...item, id: key ? `pixieset-${key}` : item.id, credit };
+    });
   } catch (err) {
     console.warn('Pixieset sync unavailable, using snapshot:', err);
     return pixiesetSnapshotPhotos;

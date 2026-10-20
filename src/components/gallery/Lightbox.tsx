@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import { ChevronLeft, ChevronRight, X } from 'lucide-react';
 import type { MediaItem } from '../../data/galleryData';
@@ -17,6 +17,50 @@ function preload(item?: MediaItem) {
   const img = new Image();
   img.src = item.url;
 }
+
+/**
+ * Shows the (already cached) thumbnail instantly, then fades the full-size photo
+ * in on top once it has downloaded — no blank frame, no pop.
+ */
+const PhotoStage: React.FC<{ item: MediaItem }> = ({ item }) => {
+  const fullRef = useRef<HTMLImageElement>(null);
+  const [loaded, setLoaded] = useState(false);
+
+  useEffect(() => {
+    // Cached images can finish before React attaches onLoad.
+    if (fullRef.current?.complete && fullRef.current.naturalWidth > 0) setLoaded(true);
+  }, []);
+
+  const ratio = item.width && item.height ? `${item.width} / ${item.height}` : undefined;
+  const alt = item.description || item.title;
+
+  return (
+    <div
+      className="relative max-h-full max-w-full"
+      style={ratio ? { aspectRatio: ratio, height: '100%' } : undefined}
+    >
+      {item.thumbnail && item.thumbnail !== item.url && (
+        <img
+          src={item.thumbnail}
+          alt=""
+          aria-hidden="true"
+          className="absolute inset-0 h-full w-full object-contain select-none"
+          draggable={false}
+        />
+      )}
+      <img
+        ref={fullRef}
+        src={item.url}
+        alt={alt}
+        onLoad={() => setLoaded(true)}
+        className={`relative h-full w-full max-h-full max-w-full object-contain select-none transition-opacity duration-200 ${
+          loaded ? 'opacity-100' : 'opacity-0'
+        }`}
+        draggable={false}
+      />
+    </div>
+  );
+};
 
 const Lightbox: React.FC<LightboxProps> = ({ items, index, onIndexChange }) => {
   const reduceMotion = useReducedMotion();
@@ -41,12 +85,17 @@ const Lightbox: React.FC<LightboxProps> = ({ items, index, onIndexChange }) => {
   useEffect(() => {
     if (!isOpen) return;
     returnFocusRef.current = document.activeElement as HTMLElement | null;
-    const previousOverflow = document.body.style.overflow;
-    document.body.style.overflow = 'hidden';
-    closeRef.current?.focus();
+    const { body } = document;
+    const previous = { overflow: body.style.overflow, paddingRight: body.style.paddingRight };
+    // Keep the page from shifting sideways when the scrollbar disappears.
+    const scrollbar = window.innerWidth - document.documentElement.clientWidth;
+    if (scrollbar > 0) body.style.paddingRight = `${scrollbar}px`;
+    body.style.overflow = 'hidden';
+    closeRef.current?.focus({ preventScroll: true });
     return () => {
-      document.body.style.overflow = previousOverflow;
-      returnFocusRef.current?.focus?.();
+      body.style.overflow = previous.overflow;
+      body.style.paddingRight = previous.paddingRight;
+      returnFocusRef.current?.focus?.({ preventScroll: true });
     };
   }, [isOpen]);
 
@@ -89,7 +138,7 @@ const Lightbox: React.FC<LightboxProps> = ({ items, index, onIndexChange }) => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: reduceMotion ? 0 : 0.2 }}
+          transition={{ duration: reduceMotion ? 0 : 0.15 }}
           className="fixed inset-0 z-[100] flex flex-col bg-[#1C0101] text-white"
           onTouchStart={onTouchStart}
           onTouchEnd={onTouchEnd}
@@ -121,44 +170,30 @@ const Lightbox: React.FC<LightboxProps> = ({ items, index, onIndexChange }) => {
               </button>
             )}
 
-            <AnimatePresence mode="wait" initial={false}>
-              <motion.div
-                key={item.id}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: reduceMotion ? 0 : 0.15 }}
-                className="h-full w-full flex items-center justify-center"
-              >
-                {item.type === 'video' ? (
-                  isNativeVideoUrl(item.url) ? (
-                    <video
-                      src={item.url}
-                      poster={item.thumbnail}
-                      controls
-                      autoPlay
-                      playsInline
-                      className="max-h-full max-w-full rounded-sm bg-black"
-                    />
-                  ) : (
-                    <iframe
-                      src={item.url}
-                      title={item.title}
-                      className="w-full max-w-5xl aspect-video rounded-sm"
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                      allowFullScreen
-                    />
-                  )
-                ) : (
-                  <img
+            <div key={item.id} className="h-full w-full flex items-center justify-center">
+              {item.type === 'video' ? (
+                isNativeVideoUrl(item.url) ? (
+                  <video
                     src={item.url}
-                    alt={item.description || item.title}
-                    className="max-h-full max-w-full object-contain select-none"
-                    draggable={false}
+                    poster={item.thumbnail}
+                    controls
+                    autoPlay
+                    playsInline
+                    className="max-h-full max-w-full rounded-sm bg-black"
                   />
-                )}
-              </motion.div>
-            </AnimatePresence>
+                ) : (
+                  <iframe
+                    src={item.url}
+                    title={item.title}
+                    className="w-full max-w-5xl aspect-video rounded-sm"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                  />
+                )
+              ) : (
+                <PhotoStage item={item} />
+              )}
+            </div>
 
             {total > 1 && (
               <button
