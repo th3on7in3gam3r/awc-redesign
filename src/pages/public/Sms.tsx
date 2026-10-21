@@ -12,12 +12,12 @@ const disclosures = [
     {
         icon: Phone,
         title: 'How to opt in',
-        body: 'People opt in by entering their number on the Vault login page. Providing your mobile number is voluntary. You will not receive a sign-in code unless you request one there.',
+        body: 'Members opt in on the AWC Vault sign-in page by entering their mobile number and checking the text-message consent box (it is never pre-checked). Opting in is voluntary and not a condition of membership. No text is sent unless you request a code there.',
     },
     {
         icon: Shield,
         title: 'Message and data rates',
-        body: 'Message/data rates may apply. Frequency depends on how often you request a sign-in code. Carrier charges are billed by your wireless provider, not by the church.',
+        body: 'Message and data rates may apply. Message frequency varies: one text each time you request a sign-in code. Carrier charges are billed by your wireless provider, not by the church.',
     },
     {
         icon: HelpCircle,
@@ -25,6 +25,67 @@ const disclosures = [
         body: 'Reply STOP to opt out, HELP for help. After you reply STOP, you will no longer receive AWC Vault sign-in codes at that number unless you opt in again.',
     },
 ];
+
+const CONSENT_TEXT =
+    'I agree to receive one-time sign-in codes by text message from Anointed Worship Center (AWC Vault) at the mobile number above. Message frequency varies (one text per sign-in request). Message and data rates may apply. Reply STOP to opt out, HELP for help. Consent is not a condition of membership.';
+
+/** Static replica of the opt-in on the AWC Vault sign-in page, for carrier review. */
+const OptInExample: React.FC = () => (
+    <figure className="mt-12" aria-labelledby="optin-example-caption">
+        <h2 id="optin-example-caption" className="font-serif text-2xl text-church-burgundy md:text-3xl">
+            How members opt in
+        </h2>
+        <p className="mt-3 max-w-3xl leading-relaxed text-slate-600">
+            This is the opt-in on the AWC Vault sign-in page, where texts are requested. The consent box starts
+            unchecked, and the Send code button stays disabled until the member checks it.
+        </p>
+
+        <div className="mt-8 rounded-[1.75rem] bg-[#F9F9F7] p-4 sm:p-8">
+            <div className="mx-auto max-w-md rounded-[1.5rem] bg-[#400010] p-6 text-white shadow-2xl sm:p-8" role="img" aria-label="Example of the AWC Vault text-message sign-in screen with consent checkbox">
+                <p className="text-center text-3xl font-black uppercase tracking-tight">
+                    AWC <span className="text-church-gold">Vault</span>
+                </p>
+                <p className="mt-1 text-center text-[11px] font-bold uppercase tracking-[0.25em] text-white/50">
+                    Anointed Worship Center
+                </p>
+
+                <p className="mt-8 text-sm font-semibold text-white/80">Sign in with a text code</p>
+                <label className="mt-3 block text-xs font-bold uppercase tracking-[0.15em] text-white/60">
+                    Mobile number
+                </label>
+                <div className="mt-2 flex items-center gap-3 rounded-2xl bg-white px-4 py-4 text-[#400010]">
+                    <Phone className="h-5 w-5 text-[#400010]/50" aria-hidden="true" />
+                    <span className="text-base text-slate-400">(555) 555-0123</span>
+                </div>
+
+                <div className="mt-5 flex items-start gap-3">
+                    <span className="mt-0.5 h-5 w-5 shrink-0 rounded border-2 border-white/60 bg-transparent" aria-hidden="true" />
+                    <p className="text-[13px] leading-relaxed text-white/85">
+                        {CONSENT_TEXT} See our{' '}
+                        <Link to="/terms" className="font-semibold text-church-gold underline underline-offset-2">Terms</Link>{' '}
+                        and{' '}
+                        <Link to="/privacy" className="font-semibold text-church-gold underline underline-offset-2">Privacy Policy</Link>.
+                    </p>
+                </div>
+
+                <div className="mt-6 w-full rounded-2xl bg-church-gold/40 py-4 text-center text-sm font-black uppercase tracking-[0.2em] text-[#400010]/70">
+                    Send code
+                </div>
+                <p className="mt-4 text-center text-[11px] leading-relaxed text-white/45">
+                    No mobile information will be shared with third parties or affiliates for marketing or promotional
+                    purposes.
+                </p>
+            </div>
+        </div>
+
+        <figcaption className="mt-6 rounded-2xl border border-slate-100 bg-slate-50/80 p-6">
+            <p className="text-sm font-bold text-church-burgundy">Example message</p>
+            <p className="mt-2 font-mono text-sm text-slate-700">
+                AWC Vault: your sign-in code is 123456. Do not share this code. Reply STOP to opt out.
+            </p>
+        </figcaption>
+    </figure>
+);
 
 const Sms: React.FC = () => {
     return (
@@ -44,7 +105,7 @@ const Sms: React.FC = () => {
                         Official messaging details for optional AWC Vault sign-in codes from {CHURCH_NAME}.
                     </p>
                     <p className="mt-4 text-[11px] font-bold uppercase tracking-[0.28em] text-white/45">
-                        Last updated September 28, 2026
+                        Last updated October 21, 2026
                     </p>
                 </div>
             </section>
@@ -55,8 +116,11 @@ const Sms: React.FC = () => {
                         <p className="max-w-3xl text-lg leading-relaxed text-slate-600">
                             This page describes the Anointed Worship Center / AWC Vault text program. Please review
                             these terms before requesting a sign-in code. By entering your mobile number on the Vault
-                            login page, you agree to receive the optional messages described here.
+                            sign-in page and checking the consent box, you agree to receive the optional messages
+                            described here.
                         </p>
+
+                        <OptInExample />
 
                         <div className="mt-12 grid gap-6 md:grid-cols-2">
                             {disclosures.map(({ icon: Icon, title, body }) => (
@@ -111,6 +175,12 @@ const Sms: React.FC = () => {
                                 className="inline-flex items-center justify-center rounded-xl border border-slate-200 px-6 py-3.5 text-sm font-bold uppercase tracking-widest text-church-burgundy transition-colors hover:border-church-gold hover:text-church-gold"
                             >
                                 Privacy Policy
+                            </Link>
+                            <Link
+                                to="/terms"
+                                className="inline-flex items-center justify-center rounded-xl border border-slate-200 px-6 py-3.5 text-sm font-bold uppercase tracking-widest text-church-burgundy transition-colors hover:border-church-gold hover:text-church-gold"
+                            >
+                                Terms
                             </Link>
                         </div>
                     </div>

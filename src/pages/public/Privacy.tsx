@@ -7,7 +7,7 @@ const Privacy: React.FC = () => {
                 <div className="bg-church-burgundy py-16 px-8 text-center relative overflow-hidden">
                     <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-10"></div>
                     <h1 className="text-4xl md:text-5xl font-serif text-white relative z-10">Privacy Policy</h1>
-                    <p className="text-white/60 mt-4 font-bold uppercase tracking-widest text-xs relative z-10">Last Updated: February 17, 2026</p>
+                    <p className="text-white/60 mt-4 font-bold uppercase tracking-widest text-xs relative z-10">Last Updated: October 21, 2026</p>
                 </div>
 
                 <div className="p-8 md:p-16 prose prose-slate max-w-none">
@@ -40,7 +40,24 @@ const Privacy: React.FC = () => {
                         We have put in place appropriate security measures to prevent your personal data from being accidentally lost, used or accessed in an unauthorized way, altered or disclosed.
                     </p>
 
-                    <h2 className="text-2xl font-serif text-church-burgundy mt-12 mb-6">4. Contact Us</h2>
+                    <h2 className="text-2xl font-serif text-church-burgundy mt-12 mb-6">4. Text Messages (SMS)</h2>
+                    <p>
+                        If you choose to receive AWC Vault sign-in codes by text, we collect your mobile number and a
+                        record of your consent. We use your number only to send the sign-in codes you request. Messages
+                        are delivered through our messaging provider, Twilio, solely to send those codes.
+                    </p>
+                    <p className="mt-4 font-semibold text-church-burgundy">
+                        No mobile information will be shared with third parties or affiliates for marketing or
+                        promotional purposes. Text messaging opt-in data and consent are not shared with any third
+                        parties.
+                    </p>
+                    <p className="mt-4">
+                        Reply STOP to any message to opt out, or HELP for help. Message and data rates may apply. See
+                        our <a href="/sms" className="text-church-burgundy underline underline-offset-2">SMS Program</a> page
+                        for full details.
+                    </p>
+
+                    <h2 className="text-2xl font-serif text-church-burgundy mt-12 mb-6">5. Contact Us</h2>
                     <p>
                         If you have any questions about this privacy policy or our privacy practices, please contact us at:
                     </p>
