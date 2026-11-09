@@ -2,7 +2,7 @@
 import { Sermon, Ministry, BlogPost, ChurchEvent } from './types';
 
 export const CHURCH_NAME = "Anointed Worship Center";
-export const TAGLINE = "A Place of Purpose, Power, and Praise";
+export const TAGLINE = "Where Everybody is Somebody";
 export const CONTRIBUTION_BOOK_URL = "https://awc-digital-contribution-book.onrender.com";
 export const CONTRIBUTION_BOOK_LABEL = "Contribution Book";
 
