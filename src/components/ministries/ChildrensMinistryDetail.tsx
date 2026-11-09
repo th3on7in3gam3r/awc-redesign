@@ -36,7 +36,7 @@ const PILLARS = [
 
 const PHOTO_GALLERY: GalleryItem[] = [
   { id: 'dsc-5607', src: '/images/children/dsc-5607.jpg', alt: "Children's ministry moment at AWC" },
-  { id: 'dsc-5603', src: '/images/children/dsc-5603.jpg', alt: 'Kids engaged in children's ministry' },
+  { id: 'dsc-5603', src: '/images/children/dsc-5603.jpg', alt: "Kids engaged in children's ministry" },
   { id: 'dsc-5098', src: '/images/children/dsc-5098.jpg', alt: 'Children learning and growing together' },
   { id: 'dsc-4792', src: '/images/children/dsc-4792.jpg', alt: "Joy in AWC Children's Ministry" },
   { id: 'dsc-4791', src: '/images/children/dsc-4791.jpg', alt: 'Children gathered in fellowship' },
