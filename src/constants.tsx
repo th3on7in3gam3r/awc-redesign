@@ -198,10 +198,10 @@ export const FELLOWSHIP_COOKOUT = {
 };
 
 export const AWC_VAULT_THANKSGIVING_RSVP_URL =
-  `${AWC_VAULT_URL}/#/events/a1b2c3d4-e5f6-4789-a012-202611221400/rsvp`;
+  `${AWC_VAULT_URL}/#/events/86ac9498-ee56-4c6a-baae-079832b0ea73/rsvp`;
 
 export const THANKSGIVING_DINNER = {
-  title: 'AWC Thanksgiving Dinner 2026',
+  title: 'AWC Grand Family Celebration 2026',
   eyebrow: 'Table of Thanksgiving',
   targetDate: '2026-11-22T14:00:00',
   displayDate: 'November 22, 2026',

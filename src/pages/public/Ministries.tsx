@@ -8,8 +8,10 @@ import WorshipArtsDetail from '../../components/ministries/WorshipArtsDetail';
 interface TeamMember {
   name: string;
   role: string;
-  bio: string;
-  imageUrl?: string;
+  bio?: string;
+  imageUrl: string;
+  /** Branded graphic already includes name/title overlay */
+  branded?: boolean;
 }
 
 const LEADER_TEAM: TeamMember[] = [
@@ -17,47 +19,110 @@ const LEADER_TEAM: TeamMember[] = [
     name: "Pastor Kenneth Mutegyeki",
     role: "Senior Pastor",
     bio: "Visionary leader dedicated to spiritual growth and community transformation through the radical power of the Word.",
-    imageUrl: "/images/leadership/pastor-ken.png"
+    imageUrl: "/images/leadership/pastor-kenneth-mutegyeki.jpg",
+    branded: true,
   },
   {
     name: "First Lady Sania Mutegyeki",
-    role: "First Lady",
+    role: "First Lady · Head of the Women's Ministry",
     bio: "A pillar of grace and wisdom, leading our women's initiatives and community outreach with a heart for service.",
-    imageUrl: "/images/leadership/first-lady-sania.png"
+    imageUrl: "/images/leadership/first-lady-sania-mutegyeki.jpg",
+    branded: true,
   },
   {
     name: "Pastor Janet Mukarrumongi",
     role: "Pastor (Nalongo)",
     bio: "Deeply committed to spiritual mentorship and nurturing the next generation of believers in Acton, MA.",
-    imageUrl: "/images/leadership/pastor-janet.jpeg"
+    imageUrl: "/images/leadership/pastor-janet.jpeg",
   },
   {
     name: "Elder Ezra Tindyebwa",
     role: "Church Elder",
     bio: "Serving as a faithful guardian of the church's spiritual foundations and providing wise counsel to our family.",
-    imageUrl: "/images/leadership/elder-ezra.jpeg"
+    imageUrl: "/images/leadership/elder-ezra.jpeg",
   },
 ];
 
 const MINISTRY_TEAM: TeamMember[] = [
-  { name: "Joel Kiwanuka", role: "Music Director", bio: "", imageUrl: "/images/joelk.jpeg" },
-  { name: "Paul Njenga", role: "Youth Minister", bio: "", imageUrl: "/images/paul-n.jpg" },
-  { name: "Gertrude Mutakubwa", role: "Children's Leader", bio: "", imageUrl: "/images/gertrudem.jpeg" },
-  { name: "Moses Agwisagye", role: "The Administrator", bio: "", imageUrl: "/images/brother-admin.jpg" },
-  { name: "Denis Kwesiga", role: "Men's Leader", bio: "", imageUrl: "/images/denis-k.png" },
-  { name: "Ezra Tindyebwa & Victoria Kamya", role: "Married Ministry Leaders", bio: "", imageUrl: "/images/marrieds-about-pic.png" },
-  { name: "Lorna Sekamwa", role: "Teen Ministry", bio: "" },
-  { name: "Sheevon Mahabir", role: "Finance and Events", bio: "", imageUrl: "/images/sheevon-mahabir.jpg" },
+  {
+    name: "Mr. Brian Setyabule",
+    role: "Head of the Music Ministry",
+    imageUrl: "/images/leadership/brian-setyabule.jpg",
+    branded: true,
+  },
+  {
+    name: "Mrs. Gertrude Mutakubwa",
+    role: "Head of the Sunday School",
+    imageUrl: "/images/leadership/gertrude-mutakubwa.jpg",
+    branded: true,
+  },
+  {
+    name: "Mr. Moses Agwisagye",
+    role: "Church Administrator",
+    imageUrl: "/images/leadership/moses-agwisagye.jpg",
+    branded: true,
+  },
+  {
+    name: "Mrs. Betty Liz Senyonjo",
+    role: "Church Secretary",
+    imageUrl: "/images/leadership/betty-liz-senyonjo.jpg",
+    branded: true,
+  },
+  {
+    name: "Ms. Winnie Nakabugo",
+    role: "Assistant Church Secretary · Leader of the Singles Ministry",
+    imageUrl: "/images/leadership/winnie-nakabugo.jpg",
+    branded: true,
+  },
+  {
+    name: "Mrs. Lorna Sekamwa",
+    role: "Leader of the Teens Ministry",
+    imageUrl: "/images/leadership/lorna-sekamwa.jpg",
+    branded: true,
+  },
+  {
+    name: "Mrs. Victoria Kamya",
+    role: "Leader of the Marrieds Ministry",
+    imageUrl: "/images/leadership/victoria-kamya.jpg",
+    branded: true,
+  },
+  {
+    name: "Sheevon Mahabir",
+    role: "Head of the Finance & Events",
+    imageUrl: "/images/leadership/sheevon-mahabir.jpg",
+    branded: true,
+  },
+  {
+    name: "Mrs. Ann Kwesiga",
+    role: "Head of the Moderators' Ministry",
+    imageUrl: "/images/leadership/ann-kwesiga.jpg",
+    branded: true,
+  },
+  {
+    name: "Ms. Nossie Bucyana",
+    role: "Assistant Head of the Women's Ministry",
+    imageUrl: "/images/leadership/nossie-bucyana.jpg",
+    branded: true,
+  },
+  {
+    name: "Mr. Herman Sekamwa",
+    role: "Assistant Leader of the Intercessors Ministry",
+    imageUrl: "/images/leadership/herman-sekamwa.jpg",
+    branded: true,
+  },
+  {
+    name: "Mr. Nathan Tendo",
+    role: "Assistant Head of the Singles Ministry",
+    imageUrl: "/images/leadership/nathan-tendo.jpg",
+    branded: true,
+  },
+  {
+    name: "Mrs. Veronica Agaba",
+    role: "Leader of the At the Foot of the Cross Prayer Altar",
+    imageUrl: "/images/leadership/veronica-agaba.jpg",
+    branded: true,
+  },
 ];
-
-function memberInitials(name: string): string {
-  return name
-    .split(/[\s&]+/)
-    .filter(Boolean)
-    .slice(0, 2)
-    .map((part) => part[0]?.toUpperCase() ?? "")
-    .join("");
-}
 
 const Ministries: React.FC = () => {
   const [selectedMinistry, setSelectedMinistry] = useState<Ministry | null>(null);
@@ -287,29 +352,32 @@ const Ministries: React.FC = () => {
                 Meet the shepherds guiding our spiritual journey with wisdom and compassion.
               </p>
             </div>
-            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5 md:gap-6">
-              {LEADER_TEAM.map((leader, i) => (
+            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5">
+              {LEADER_TEAM.map((leader) => (
                 <article
-                  key={i}
-                  className="bg-white rounded-2xl overflow-hidden border border-slate-200/80 shadow-sm"
+                  key={leader.name}
+                  className="bg-white rounded-2xl overflow-hidden border border-slate-200/80 shadow-sm flex flex-col"
                 >
-                  <div className="aspect-[4/5] overflow-hidden bg-slate-100">
+                  <div className="aspect-square overflow-hidden bg-[#5c0a0a]">
                     <img
                       src={leader.imageUrl}
-                      className="w-full h-full object-cover object-top"
-                      alt={leader.name}
+                      className={`w-full h-full object-cover ${leader.branded ? '' : 'object-top'}`}
+                      alt={`${leader.name}, ${leader.role}`}
+                      loading="lazy"
                     />
                   </div>
-                  <div className="p-4 md:p-5">
+                  <div className="p-4 md:p-5 flex-1">
                     <p className="text-church-gold font-bold uppercase tracking-[0.18em] text-[9px] mb-1">
                       {leader.role}
                     </p>
                     <h3 className="text-church-burgundy text-base md:text-lg font-bold serif leading-snug mb-2">
                       {leader.name}
                     </h3>
-                    <p className="text-slate-500 text-sm leading-relaxed line-clamp-3">
-                      {leader.bio}
-                    </p>
+                    {leader.bio && (
+                      <p className="text-slate-500 text-sm leading-relaxed line-clamp-3">
+                        {leader.bio}
+                      </p>
+                    )}
                   </div>
                 </article>
               ))}
@@ -325,31 +393,22 @@ const Ministries: React.FC = () => {
                 Dedicated servants leading with passion and purpose in their areas of calling.
               </p>
             </div>
-            <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-y-10 gap-x-5">
-              {MINISTRY_TEAM.map((member, i) => (
-                <div key={i} className="text-center group">
-                  <div className="relative mb-3 mx-auto w-20 h-20 lg:w-24 lg:h-24">
-                    {member.imageUrl ? (
-                      <img
-                        src={member.imageUrl}
-                        className="w-full h-full object-cover rounded-full border-[3px] border-white shadow-md ring-1 ring-slate-200/80"
-                        alt={member.name}
-                      />
-                    ) : (
-                      <div
-                        className="w-full h-full rounded-full border-[3px] border-white shadow-md ring-1 ring-slate-200/80 flex items-center justify-center bg-gradient-to-br from-church-burgundy to-[#2d0202]"
-                        aria-label={member.name}
-                        role="img"
-                      >
-                        <span className="serif text-xl lg:text-2xl font-bold text-church-gold tracking-wide select-none">
-                          {memberInitials(member.name)}
-                        </span>
-                      </div>
-                    )}
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-5">
+              {MINISTRY_TEAM.map((member) => (
+                <article
+                  key={member.name}
+                  className="rounded-2xl overflow-hidden border border-slate-200/80 shadow-sm bg-[#5c0a0a] group"
+                >
+                  <div className="aspect-square overflow-hidden">
+                    <img
+                      src={member.imageUrl}
+                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.02]"
+                      alt={`${member.name}, ${member.role}`}
+                      loading="lazy"
+                    />
                   </div>
-                  <h4 className="text-church-burgundy font-bold text-[12px] leading-tight px-1">{member.name}</h4>
-                  <p className="text-church-gold font-bold uppercase tracking-widest text-[8px] mt-1.5 block opacity-80">{member.role}</p>
-                </div>
+                  <span className="sr-only">{member.name}, {member.role}</span>
+                </article>
               ))}
             </div>
           </div>
