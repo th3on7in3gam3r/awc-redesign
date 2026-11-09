@@ -14,7 +14,7 @@ const AVAILABLE_MINISTRIES = [
     'Kids Ministry',
     'Youth Ministry',
     'Prayer Team',
-    'Community Outreach'
+    'AWC Public Events'
 ];
 
 export const MinistryRequestModal: React.FC<MinistryRequestModalProps> = ({ isOpen, onClose, onSuccess }) => {

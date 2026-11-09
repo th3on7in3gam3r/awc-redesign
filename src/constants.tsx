@@ -79,10 +79,10 @@ export const MINISTRIES: Ministry[] = [
   },
   {
     id: "outreach",
-    name: "Community Outreach",
-    description: "Sharing the love of Christ beyond our four walls through service, compassion, and practical ministry.",
-    icon: "fa-solid fa-handshake-angle",
-    imageUrl: "/images/community-outreach.png",
+    name: "AWC Public Events",
+    description: "Open gatherings where faith, food, and fellowship welcome the community with joy and hospitality.",
+    icon: "fa-solid fa-calendar-days",
+    imageUrl: "/images/public-events/dsc-4815.jpg",
   }
 ];
 

@@ -15,7 +15,7 @@ const MINISTRIES = [
     { id: 'womens', name: "Women's Ministry", icon: UserCheck, description: 'Fellowship and growth for women' },
     { id: 'married', name: "Married's Ministry", icon: HeartHandshake, description: 'Support for married couples' },
     { id: 'prayer', name: 'Prayer Team', icon: Heart, description: 'Intercede for others' },
-    { id: 'outreach', name: 'Community Outreach', icon: Handshake, description: 'Serve the community' },
+    { id: 'outreach', name: 'AWC Public Events', icon: Handshake, description: 'Serve at community gatherings' },
     { id: 'teaching', name: 'Bible Study', icon: BookOpen, description: 'Study and teach the Word' },
 ];
 

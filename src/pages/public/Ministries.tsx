@@ -5,6 +5,7 @@ import { Ministry } from '../../types';
 import YouthMinistryDetail from '../../components/ministries/YouthMinistryDetail';
 import WorshipArtsDetail from '../../components/ministries/WorshipArtsDetail';
 import WomensMinistryDetail from '../../components/ministries/WomensMinistryDetail';
+import PublicEventsDetail from '../../components/ministries/PublicEventsDetail';
 
 interface TeamMember {
   name: string;
@@ -182,6 +183,16 @@ const Ministries: React.FC = () => {
     if (selectedMinistry.id === 'women') {
       return (
         <WomensMinistryDetail
+          onBack={() => setSelectedMinistry(null)}
+          joined={joined}
+          onJoin={handleJoin}
+        />
+      );
+    }
+
+    if (selectedMinistry.id === 'outreach') {
+      return (
+        <PublicEventsDetail
           onBack={() => setSelectedMinistry(null)}
           joined={joined}
           onJoin={handleJoin}
