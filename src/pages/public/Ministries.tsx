@@ -75,7 +75,7 @@ const MINISTRY_TEAM: TeamMember[] = [
   },
   {
     name: "Mr. Paul Njenga",
-    role: "Head of Media",
+    role: "Leader of the Youth Ministry · Church Custodian",
     imageUrl: "/images/leadership/paul-njenga.jpg",
     branded: true,
   },
@@ -125,6 +125,12 @@ const MINISTRY_TEAM: TeamMember[] = [
     name: "Mr. Nathan Tendo",
     role: "Assistant Head of the Singles Ministry",
     imageUrl: "/images/leadership/nathan-tendo.jpg",
+    branded: true,
+  },
+  {
+    name: "Mrs. Sarah Bogere",
+    role: "Head of Mount Moriah Prayer Altar",
+    imageUrl: "/images/leadership/sarah-bogere.jpg",
     branded: true,
   },
   {
