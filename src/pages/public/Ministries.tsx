@@ -98,7 +98,7 @@ const MINISTRY_TEAM: TeamMember[] = [
     branded: true,
   },
   {
-    name: "Sheevon Mahabir",
+    name: "Mrs. Sheevon Mahabir",
     role: "Head of the Finance & Events",
     imageUrl: "/images/leadership/sheevon-mahabir.jpg",
     branded: true,
