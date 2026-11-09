@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { MINISTRIES } from '../../constants';
 import { Ministry } from '../../types';
 import YouthMinistryDetail from '../../components/ministries/YouthMinistryDetail';
@@ -126,7 +126,25 @@ const MINISTRY_TEAM: TeamMember[] = [
 
 const Ministries: React.FC = () => {
   const [selectedMinistry, setSelectedMinistry] = useState<Ministry | null>(null);
+  const [selectedLeader, setSelectedLeader] = useState<TeamMember | null>(null);
   const [joined, setJoined] = useState(false);
+
+  useEffect(() => {
+    if (!selectedLeader) return;
+
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setSelectedLeader(null);
+    };
+
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    window.addEventListener('keydown', onKeyDown);
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener('keydown', onKeyDown);
+    };
+  }, [selectedLeader]);
 
   const handleJoin = (e: React.FormEvent) => {
     e.preventDefault();
@@ -354,15 +372,18 @@ const Ministries: React.FC = () => {
             </div>
             <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5">
               {LEADER_TEAM.map((leader) => (
-                <article
+                <button
                   key={leader.name}
-                  className="bg-white rounded-2xl overflow-hidden border border-slate-200/80 shadow-sm flex flex-col"
+                  type="button"
+                  onClick={() => setSelectedLeader(leader)}
+                  className="bg-white rounded-2xl overflow-hidden border border-slate-200/80 shadow-sm flex flex-col text-left transition-shadow hover:shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-church-gold focus-visible:ring-offset-2"
+                  aria-label={`View details for ${leader.name}, ${leader.role}`}
                 >
                   <div className="aspect-square overflow-hidden bg-[#5c0a0a]">
                     <img
                       src={leader.imageUrl}
                       className={`w-full h-full object-cover ${leader.branded ? '' : 'object-top'}`}
-                      alt={`${leader.name}, ${leader.role}`}
+                      alt=""
                       loading="lazy"
                     />
                   </div>
@@ -379,7 +400,7 @@ const Ministries: React.FC = () => {
                       </p>
                     )}
                   </div>
-                </article>
+                </button>
               ))}
             </div>
           </div>
@@ -390,25 +411,27 @@ const Ministries: React.FC = () => {
               <span className="text-church-gold font-black tracking-[0.4em] uppercase text-xs mb-3 block">Our Team</span>
               <h2 className="text-3xl md:text-4xl font-bold text-church-burgundy serif mb-3">Ministry Leaders</h2>
               <p className="text-base md:text-lg text-slate-500 max-w-2xl mx-auto font-light">
-                Dedicated servants leading with passion and purpose in their areas of calling.
+                Dedicated servants leading with passion and purpose in their areas of calling. Tap a leader for full details.
               </p>
             </div>
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-5">
               {MINISTRY_TEAM.map((member) => (
-                <article
+                <button
                   key={member.name}
-                  className="rounded-2xl overflow-hidden border border-slate-200/80 shadow-sm bg-[#5c0a0a] group"
+                  type="button"
+                  onClick={() => setSelectedLeader(member)}
+                  className="rounded-2xl overflow-hidden border border-slate-200/80 shadow-sm bg-[#5c0a0a] group text-left transition-shadow hover:shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-church-gold focus-visible:ring-offset-2"
+                  aria-label={`View details for ${member.name}, ${member.role}`}
                 >
                   <div className="aspect-square overflow-hidden">
                     <img
                       src={member.imageUrl}
                       className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.02]"
-                      alt={`${member.name}, ${member.role}`}
+                      alt=""
                       loading="lazy"
                     />
                   </div>
-                  <span className="sr-only">{member.name}, {member.role}</span>
-                </article>
+                </button>
               ))}
             </div>
           </div>
@@ -431,6 +454,57 @@ const Ministries: React.FC = () => {
           </div>
         </div>
       </div>
+
+      {selectedLeader && (
+        <div
+          className="fixed inset-0 z-[80] flex items-end sm:items-center justify-center p-0 sm:p-6"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="leader-modal-name"
+        >
+          <button
+            type="button"
+            className="absolute inset-0 bg-black/60 backdrop-blur-[2px]"
+            aria-label="Close leader details"
+            onClick={() => setSelectedLeader(null)}
+          />
+          <div className="relative z-10 w-full sm:max-w-md bg-white rounded-t-3xl sm:rounded-3xl shadow-2xl overflow-hidden animate-slide-up max-h-[92vh] overflow-y-auto">
+            <button
+              type="button"
+              onClick={() => setSelectedLeader(null)}
+              className="absolute top-3 right-3 z-20 w-10 h-10 rounded-full bg-black/45 text-white hover:bg-black/60 transition-colors flex items-center justify-center"
+              aria-label="Close"
+            >
+              <i className="fa-solid fa-xmark text-sm"></i>
+            </button>
+
+            <div className="aspect-square bg-[#5c0a0a]">
+              <img
+                src={selectedLeader.imageUrl}
+                alt={selectedLeader.name}
+                className={`w-full h-full object-cover ${selectedLeader.branded ? '' : 'object-top'}`}
+              />
+            </div>
+
+            <div className="p-6 md:p-7 text-center">
+              <p className="text-church-gold font-bold uppercase tracking-[0.2em] text-[10px] mb-2">
+                {selectedLeader.role}
+              </p>
+              <h3
+                id="leader-modal-name"
+                className="text-church-burgundy text-2xl md:text-[1.7rem] font-bold serif leading-snug mb-3"
+              >
+                {selectedLeader.name}
+              </h3>
+              {selectedLeader.bio && (
+                <p className="text-slate-500 text-sm md:text-base leading-relaxed font-light">
+                  {selectedLeader.bio}
+                </p>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
