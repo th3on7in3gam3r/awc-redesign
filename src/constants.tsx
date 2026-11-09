@@ -54,7 +54,7 @@ export const MINISTRIES: Ministry[] = [
     name: "Women's Ministry",
     description: "Empowering women to walk in faith, strength, and purpose. Sisters united in Christ's love and service.",
     icon: "fa-solid fa-hands-praying",
-    imageUrl: "/images/womens-ministry.png",
+    imageUrl: "/images/women/dsc-4612.jpg",
   },
   {
     id: "youth",

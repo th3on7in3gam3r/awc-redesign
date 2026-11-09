@@ -4,6 +4,7 @@ import { MINISTRIES } from '../../constants';
 import { Ministry } from '../../types';
 import YouthMinistryDetail from '../../components/ministries/YouthMinistryDetail';
 import WorshipArtsDetail from '../../components/ministries/WorshipArtsDetail';
+import WomensMinistryDetail from '../../components/ministries/WomensMinistryDetail';
 
 interface TeamMember {
   name: string;
@@ -33,13 +34,15 @@ const LEADER_TEAM: TeamMember[] = [
     name: "Pastor Janet Mukarrumongi",
     role: "Pastor (Nalongo)",
     bio: "Deeply committed to spiritual mentorship and nurturing the next generation of believers in Acton, MA.",
-    imageUrl: "/images/leadership/pastor-janet.jpeg",
+    imageUrl: "/images/leadership/pastor-janet-mukarrumongi.jpg",
+    branded: true,
   },
   {
     name: "Elder Ezra Tindyebwa",
-    role: "Church Elder",
+    role: "Church Elder · Head of the Married's Ministry",
     bio: "Serving as a faithful guardian of the church's spiritual foundations and providing wise counsel to our family.",
-    imageUrl: "/images/leadership/elder-ezra.jpeg",
+    imageUrl: "/images/leadership/elder-ezra-tindyebwa.jpg",
+    branded: true,
   },
 ];
 
@@ -169,6 +172,16 @@ const Ministries: React.FC = () => {
     if (selectedMinistry.id === 'worship') {
       return (
         <WorshipArtsDetail
+          onBack={() => setSelectedMinistry(null)}
+          joined={joined}
+          onJoin={handleJoin}
+        />
+      );
+    }
+
+    if (selectedMinistry.id === 'women') {
+      return (
+        <WomensMinistryDetail
           onBack={() => setSelectedMinistry(null)}
           joined={joined}
           onJoin={handleJoin}
@@ -315,44 +328,39 @@ const Ministries: React.FC = () => {
               </p>
             </div>
 
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6">
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5">
               {MINISTRIES.map((ministry) => (
                 <button
                   key={ministry.id}
                   type="button"
                   onClick={() => setSelectedMinistry(ministry)}
-                  className="group text-left bg-white rounded-2xl overflow-hidden border border-slate-200/80 shadow-sm hover:shadow-md hover:border-church-gold/40 transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-church-gold/50"
+                  className="group relative text-left aspect-[4/5] sm:aspect-[5/6] overflow-hidden rounded-2xl bg-church-burgundy focus:outline-none focus-visible:ring-2 focus-visible:ring-church-gold focus-visible:ring-offset-2"
                 >
-                  <div className="aspect-[16/10] overflow-hidden bg-slate-100 relative">
-                    {ministry.imageUrl && (
-                      <img
-                        src={ministry.imageUrl}
-                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
-                        alt=""
-                      />
-                    )}
-                  </div>
+                  {ministry.imageUrl && (
+                    <img
+                      src={ministry.imageUrl}
+                      className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.04]"
+                      alt=""
+                      loading="lazy"
+                    />
+                  )}
+                  <div className="absolute inset-0 bg-gradient-to-t from-church-burgundy via-church-burgundy/55 to-transparent" />
+                  <div className="absolute inset-0 bg-church-burgundy/10 transition-colors duration-300 group-hover:bg-transparent" />
 
-                  <div className="p-5 md:p-6">
-                    <div className="flex items-start gap-3 mb-3">
-                      {ministry.icon && (
-                        <div className="shrink-0 w-10 h-10 rounded-xl bg-church-burgundy/5 text-church-burgundy flex items-center justify-center text-sm group-hover:bg-church-gold group-hover:text-white transition-colors duration-300">
-                          <i className={ministry.icon}></i>
-                        </div>
-                      )}
-                      <div className="min-w-0 pt-0.5">
-                        <h3 className="text-lg md:text-xl font-bold text-church-burgundy serif leading-snug">
-                          {ministry.name}
-                        </h3>
+                  <div className="relative z-10 flex h-full flex-col justify-end p-5 md:p-6">
+                    {ministry.icon && (
+                      <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-full bg-church-gold/15 text-church-gold text-sm backdrop-blur-sm">
+                        <i className={ministry.icon} aria-hidden="true"></i>
                       </div>
-                    </div>
-
-                    <p className="text-slate-500 text-sm leading-relaxed line-clamp-2 mb-4">
+                    )}
+                    <h3 className="text-xl md:text-2xl font-bold text-white serif leading-snug mb-2">
+                      {ministry.name}
+                    </h3>
+                    <p className="text-white/70 text-sm leading-relaxed line-clamp-2 mb-4 max-w-[28ch]">
                       {ministry.description}
                     </p>
-
                     <span className="inline-flex items-center gap-2 text-church-gold font-bold uppercase tracking-[0.18em] text-[10px]">
-                      Learn More
+                      Explore
                       <i className="fa-solid fa-arrow-right text-[9px] transition-transform duration-300 group-hover:translate-x-1"></i>
                     </span>
                   </div>
