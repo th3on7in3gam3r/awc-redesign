@@ -6,6 +6,7 @@ import YouthMinistryDetail from '../../components/ministries/YouthMinistryDetail
 import WorshipArtsDetail from '../../components/ministries/WorshipArtsDetail';
 import WomensMinistryDetail from '../../components/ministries/WomensMinistryDetail';
 import PublicEventsDetail from '../../components/ministries/PublicEventsDetail';
+import ChildrensMinistryDetail from '../../components/ministries/ChildrensMinistryDetail';
 
 interface TeamMember {
   name: string;
@@ -193,6 +194,16 @@ const Ministries: React.FC = () => {
     if (selectedMinistry.id === 'outreach') {
       return (
         <PublicEventsDetail
+          onBack={() => setSelectedMinistry(null)}
+          joined={joined}
+          onJoin={handleJoin}
+        />
+      );
+    }
+
+    if (selectedMinistry.id === 'children') {
+      return (
+        <ChildrensMinistryDetail
           onBack={() => setSelectedMinistry(null)}
           joined={joined}
           onJoin={handleJoin}

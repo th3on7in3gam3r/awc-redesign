@@ -68,7 +68,7 @@ export const MINISTRIES: Ministry[] = [
     name: "Children's Ministry",
     description: "Nurturing young hearts to grow in faith, love, and joy through engaging lessons and activities.",
     icon: "fa-solid fa-children",
-    imageUrl: "/images/children-ministry.png",
+    imageUrl: "/images/children/dsc-4791.jpg",
   },
   {
     id: "worship",
