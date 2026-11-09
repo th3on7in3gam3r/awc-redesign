@@ -74,6 +74,12 @@ const MINISTRY_TEAM: TeamMember[] = [
     branded: true,
   },
   {
+    name: "Mr. Paul Njenga",
+    role: "Head of Media",
+    imageUrl: "/images/leadership/paul-njenga.jpg",
+    branded: true,
+  },
+  {
     name: "Ms. Winnie Nakabugo",
     role: "Assistant Church Secretary · Leader of the Singles Ministry",
     imageUrl: "/images/leadership/winnie-nakabugo.jpg",
