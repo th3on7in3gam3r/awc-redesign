@@ -75,7 +75,7 @@ const MINISTRY_TEAM: TeamMember[] = [
   },
   {
     name: "Mr. Paul Njenga",
-    role: "Head of Media",
+    role: "Leader of the Youth Ministry and also Church Custodian",
     imageUrl: "/images/leadership/paul-njenga.jpg",
     branded: true,
   },
