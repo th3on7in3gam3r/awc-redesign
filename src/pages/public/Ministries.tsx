@@ -370,7 +370,7 @@ const Ministries: React.FC = () => {
   }
 
   return (
-    <div className="bg-gray-50 min-h-screen">
+    <div className="bg-[#f8f1e5] min-h-screen">
       {/* Page header */}
       <section className="relative overflow-hidden bg-church-burgundy pt-28 pb-14 md:pt-32 md:pb-16">
         <div className="absolute inset-0 bg-gradient-to-br from-church-burgundy via-church-burgundy to-[#2a0202]"></div>
@@ -405,64 +405,6 @@ const Ministries: React.FC = () => {
           </div>
         </div>
       </section>
-
-      {/* MAIN CONTENT */}
-      <div className="pt-14 md:pt-16">
-        <div className="max-w-7xl mx-auto px-4">
-
-          {/* Core Ministries Section */}
-          <div className="mb-24 ministries-section">
-            <div className="text-center mb-10 md:mb-12">
-              <span className="text-church-gold font-black tracking-[0.4em] uppercase text-xs mb-3 block">Get Involved</span>
-              <h2 className="text-3xl md:text-4xl font-bold text-church-burgundy serif mb-3">Core Ministries</h2>
-              <p className="text-base md:text-lg text-slate-500 max-w-2xl mx-auto font-light">
-                Discover where your gifts and passions can make a difference in our community.
-              </p>
-            </div>
-
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5">
-              {MINISTRIES.map((ministry) => (
-                <button
-                  key={ministry.id}
-                  type="button"
-                  onClick={() => setSelectedMinistry(ministry)}
-                  className="group relative text-left aspect-[4/5] sm:aspect-[5/6] overflow-hidden rounded-2xl bg-church-burgundy focus:outline-none focus-visible:ring-2 focus-visible:ring-church-gold focus-visible:ring-offset-2"
-                >
-                  {ministry.imageUrl && (
-                    <img
-                      src={ministry.imageUrl}
-                      className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.04]"
-                      alt=""
-                      loading="lazy"
-                    />
-                  )}
-                  <div className="absolute inset-0 bg-gradient-to-t from-church-burgundy via-church-burgundy/55 to-transparent" />
-                  <div className="absolute inset-0 bg-church-burgundy/10 transition-colors duration-300 group-hover:bg-transparent" />
-
-                  <div className="relative z-10 flex h-full flex-col justify-end p-5 md:p-6">
-                    {ministry.icon && (
-                      <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-full bg-church-gold/15 text-church-gold text-sm backdrop-blur-sm">
-                        <i className={ministry.icon} aria-hidden="true"></i>
-                      </div>
-                    )}
-                    <h3 className="text-xl md:text-2xl font-bold text-white serif leading-snug mb-2">
-                      {ministry.name}
-                    </h3>
-                    <p className="text-white/70 text-sm leading-relaxed line-clamp-2 mb-4 max-w-[28ch]">
-                      {ministry.description}
-                    </p>
-                    <span className="inline-flex items-center gap-2 text-church-gold font-bold uppercase tracking-[0.18em] text-[10px]">
-                      Explore
-                      <i className="fa-solid fa-arrow-right text-[9px] transition-transform duration-300 group-hover:translate-x-1"></i>
-                    </span>
-                  </div>
-                </button>
-              ))}
-            </div>
-          </div>
-
-        </div>
-      </div>
 
       {/* Leadership — cream mockup */}
       <section id="leadership" className="relative overflow-hidden bg-[#f8f1e5] pt-14 md:pt-20 pb-20 md:pb-24">
@@ -554,6 +496,53 @@ const Ministries: React.FC = () => {
                   className="w-[calc(50%-0.375rem)] sm:w-[calc(33.333%-0.84rem)] lg:w-[calc(25%-0.94rem)]"
                 />
               ))}
+            </div>
+          </div>
+
+          {/* Core Ministries */}
+          <div className="ministries-section mt-16 md:mt-20 scroll-mt-28">
+            <p className="text-center text-[#a8842b] font-bold uppercase tracking-[0.3em] text-xs mb-2">Get Involved</p>
+            <SectionHeading title="Core Ministries" subtitle="Discover where your gifts and passions can make a difference in our community." />
+            <div className="mt-8">
+              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5">
+                {MINISTRIES.map((ministry) => (
+                  <button
+                    key={ministry.id}
+                    type="button"
+                    onClick={() => setSelectedMinistry(ministry)}
+                    className="group relative text-left aspect-[4/5] sm:aspect-[5/6] overflow-hidden rounded-2xl bg-church-burgundy focus:outline-none focus-visible:ring-2 focus-visible:ring-church-gold focus-visible:ring-offset-2"
+                  >
+                    {ministry.imageUrl && (
+                      <img
+                        src={ministry.imageUrl}
+                        className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.04]"
+                        alt=""
+                        loading="lazy"
+                      />
+                    )}
+                    <div className="absolute inset-0 bg-gradient-to-t from-church-burgundy via-church-burgundy/55 to-transparent" />
+                    <div className="absolute inset-0 bg-church-burgundy/10 transition-colors duration-300 group-hover:bg-transparent" />
+  
+                    <div className="relative z-10 flex h-full flex-col justify-end p-5 md:p-6">
+                      {ministry.icon && (
+                        <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-full bg-church-gold/15 text-church-gold text-sm backdrop-blur-sm">
+                          <i className={ministry.icon} aria-hidden="true"></i>
+                        </div>
+                      )}
+                      <h3 className="text-xl md:text-2xl font-bold text-white serif leading-snug mb-2">
+                        {ministry.name}
+                      </h3>
+                      <p className="text-white/70 text-sm leading-relaxed line-clamp-2 mb-4 max-w-[28ch]">
+                        {ministry.description}
+                      </p>
+                      <span className="inline-flex items-center gap-2 text-church-gold font-bold uppercase tracking-[0.18em] text-[10px]">
+                        Explore
+                        <i className="fa-solid fa-arrow-right text-[9px] transition-transform duration-300 group-hover:translate-x-1"></i>
+                      </span>
+                    </div>
+                  </button>
+                ))}
+              </div>
             </div>
           </div>
         </div>
