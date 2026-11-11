@@ -107,178 +107,124 @@ const Home: React.FC = () => {
   return (
     <div className="flex flex-col w-full">
       <GivingModal isOpen={showGivingModal} onClose={() => setShowGivingModal(false)} />
-      {/* Hero Banner — framed burgundy card, gold headline, pastors on the right */}
-      <section className="relative bg-[#24050a] pt-24 md:pt-28 pb-8 md:pb-10 overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_#3a0912_0%,_#24050a_60%)]" aria-hidden="true" />
+      {/* Hero — full-bleed, editorial: clean type left, Pastor & First Lady right */}
+      <section className="relative overflow-hidden bg-[#2a050c] pt-20">
+        {/* Background: deep burgundy with a soft light behind the pastors */}
+        <div className="absolute inset-0 bg-gradient-to-br from-[#4a0a17] via-[#2e060e] to-[#16030a]" aria-hidden="true" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_75%_55%,rgba(150,32,52,0.5),transparent_55%)]" aria-hidden="true" />
+        <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-[#d4af37]/50 to-transparent" aria-hidden="true" />
 
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6">
-          {/* Banner card */}
-          <div
-            className="relative overflow-hidden rounded-2xl border border-[#e8c873]/40 shadow-[0_30px_80px_-30px_rgba(0,0,0,0.8)]"
-            style={{
-              background:
-                'radial-gradient(ellipse 70% 90% at 30% 40%, #8a1a2b 0%, #6a0f1f 40%, #45081a 75%, #2e0510 100%)',
-            }}
-          >
-            {/* Soft light behind the pastors */}
-            <div className="pointer-events-none absolute right-[8%] top-[10%] h-[70%] w-[45%] rounded-full bg-[#b8323f]/25 blur-[90px]" aria-hidden="true" />
-
-            {/* Gold swoosh ribbon */}
-            <svg
-              className="pointer-events-none absolute inset-x-0 bottom-0 z-[5] h-[45%] w-full"
-              viewBox="0 0 1200 300"
-              preserveAspectRatio="none"
-              fill="none"
-              aria-hidden="true"
+        <div className="relative max-w-7xl mx-auto px-6 lg:px-8">
+          <div className="grid grid-cols-1 md:grid-cols-12 md:min-h-[600px] lg:min-h-[640px]">
+            {/* Copy */}
+            <div
+              className={`relative z-20 md:col-span-7 lg:col-span-6 flex flex-col justify-center pt-12 md:py-20 transition-all duration-700 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-6 opacity-0'}`}
             >
-              <defs>
-                <linearGradient id="awcSwoosh" x1="0" y1="0" x2="1" y2="0">
-                  <stop offset="0%" stopColor="#8a6a22" stopOpacity="0.9" />
-                  <stop offset="25%" stopColor="#f6dc8c" />
-                  <stop offset="55%" stopColor="#d4af37" />
-                  <stop offset="80%" stopColor="#fbe7a6" />
-                  <stop offset="100%" stopColor="#b4942e" />
-                </linearGradient>
-                <linearGradient id="awcSwooshFade" x1="0" y1="0" x2="1" y2="0">
-                  <stop offset="0%" stopColor="#d4af37" stopOpacity="0" />
-                  <stop offset="40%" stopColor="#d4af37" stopOpacity="0.55" />
-                  <stop offset="100%" stopColor="#f6dc8c" stopOpacity="0.8" />
-                </linearGradient>
-              </defs>
-              {/* main ribbon */}
-              <path
-                d="M0 250 C 220 205, 420 215, 640 250 C 820 278, 1000 250, 1200 150 L 1200 168 C 1000 270, 820 296, 640 268 C 420 236, 220 228, 0 270 Z"
-                fill="url(#awcSwoosh)"
-              />
-              {/* thin echo line */}
-              <path
-                d="M0 228 C 240 182, 460 196, 660 228 C 860 258, 1020 222, 1200 120"
-                stroke="url(#awcSwooshFade)"
-                strokeWidth="1.5"
-              />
-              {/* deep shade under ribbon */}
-              <path
-                d="M0 270 C 220 228, 420 236, 640 268 C 820 296, 1000 270, 1200 168 L 1200 300 L 0 300 Z"
-                fill="#2a0410"
-                opacity="0.55"
-              />
-            </svg>
-
-            <div className="relative z-10 grid grid-cols-1 md:grid-cols-12 items-end md:min-h-[420px] lg:min-h-[470px]">
-              {/* Left copy */}
-              <div
-                className={`md:col-span-7 px-6 sm:px-10 lg:px-14 pt-10 md:pt-0 md:pb-24 md:self-center transition-all duration-700 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}`}
-              >
-                <div className="flex gap-5 sm:gap-6">
-                  <div className="w-[2px] shrink-0 self-stretch bg-gradient-to-b from-[#f6dc8c] via-[#d4af37] to-transparent" aria-hidden="true" />
-                  <div className="min-w-0">
-                    <p className="mb-5 text-[10px] sm:text-xs font-semibold uppercase tracking-[0.18em] lg:tracking-[0.3em] text-[#f0cf72]/90">
-                      Welcome to Anointed Worship Center
-                    </p>
-                    <h1
-                      className="font-serif font-bold text-[clamp(2.1rem,calc((100vw-140px)/8.6),3.75rem)] leading-[1.08] md:text-[clamp(2.25rem,calc(5.1vw-4px),4.4rem)] bg-clip-text text-transparent drop-shadow-[0_2px_4px_rgba(0,0,0,0.25)]"
-                      style={{ backgroundImage: 'linear-gradient(180deg, #fbe7a6 0%, #f0cf72 45%, #c9a03c 100%)' }}
-                    >
-                      <span>Where Everybody</span>
-                      <br />
-                      <span>Is Somebody</span>
-                    </h1>
-
-                    <div className="mt-6 h-px w-16 bg-gradient-to-r from-[#d4af37] to-transparent" aria-hidden="true" />
-                    <p className="mt-5 max-w-md font-serif text-lg sm:text-xl italic text-white/90 leading-relaxed">
-                      A community of faith, family, and purpose.
-                    </p>
-
-                    <div className="mt-9 flex flex-col sm:flex-row sm:flex-wrap gap-3 sm:gap-4">
-                      <Link
-                        to="/visit"
-                        className="inline-flex items-center justify-center whitespace-nowrap rounded-md px-8 md:px-6 lg:px-8 py-3.5 font-serif text-base font-bold text-[#3a0610] shadow-[0_8px_20px_-8px_rgba(0,0,0,0.6)] transition hover:brightness-110"
-                        style={{ backgroundImage: 'linear-gradient(180deg, #f6dc8c 0%, #d9b14f 60%, #b88f2f 100%)' }}
-                      >
-                        Plan Your Visit
-                      </Link>
-                      <button
-                        type="button"
-                        onClick={() => {
-                          const sermonSection = document.getElementById('sermons-section');
-                          if (sermonSection) {
-                            sermonSection.scrollIntoView({ behavior: 'smooth' });
-                          } else {
-                            window.location.href = '/sermons';
-                          }
-                        }}
-                        className="inline-flex items-center justify-center gap-3 whitespace-nowrap rounded-md border border-white/85 px-7 md:px-5 lg:px-7 py-3.5 font-serif text-base font-semibold text-white transition hover:bg-white hover:text-[#4a0414]"
-                      >
-                        <i className="fa-solid fa-play text-[12px]" aria-hidden="true"></i>
-                        Watch Sermons
-                      </button>
-                    </div>
-                  </div>
-                </div>
+              <div className="flex items-center gap-3">
+                <span className="h-px w-8 bg-[#d4af37]" aria-hidden="true" />
+                <p className="text-[10px] sm:text-xs font-semibold uppercase tracking-[0.16em] sm:tracking-[0.22em] text-[#d4af37]">
+                  Welcome to Anointed Worship Center
+                </p>
               </div>
 
-              {/* Right: Pastor & First Lady */}
-              <div
-                className={`md:col-span-5 relative flex justify-center md:justify-end items-end md:self-stretch mt-8 md:mt-0 transition-all duration-1000 delay-200 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}
-              >
-                <img
-                  src="/images/pastors-couple-blue-transparent.png"
-                  alt="Dr. Kenneth Mutegyeki and First Lady Sania Mutegyeki"
-                  className="relative h-[360px] sm:h-[440px] md:absolute md:bottom-0 md:right-[4%] md:h-[104%] w-auto max-w-none object-contain object-bottom"
-                  style={{ filter: 'drop-shadow(0 12px 30px rgba(0,0,0,0.45))' }}
-                />
+              <h1 className="mt-6 font-serif font-bold text-white leading-[1.06] text-[clamp(2.4rem,calc((100vw-60px)/8.4),3.6rem)] md:text-[clamp(2.5rem,calc(5vw-2px),4.5rem)]">
+                Where Everybody
+                <br />
+                Is <span className="text-[#d4af37]">Somebody</span>
+              </h1>
+
+              <p className="mt-6 max-w-md md:max-w-sm lg:max-w-lg text-base sm:text-lg text-white/75 leading-relaxed">
+                A community of faith, family, and purpose in Acton, Massachusetts.
+              </p>
+
+              <div className="mt-9 flex flex-col sm:flex-row sm:flex-wrap gap-3">
+                <Link
+                  to="/visit"
+                  className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md bg-[#d4af37] px-7 py-3.5 text-sm font-semibold text-[#2a050c] transition-colors hover:bg-[#e6c45a]"
+                >
+                  Plan Your Visit
+                  <i className="fa-solid fa-arrow-right text-[11px]" aria-hidden="true"></i>
+                </Link>
+                <button
+                  type="button"
+                  onClick={() => {
+                    const sermonSection = document.getElementById('sermons-section');
+                    if (sermonSection) {
+                      sermonSection.scrollIntoView({ behavior: 'smooth' });
+                    } else {
+                      window.location.href = '/sermons';
+                    }
+                  }}
+                  className="inline-flex items-center justify-center gap-2.5 whitespace-nowrap rounded-md border border-white/30 px-7 py-3.5 text-sm font-semibold text-white transition-colors hover:border-white hover:bg-white/5"
+                >
+                  <i className="fa-solid fa-play text-[11px]" aria-hidden="true"></i>
+                  Watch Sermons
+                </button>
               </div>
-            </div>
-          </div>
 
-          {/* Gold rule + Pastoral Leadership tab, service info & music */}
-          <div className="relative mt-6">
-            <div className="absolute left-0 right-0 top-[17px] h-px bg-gradient-to-r from-[#d4af37] via-[#d4af37]/60 to-transparent" aria-hidden="true" />
-            <div className="relative flex flex-col lg:flex-row lg:items-start gap-4 lg:gap-8">
-              <Link
-                to="/ministries"
-                className="self-start rounded-t-md rounded-b-sm border border-[#f6dc8c]/60 px-5 py-2 font-serif text-sm font-bold uppercase tracking-[0.08em] text-[#3a0610] shadow-md transition hover:brightness-110"
-                style={{ backgroundImage: 'linear-gradient(180deg, #f6dc8c 0%, #d9b14f 70%, #b88f2f 100%)' }}
-              >
-                Pastoral Leadership
-              </Link>
-
-              <div className="lg:ml-auto mt-2 lg:mt-10 flex flex-wrap items-center gap-x-6 gap-y-3 text-white/85">
-                <div className="flex items-center gap-2">
-                  <i className="fa-solid fa-calendar-day text-[#d4af37] text-xs" aria-hidden="true"></i>
-                  <span className="text-[13px]"><span className="font-semibold text-[#f0cf72]">Sun</span> 10 AM</span>
+              {/* Service times */}
+              <div className="mt-12 flex flex-wrap items-center gap-x-8 gap-y-3 border-t border-white/10 pt-6 text-sm text-white/70">
+                <div>
+                  <span className="block text-[10px] font-semibold uppercase tracking-[0.2em] text-[#d4af37]">Sunday Service</span>
+                  <span className="mt-1 block text-white font-medium">10:00 AM</span>
                 </div>
-                <div className="flex items-center gap-2">
-                  <i className="fa-solid fa-book-bible text-[#d4af37] text-xs" aria-hidden="true"></i>
-                  <span className="text-[13px]"><span className="font-semibold text-[#f0cf72]">Wed</span> 7 PM</span>
+                <div>
+                  <span className="block text-[10px] font-semibold uppercase tracking-[0.2em] text-[#d4af37]">Wednesday Bible Study</span>
+                  <span className="mt-1 block text-white font-medium">7:00 PM</span>
                 </div>
                 <a
                   href="https://www.google.com/maps/search/?api=1&query=4+School+St+Acton,+MA+01720"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-2 text-[13px] hover:text-white"
+                  className="group"
                 >
-                  <i className="fa-solid fa-location-dot text-[#d4af37] text-xs" aria-hidden="true"></i>
-                  4 School St, Acton, MA
+                  <span className="block text-[10px] font-semibold uppercase tracking-[0.2em] text-[#d4af37]">Location</span>
+                  <span className="mt-1 block text-white font-medium group-hover:underline underline-offset-4">4 School St, Acton, MA</span>
                 </a>
-                <div className="flex items-center gap-2.5">
-                  <button
-                    onClick={togglePlay}
-                    className={`w-7 h-7 shrink-0 rounded-full flex items-center justify-center transition-colors ${isPlaying ? 'bg-white text-[#4a0414]' : 'bg-[#d4af37] text-[#4a0414]'}`}
-                    aria-label={isPlaying ? 'Pause' : 'Play'}
-                  >
-                    <i className={`fa-solid ${isPlaying ? 'fa-pause' : 'fa-play'} text-[9px]`}></i>
-                  </button>
-                  <span className="text-[13px] font-medium whitespace-nowrap">{playlist[currentTrack].title}</span>
-                  <button
-                    onClick={nextTrack}
-                    className="w-7 h-7 shrink-0 rounded-full border border-white/20 hover:bg-white/10 flex items-center justify-center transition-colors"
-                    aria-label="Next track"
-                  >
-                    <i className="fa-solid fa-forward text-[8px]"></i>
-                  </button>
-                </div>
               </div>
+            </div>
+
+            {/* Pastor & First Lady */}
+            <div
+              className={`relative md:col-span-5 lg:col-span-6 flex items-end justify-center md:justify-end mt-10 md:mt-0 transition-all duration-1000 delay-150 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}`}
+            >
+              <img
+                src="/images/pastors-couple-blue-transparent.png"
+                alt="Dr. Kenneth Mutegyeki and First Lady Sania Mutegyeki"
+                className="relative z-10 h-[380px] sm:h-[460px] md:absolute md:bottom-0 md:right-0 md:h-[72%] lg:h-[94%] w-auto max-w-none object-contain object-bottom"
+                style={{ filter: 'drop-shadow(0 20px 40px rgba(0,0,0,0.45))' }}
+              />
+              <div className="pointer-events-none absolute inset-x-0 bottom-0 z-20 h-16 bg-gradient-to-t from-[#1c040a]/80 to-transparent" aria-hidden="true" />
+            </div>
+          </div>
+        </div>
+
+        {/* Slim bottom bar: leadership link + music */}
+        <div className="relative z-30 border-t border-white/10 bg-black/25 backdrop-blur-sm">
+          <div className="max-w-7xl mx-auto px-6 lg:px-8 py-3 flex flex-wrap items-center justify-between gap-3">
+            <Link
+              to="/ministries"
+              className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-white/80 hover:text-[#d4af37] transition-colors"
+            >
+              Meet Our Pastoral Leadership
+              <i className="fa-solid fa-arrow-right text-[10px]" aria-hidden="true"></i>
+            </Link>
+            <div className="flex items-center gap-2.5 text-white/80">
+              <button
+                onClick={togglePlay}
+                className={`w-7 h-7 shrink-0 rounded-full flex items-center justify-center transition-colors ${isPlaying ? 'bg-white text-[#2a050c]' : 'bg-[#d4af37] text-[#2a050c]'}`}
+                aria-label={isPlaying ? 'Pause' : 'Play'}
+              >
+                <i className={`fa-solid ${isPlaying ? 'fa-pause' : 'fa-play'} text-[9px]`}></i>
+              </button>
+              <span className="text-[13px] font-medium whitespace-nowrap">{playlist[currentTrack].title}</span>
+              <button
+                onClick={nextTrack}
+                className="w-7 h-7 shrink-0 rounded-full border border-white/20 hover:bg-white/10 flex items-center justify-center transition-colors"
+                aria-label="Next track"
+              >
+                <i className="fa-solid fa-forward text-[8px]"></i>
+              </button>
             </div>
           </div>
         </div>
