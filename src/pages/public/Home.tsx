@@ -28,12 +28,6 @@ const CHURCH_STATS = {
   ministries: '10',
 } as const;
 
-const HERO_STATS = [
-  { value: CHURCH_STATS.establishedYear, label: CHURCH_STATS.establishedLabel },
-  { value: CHURCH_STATS.members, label: 'Members' },
-  { value: CHURCH_STATS.ministries, label: 'Ministries' },
-] as const;
-
 const Home: React.FC = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -113,177 +107,177 @@ const Home: React.FC = () => {
   return (
     <div className="flex flex-col w-full">
       <GivingModal isOpen={showGivingModal} onClose={() => setShowGivingModal(false)} />
-      {/* Hero Section - Mobile Optimized */}
-      <section className="relative min-h-[100svh] flex flex-col overflow-hidden pt-20 bg-[#1a0509]">
-        {/* Background Gradient & Effects */}
-        <div className="absolute inset-0 z-0 bg-gradient-to-br from-[#3a0a12] via-[#1a0509] to-black"></div>
-        <div className="absolute inset-0 z-0 bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-church-gold/15 via-transparent to-transparent opacity-50"></div>
-        <div className="absolute inset-0 z-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')]"></div>
+      {/* Hero Banner — framed burgundy card, gold headline, pastors on the right */}
+      <section className="relative bg-[#24050a] pt-24 md:pt-28 pb-8 md:pb-10 overflow-hidden">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_#3a0912_0%,_#24050a_60%)]" aria-hidden="true" />
 
-        {/* Pastor & First Lady Image */}
-        <div className={`absolute bottom-0 right-0 z-10 h-[50vh] sm:h-[65vh] md:h-[90vh] w-full md:w-auto flex justify-end items-end transition-all duration-1000 delay-300 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`}>
-          <div className="hidden md:block absolute top-[20%] right-[-10%] md:right-[10%] w-[400px] h-[400px] md:w-[800px] md:h-[800px] bg-church-gold/30 rounded-full blur-[100px] animate-pulse-slow"></div>
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6">
+          {/* Banner card */}
+          <div
+            className="relative overflow-hidden rounded-2xl border border-[#e8c873]/40 shadow-[0_30px_80px_-30px_rgba(0,0,0,0.8)]"
+            style={{
+              background:
+                'radial-gradient(ellipse 70% 90% at 30% 40%, #8a1a2b 0%, #6a0f1f 40%, #45081a 75%, #2e0510 100%)',
+            }}
+          >
+            {/* Soft light behind the pastors */}
+            <div className="pointer-events-none absolute right-[8%] top-[10%] h-[70%] w-[45%] rounded-full bg-[#b8323f]/25 blur-[90px]" aria-hidden="true" />
 
-          <img
-            src="/images/pastors-hero-transparent.png"
-            alt="Pastor & First Lady"
-            className="h-full w-auto object-contain object-bottom drop-shadow-2xl relative z-10"
-            style={{ filter: 'drop-shadow(0 0 40px rgba(0,0,0,0.5))' }}
-          />
-
-          <div className="hidden md:block absolute top-0 right-0 w-full h-full z-20 pointer-events-none mix-blend-soft-light bg-gradient-to-tr from-transparent via-transparent to-white/40 md:to-white/20"></div>
-          <div className="hidden md:block absolute top-[10%] right-[10%] w-[300px] h-[300px] bg-church-gold/20 rounded-full blur-[80px] z-20 mix-blend-screen pointer-events-none"></div>
-
-          <div className="absolute inset-0 bg-gradient-to-t from-black via-black/80 to-transparent md:hidden h-full z-20"></div>
-          <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-transparent to-transparent md:hidden z-20"></div>
-        </div>
-
-        {/* Content Container */}
-        <div className="container mx-auto px-6 relative z-20 flex-1 flex flex-col justify-center py-10 md:py-12">
-          <div className="max-w-3xl">
-            {/* Animated Welcome Badge */}
-            <div className={`transition-all duration-700 delay-100 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}`}>
-              <div className="inline-flex items-center gap-2.5 bg-white/5 backdrop-blur-sm border border-white/10 rounded-full px-3.5 py-1.5 mb-6 sm:mb-8">
-                <div className="w-1.5 h-1.5 bg-church-gold rounded-full"></div>
-                <span className="text-white/80 text-[11px] font-medium tracking-wide">Welcome to Anointed Worship Center</span>
-              </div>
-            </div>
-
-            {/* Main Heading */}
-            <h1 className={`font-serif text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-5 leading-[1.08] transition-all duration-700 delay-200 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}`}>
-              Where <span className="text-church-gold">Everybody</span>
-              <br />
-              Is <span className="text-church-gold">Somebody</span>
-            </h1>
-
-            {/* Subtitle */}
-            <p className={`text-base sm:text-lg md:text-xl text-white/70 font-light mb-8 md:mb-10 max-w-xl leading-relaxed transition-all duration-700 delay-300 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}`}>
-              A vibrant community of faith in Acton, MA. Join us as we grow together to love Christ the Lord.
-            </p>
-
-            {/* CTA Buttons */}
-            <div className={`flex flex-col sm:flex-row sm:flex-wrap gap-3 mb-10 md:mb-14 transition-all duration-700 delay-400 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}`}>
-              <Link
-                to="/about"
-                className="group bg-church-gold hover:bg-white text-church-burgundy px-6 py-3 rounded-lg font-semibold text-[12px] tracking-wide transition-colors flex items-center justify-center gap-2"
-              >
-                Plan Your Visit
-                <i className="fa-solid fa-arrow-right text-[10px] group-hover:translate-x-0.5 transition-transform"></i>
-              </Link>
-              <button
-                onClick={() => {
-                  const sermonSection = document.getElementById('sermons-section');
-                  if (sermonSection) {
-                    sermonSection.scrollIntoView({ behavior: 'smooth' });
-                  } else {
-                    window.location.href = '/sermons';
-                  }
-                }}
-                className="group bg-transparent border border-white/25 text-white hover:bg-white hover:text-church-burgundy px-6 py-3 rounded-lg font-semibold text-[12px] tracking-wide transition-colors flex items-center justify-center gap-2"
-              >
-                <i className="fa-solid fa-play text-[10px]"></i>
-                Watch Sermons
-              </button>
-              <Link
-                to="/giving"
-                className="group bg-transparent border border-church-gold/50 text-church-gold hover:bg-church-gold hover:text-church-burgundy px-6 py-3 rounded-lg font-semibold text-[12px] tracking-wide transition-colors flex items-center justify-center gap-2"
-              >
-                <i className="fa-solid fa-hand-holding-heart text-[10px]"></i>
-                Give
-              </Link>
-            </div>
-
-            {/* Quick Stats */}
-            <div
-              className={`max-w-md transition-all duration-700 delay-500 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}`}
+            {/* Gold swoosh ribbon */}
+            <svg
+              className="pointer-events-none absolute inset-x-0 bottom-0 z-[5] h-[45%] w-full"
+              viewBox="0 0 1200 300"
+              preserveAspectRatio="none"
+              fill="none"
+              aria-hidden="true"
             >
-              <div className="grid grid-cols-3 divide-x divide-white/10 rounded-xl border border-white/10 bg-black/20 backdrop-blur-sm">
-                {HERO_STATS.map((stat) => (
-                  <div key={stat.label} className="px-3 py-4 sm:px-5 sm:py-5 text-center">
-                    <div className="text-2xl sm:text-3xl font-bold text-church-gold tabular-nums leading-none">
-                      {stat.value}
-                    </div>
-                    <div className="text-white/50 text-[10px] sm:text-[11px] uppercase tracking-[0.18em] mt-2 font-medium">
-                      {stat.label}
+              <defs>
+                <linearGradient id="awcSwoosh" x1="0" y1="0" x2="1" y2="0">
+                  <stop offset="0%" stopColor="#8a6a22" stopOpacity="0.9" />
+                  <stop offset="25%" stopColor="#f6dc8c" />
+                  <stop offset="55%" stopColor="#d4af37" />
+                  <stop offset="80%" stopColor="#fbe7a6" />
+                  <stop offset="100%" stopColor="#b4942e" />
+                </linearGradient>
+                <linearGradient id="awcSwooshFade" x1="0" y1="0" x2="1" y2="0">
+                  <stop offset="0%" stopColor="#d4af37" stopOpacity="0" />
+                  <stop offset="40%" stopColor="#d4af37" stopOpacity="0.55" />
+                  <stop offset="100%" stopColor="#f6dc8c" stopOpacity="0.8" />
+                </linearGradient>
+              </defs>
+              {/* main ribbon */}
+              <path
+                d="M0 250 C 220 205, 420 215, 640 250 C 820 278, 1000 250, 1200 150 L 1200 168 C 1000 270, 820 296, 640 268 C 420 236, 220 228, 0 270 Z"
+                fill="url(#awcSwoosh)"
+              />
+              {/* thin echo line */}
+              <path
+                d="M0 228 C 240 182, 460 196, 660 228 C 860 258, 1020 222, 1200 120"
+                stroke="url(#awcSwooshFade)"
+                strokeWidth="1.5"
+              />
+              {/* deep shade under ribbon */}
+              <path
+                d="M0 270 C 220 228, 420 236, 640 268 C 820 296, 1000 270, 1200 168 L 1200 300 L 0 300 Z"
+                fill="#2a0410"
+                opacity="0.55"
+              />
+            </svg>
+
+            <div className="relative z-10 grid grid-cols-1 md:grid-cols-12 items-end md:min-h-[420px] lg:min-h-[470px]">
+              {/* Left copy */}
+              <div
+                className={`md:col-span-7 px-6 sm:px-10 lg:px-14 pt-10 md:pt-0 md:pb-24 md:self-center transition-all duration-700 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}`}
+              >
+                <div className="flex gap-5 sm:gap-6">
+                  <div className="w-[2px] shrink-0 self-stretch bg-gradient-to-b from-[#f6dc8c] via-[#d4af37] to-transparent" aria-hidden="true" />
+                  <div className="min-w-0">
+                    <h1
+                      className="font-serif font-bold text-[2.3rem] leading-[1.08] sm:text-6xl md:text-[3.4rem] lg:text-[4rem] xl:text-[4.4rem] bg-clip-text text-transparent drop-shadow-[0_2px_6px_rgba(0,0,0,0.35)]"
+                      style={{ backgroundImage: 'linear-gradient(180deg, #fbe7a6 0%, #f0cf72 45%, #c9a03c 100%)' }}
+                    >
+                      <span className="sm:whitespace-nowrap">Where Everybody</span>
+                      <br />
+                      <span className="whitespace-nowrap">Is Somebody</span>
+                    </h1>
+
+                    <p className="mt-5 font-serif text-lg sm:text-xl text-white leading-snug">
+                      Welcome to Anointed Worship Center.
+                      <br />
+                      <em className="text-white/90">A community of faith, family, and purpose.</em>
+                    </p>
+
+                    <div className="mt-8 flex flex-col sm:flex-row gap-3 sm:gap-4">
+                      <Link
+                        to="/visit"
+                        className="inline-flex items-center justify-center rounded-md px-8 py-3.5 font-serif text-base font-bold text-[#3a0610] shadow-[0_8px_20px_-8px_rgba(0,0,0,0.6)] transition hover:brightness-110"
+                        style={{ backgroundImage: 'linear-gradient(180deg, #f6dc8c 0%, #d9b14f 60%, #b88f2f 100%)' }}
+                      >
+                        Plan Your Visit
+                      </Link>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const sermonSection = document.getElementById('sermons-section');
+                          if (sermonSection) {
+                            sermonSection.scrollIntoView({ behavior: 'smooth' });
+                          } else {
+                            window.location.href = '/sermons';
+                          }
+                        }}
+                        className="inline-flex items-center justify-center gap-3 rounded-md border border-white/85 px-7 py-3.5 font-serif text-base font-semibold text-white transition hover:bg-white hover:text-[#4a0414]"
+                      >
+                        <i className="fa-solid fa-play text-[12px]" aria-hidden="true"></i>
+                        Watch Sermons
+                      </button>
                     </div>
                   </div>
-                ))}
+                </div>
+              </div>
+
+              {/* Right: Pastor & First Lady */}
+              <div
+                className={`md:col-span-5 relative flex justify-center md:justify-end items-end md:self-stretch mt-8 md:mt-0 transition-all duration-1000 delay-200 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}
+              >
+                <img
+                  src="/images/pastors-couple-blue-transparent.png"
+                  alt="Dr. Kenneth Mutegyeki and First Lady Sania Mutegyeki"
+                  className="relative h-[360px] sm:h-[440px] md:absolute md:bottom-0 md:right-[4%] md:h-[104%] w-auto max-w-none object-contain object-bottom"
+                  style={{ filter: 'drop-shadow(0 12px 30px rgba(0,0,0,0.45))' }}
+                />
               </div>
             </div>
           </div>
-        </div>
 
-        {/* Bottom Service Times & Music Player Bar */}
-        <div className="relative z-30 px-4 pb-4 md:pb-6 mt-auto">
-          <div className="mx-auto max-w-5xl bg-black/40 backdrop-blur-md rounded-2xl px-5 py-3.5 md:px-7 border border-white/10">
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 items-center gap-4">
-
-            {/* Service Times */}
-            <div className="flex items-center justify-center sm:justify-start gap-6">
-              <div className="flex items-center gap-2.5">
-                <div className="w-8 h-8 shrink-0 bg-church-gold/15 rounded-full flex items-center justify-center">
-                  <i className="fa-solid fa-calendar-day text-church-gold text-[11px]"></i>
-                </div>
-                <div className="leading-tight">
-                  <span className="block text-[10px] font-semibold text-church-gold uppercase tracking-wider">Sun</span>
-                  <span className="block text-white text-sm font-semibold">10 AM</span>
-                </div>
-              </div>
-              <div className="w-px h-7 bg-white/15"></div>
-              <div className="flex items-center gap-2.5">
-                <div className="w-8 h-8 shrink-0 bg-church-gold/15 rounded-full flex items-center justify-center">
-                  <i className="fa-solid fa-book-bible text-church-gold text-[11px]"></i>
-                </div>
-                <div className="leading-tight">
-                  <span className="block text-[10px] font-semibold text-church-gold uppercase tracking-wider">Wed</span>
-                  <span className="block text-white text-sm font-semibold">7 PM</span>
-                </div>
-              </div>
-            </div>
-
-            {/* Actions */}
-            <a href="https://www.google.com/maps/search/?api=1&query=4+School+St+Acton,+MA+01720" target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-2.5 group">
-              <div className="w-8 h-8 shrink-0 rounded-full bg-church-gold/15 flex items-center justify-center group-hover:bg-church-gold transition-colors">
-                <i className="fa-solid fa-location-dot text-church-gold text-[11px] group-hover:text-church-burgundy"></i>
-              </div>
-              <span className="text-[13px] font-semibold text-white/85 group-hover:text-white transition-colors">4 School St, Acton, MA</span>
-            </a>
-
-            {/* Music Player */}
-            <div className="flex items-center justify-center sm:justify-end gap-3">
-              <button
-                onClick={togglePlay}
-                className={`w-8 h-8 shrink-0 rounded-full flex items-center justify-center transition-colors ${isPlaying ? 'bg-white text-church-burgundy' : 'bg-church-gold text-church-burgundy'}`}
-                aria-label={isPlaying ? 'Pause' : 'Play'}
+          {/* Gold rule + Pastoral Leadership tab, service info & music */}
+          <div className="relative mt-6">
+            <div className="absolute left-0 right-0 top-[17px] h-px bg-gradient-to-r from-[#d4af37] via-[#d4af37]/60 to-transparent" aria-hidden="true" />
+            <div className="relative flex flex-col lg:flex-row lg:items-start gap-4 lg:gap-8">
+              <Link
+                to="/ministries"
+                className="self-start rounded-t-md rounded-b-sm border border-[#f6dc8c]/60 px-5 py-2 font-serif text-sm font-bold uppercase tracking-[0.08em] text-[#3a0610] shadow-md transition hover:brightness-110"
+                style={{ backgroundImage: 'linear-gradient(180deg, #f6dc8c 0%, #d9b14f 70%, #b88f2f 100%)' }}
               >
-                <i className={`fa-solid ${isPlaying ? 'fa-pause' : 'fa-play'} text-[10px]`}></i>
-              </button>
+                Pastoral Leadership
+              </Link>
 
-              <div className="min-w-0">
-                <span className="block text-[13px] font-semibold text-white whitespace-nowrap">
-                  {playlist[currentTrack].title}
-                </span>
-                <span className="block text-[10px] text-white/45">
-                  {isPlaying ? 'Now playing' : 'Paused'}
-                </span>
+              <div className="lg:ml-auto mt-2 lg:mt-10 flex flex-wrap items-center gap-x-6 gap-y-3 text-white/85">
+                <div className="flex items-center gap-2">
+                  <i className="fa-solid fa-calendar-day text-[#d4af37] text-xs" aria-hidden="true"></i>
+                  <span className="text-[13px]"><span className="font-semibold text-[#f0cf72]">Sun</span> 10 AM</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <i className="fa-solid fa-book-bible text-[#d4af37] text-xs" aria-hidden="true"></i>
+                  <span className="text-[13px]"><span className="font-semibold text-[#f0cf72]">Wed</span> 7 PM</span>
+                </div>
+                <a
+                  href="https://www.google.com/maps/search/?api=1&query=4+School+St+Acton,+MA+01720"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2 text-[13px] hover:text-white"
+                >
+                  <i className="fa-solid fa-location-dot text-[#d4af37] text-xs" aria-hidden="true"></i>
+                  4 School St, Acton, MA
+                </a>
+                <div className="flex items-center gap-2.5">
+                  <button
+                    onClick={togglePlay}
+                    className={`w-7 h-7 shrink-0 rounded-full flex items-center justify-center transition-colors ${isPlaying ? 'bg-white text-[#4a0414]' : 'bg-[#d4af37] text-[#4a0414]'}`}
+                    aria-label={isPlaying ? 'Pause' : 'Play'}
+                  >
+                    <i className={`fa-solid ${isPlaying ? 'fa-pause' : 'fa-play'} text-[9px]`}></i>
+                  </button>
+                  <span className="text-[13px] font-medium whitespace-nowrap">{playlist[currentTrack].title}</span>
+                  <button
+                    onClick={nextTrack}
+                    className="w-7 h-7 shrink-0 rounded-full border border-white/20 hover:bg-white/10 flex items-center justify-center transition-colors"
+                    aria-label="Next track"
+                  >
+                    <i className="fa-solid fa-forward text-[8px]"></i>
+                  </button>
+                </div>
               </div>
-
-              <button
-                onClick={nextTrack}
-                className="w-8 h-8 shrink-0 rounded-full border border-white/15 hover:bg-white/10 flex items-center justify-center transition-colors"
-                aria-label="Next track"
-              >
-                <i className="fa-solid fa-forward text-[9px] text-white/80"></i>
-              </button>
             </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Scroll Indicator */}
-        <div className="absolute bottom-28 left-8 animate-bounce hidden 2xl:block z-20 pointer-events-none">
-          <div className="w-6 h-10 border-2 border-white/30 rounded-full flex items-start justify-center p-2">
-            <div className="w-1 h-2 bg-white/50 rounded-full"></div>
           </div>
         </div>
 
