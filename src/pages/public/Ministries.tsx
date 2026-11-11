@@ -312,8 +312,8 @@ const Ministries: React.FC = () => {
   }
 
   return (
-    <div className="bg-gray-50 min-h-screen">
-      {/* Page header */}
+    <div className="min-h-screen bg-[#FBF7F0]">
+      {/* Page header — preserved */}
       <section className="relative overflow-hidden bg-church-burgundy pt-28 pb-14 md:pt-32 md:pb-16">
         <div className="absolute inset-0 bg-gradient-to-br from-church-burgundy via-church-burgundy to-[#2a0202]"></div>
         <div className="absolute inset-y-0 right-0 w-1/2 bg-gradient-to-l from-church-gold/10 to-transparent pointer-events-none"></div>
@@ -349,11 +349,21 @@ const Ministries: React.FC = () => {
       </section>
 
       {/* MAIN CONTENT */}
-      <div className="pt-14 md:pt-16 pb-20">
-        <div className="max-w-7xl mx-auto px-4">
+      <div className="relative overflow-hidden pt-14 md:pt-16 pb-0">
+        {/* Soft cream wave atmosphere behind leadership sections */}
+        <div
+          className="pointer-events-none absolute inset-x-0 bottom-0 top-[28%] opacity-70"
+          aria-hidden="true"
+          style={{
+            background:
+              'radial-gradient(ellipse 80% 40% at 10% 70%, rgba(212,175,55,0.12), transparent 55%), radial-gradient(ellipse 70% 35% at 90% 85%, rgba(74,4,4,0.06), transparent 50%)',
+          }}
+        />
 
-          {/* Core Ministries Section */}
-          <div className="mb-24 ministries-section">
+        <div className="relative z-10 max-w-7xl mx-auto px-4 md:px-6">
+
+          {/* Core Ministries Section — preserved */}
+          <div className="mb-20 md:mb-24 ministries-section">
             <div className="text-center mb-10 md:mb-12">
               <span className="text-church-gold font-black tracking-[0.4em] uppercase text-xs mb-3 block">Get Involved</span>
               <h2 className="text-3xl md:text-4xl font-bold text-church-burgundy serif mb-3">Core Ministries</h2>
@@ -403,27 +413,44 @@ const Ministries: React.FC = () => {
             </div>
           </div>
 
-          {/* Meet Our Pastor & First Lady */}
-          <section className="mb-24 -mx-4 px-4 md:mx-0 md:px-0">
-            <div className="rounded-[1.75rem] md:rounded-[2rem] bg-[#F8F3EA] border border-[#E8DFD0] px-5 py-10 sm:px-8 sm:py-12 md:px-12 md:py-14 overflow-hidden">
-              <div className="grid lg:grid-cols-12 gap-10 lg:gap-12 items-center">
-                <div className="lg:col-span-5 space-y-5">
-                  <span className="text-church-gold font-black tracking-[0.4em] uppercase text-xs block">
-                    Leadership
-                  </span>
+          {/* Meet Our Pastor & First Lady — mockup layout */}
+          <section className="mb-20 md:mb-28">
+            <div className="relative overflow-hidden rounded-[1.75rem] md:rounded-[2rem] bg-[#F7F1E6] px-5 py-10 shadow-[0_18px_50px_-28px_rgba(74,4,4,0.35)] sm:px-8 sm:py-12 md:px-12 md:py-14">
+              <svg
+                className="pointer-events-none absolute bottom-0 left-0 h-28 w-64 opacity-40"
+                viewBox="0 0 280 100"
+                fill="none"
+                aria-hidden="true"
+              >
+                <path d="M0 80 C60 40, 120 30, 180 50 C220 62, 250 70, 280 60" stroke="#D4AF37" strokeWidth="1.5" />
+                <path d="M0 95 C70 55, 130 45, 190 65 C230 78, 255 85, 280 78" stroke="#C4A574" strokeWidth="1.25" opacity="0.7" />
+              </svg>
+              <svg
+                className="pointer-events-none absolute bottom-0 right-0 h-24 w-56 opacity-35"
+                viewBox="0 0 240 90"
+                fill="none"
+                aria-hidden="true"
+              >
+                <path d="M0 70 C50 40, 110 35, 240 55" stroke="#D4AF37" strokeWidth="1.25" />
+              </svg>
+
+              <div className="relative z-10 grid items-center gap-10 lg:grid-cols-12 lg:gap-12">
+                <div className="lg:col-span-4 space-y-4">
+                  <div>
+                    <p className="text-church-gold font-bold uppercase tracking-[0.28em] text-[10px]">
+                      Our Leadership
+                    </p>
+                    <div className="mt-2 h-px w-14 bg-church-gold" aria-hidden="true" />
+                  </div>
                   <h2 className="text-3xl md:text-4xl font-bold text-church-burgundy serif leading-tight">
                     Meet Our Pastor &amp; First Lady
                   </h2>
-                  <p className="text-base md:text-lg text-slate-600 font-light leading-relaxed max-w-md">
-                    Get to know the pastoral couple who shepherd Anointed Worship Center with faith,
-                    warmth, and a heart for every person who walks through our doors.
-                  </p>
-                  <p className="text-sm text-slate-500 leading-relaxed max-w-md">
-                    Tap a portrait to open their full leadership profile.
+                  <p className="text-base text-slate-600 leading-relaxed max-w-sm">
+                    Get to know the pastoral leadership of Anointed Worship Center.
                   </p>
                 </div>
 
-                <div className="lg:col-span-7 grid sm:grid-cols-2 gap-4 md:gap-5">
+                <div className="lg:col-span-8 grid sm:grid-cols-2 gap-5 md:gap-6">
                   {[
                     {
                       leader: LEADER_TEAM[0],
@@ -442,10 +469,10 @@ const Ministries: React.FC = () => {
                       key={displayName}
                       type="button"
                       onClick={() => setSelectedLeader(leader)}
-                      className="group text-left rounded-2xl overflow-hidden bg-black border border-black/10 shadow-sm transition-shadow hover:shadow-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-church-gold focus-visible:ring-offset-2 focus-visible:ring-offset-[#F8F3EA]"
+                      className="group flex flex-col overflow-hidden rounded-2xl bg-white text-left shadow-[0_12px_30px_-18px_rgba(74,4,4,0.45)] transition hover:shadow-[0_18px_36px_-16px_rgba(74,4,4,0.5)] focus:outline-none focus-visible:ring-2 focus-visible:ring-church-gold focus-visible:ring-offset-2 focus-visible:ring-offset-[#F7F1E6]"
                       aria-label={`View details for ${displayName}, ${displayRole}`}
                     >
-                      <div className="aspect-[3/4] overflow-hidden bg-black">
+                      <div className="aspect-[4/5] overflow-hidden bg-black">
                         <img
                           src={portraitSrc}
                           alt=""
@@ -453,13 +480,17 @@ const Ministries: React.FC = () => {
                           loading="lazy"
                         />
                       </div>
-                      <div className="bg-[#F8F3EA] px-4 py-4 md:px-5 md:py-5 border-t border-[#E8DFD0]">
-                        <h3 className="text-church-burgundy text-lg md:text-xl font-bold serif leading-snug">
+                      <div className="flex flex-1 flex-col px-5 py-5">
+                        <h3 className="text-church-burgundy text-xl font-bold serif leading-snug">
                           {displayName}
                         </h3>
-                        <p className="mt-1.5 text-church-gold font-semibold text-xs md:text-sm leading-snug">
+                        <p className="mt-1.5 text-sm italic text-[#8B6B3D]">
                           {displayRole}
                         </p>
+                        <span className="mt-4 inline-flex items-center gap-2 border-t border-[#EDE4D6] pt-3 text-sm font-semibold text-church-burgundy">
+                          Meet Our Leaders
+                          <i className="fa-solid fa-arrow-right text-[10px] transition-transform group-hover:translate-x-1" aria-hidden="true" />
+                        </span>
                       </div>
                     </button>
                   ))}
@@ -468,98 +499,112 @@ const Ministries: React.FC = () => {
             </div>
           </section>
 
-          {/* Pastoral Leadership Section */}
-          <div className="mb-24">
-            <div className="text-center mb-10 md:mb-12">
-              <span className="text-church-gold font-black tracking-[0.4em] uppercase text-xs mb-3 block">Our Leaders</span>
-              <h2 className="text-3xl md:text-4xl font-bold text-church-burgundy serif mb-3">Pastoral Leadership</h2>
-              <p className="text-base md:text-lg text-slate-500 max-w-2xl mx-auto font-light">
-                Meet the shepherds guiding our spiritual journey with wisdom and compassion.
-              </p>
+          {/* Pastoral Leadership — preserve all four branded cards */}
+          <div className="mb-20 md:mb-28">
+            <div className="mb-10 md:mb-12 flex items-center justify-center gap-4 md:gap-6">
+              <div className="hidden h-px flex-1 max-w-[8rem] bg-church-gold/70 sm:block" aria-hidden="true" />
+              <h2 className="text-3xl md:text-4xl font-bold text-church-burgundy serif text-center whitespace-nowrap">
+                Pastoral Leadership
+              </h2>
+              <div className="hidden h-px flex-1 max-w-[8rem] bg-church-gold/70 sm:block" aria-hidden="true" />
             </div>
-            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5">
+            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5 md:gap-6">
               {LEADER_TEAM.map((leader) => (
                 <button
                   key={leader.name}
                   type="button"
                   onClick={() => setSelectedLeader(leader)}
-                  className="bg-white rounded-2xl overflow-hidden border border-slate-200/80 shadow-sm flex flex-col text-left transition-shadow hover:shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-church-gold focus-visible:ring-offset-2"
+                  className="group flex flex-col overflow-hidden rounded-2xl bg-[#F7F1E6] text-left shadow-[0_10px_28px_-18px_rgba(74,4,4,0.4)] transition hover:shadow-[0_16px_32px_-14px_rgba(74,4,4,0.45)] focus:outline-none focus-visible:ring-2 focus-visible:ring-church-gold focus-visible:ring-offset-2 focus-visible:ring-offset-[#FBF7F0]"
                   aria-label={`View details for ${leader.name}, ${leader.role}`}
                 >
-                  <div className="aspect-square overflow-hidden bg-[#5c0a0a]">
+                  <div className="aspect-[4/5] overflow-hidden bg-[#5c0a0a]">
                     <img
                       src={leader.imageUrl}
-                      className={`w-full h-full object-cover ${leader.branded ? '' : 'object-top'}`}
+                      className={`h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.02] ${leader.branded ? '' : 'object-top'}`}
                       alt=""
                       loading="lazy"
                     />
                   </div>
-                  <div className="p-4 md:p-5 flex-1">
-                    <p className="text-church-gold font-bold uppercase tracking-[0.18em] text-[9px] mb-1">
-                      {leader.role}
-                    </p>
-                    <h3 className="text-church-burgundy text-base md:text-lg font-bold serif leading-snug mb-2">
+                  <div className="px-4 py-4 md:px-5 md:py-5">
+                    <h3 className="text-church-burgundy text-base md:text-lg font-bold serif leading-snug">
                       {leader.name}
                     </h3>
-                    {leader.bio && (
-                      <p className="text-slate-500 text-sm leading-relaxed line-clamp-3">
-                        {leader.bio}
-                      </p>
-                    )}
+                    <p className="mt-1 text-sm italic text-[#8B6B3D] leading-snug">
+                      {leader.role}
+                    </p>
                   </div>
                 </button>
               ))}
             </div>
           </div>
 
-          {/* Ministry Leaders Section */}
-          <div className="mb-24">
-            <div className="text-center mb-10 md:mb-12">
-              <span className="text-church-gold font-black tracking-[0.4em] uppercase text-xs mb-3 block">Our Team</span>
-              <h2 className="text-3xl md:text-4xl font-bold text-church-burgundy serif mb-3">Ministry Leaders</h2>
-              <p className="text-base md:text-lg text-slate-500 max-w-2xl mx-auto font-light">
-                Dedicated servants leading with passion and purpose in their areas of calling. Tap a leader for full details.
-              </p>
+          {/* Ministry Leaders — preserve branded artwork; add HTML names/roles */}
+          <div className="mb-20 md:mb-24">
+            <div className="mb-3 flex items-center justify-center gap-4 md:gap-6">
+              <div className="hidden h-px flex-1 max-w-[8rem] bg-church-gold/70 sm:block" aria-hidden="true" />
+              <h2 className="text-3xl md:text-4xl font-bold text-church-burgundy serif text-center whitespace-nowrap">
+                Ministry Leaders
+              </h2>
+              <div className="hidden h-px flex-1 max-w-[8rem] bg-church-gold/70 sm:block" aria-hidden="true" />
             </div>
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-5">
+            <p className="mb-10 md:mb-12 text-center text-base md:text-lg text-slate-600 font-light">
+              Dedicated servants leading with faith and purpose.
+            </p>
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-5">
               {MINISTRY_TEAM.map((member) => (
                 <button
                   key={member.name}
                   type="button"
                   onClick={() => setSelectedLeader(member)}
-                  className="rounded-2xl overflow-hidden border border-slate-200/80 shadow-sm bg-[#5c0a0a] group text-left transition-shadow hover:shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-church-gold focus-visible:ring-offset-2"
+                  className="group flex flex-col overflow-hidden rounded-2xl bg-[#F7F1E6] text-left shadow-[0_10px_28px_-18px_rgba(74,4,4,0.35)] transition hover:shadow-[0_16px_32px_-14px_rgba(74,4,4,0.4)] focus:outline-none focus-visible:ring-2 focus-visible:ring-church-gold focus-visible:ring-offset-2 focus-visible:ring-offset-[#FBF7F0]"
                   aria-label={`View details for ${member.name}, ${member.role}`}
                 >
-                  <div className="aspect-square overflow-hidden">
+                  <div className="aspect-square overflow-hidden bg-[#5c0a0a]">
                     <img
                       src={member.imageUrl}
-                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.02]"
+                      className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.02]"
                       alt=""
                       loading="lazy"
                     />
+                  </div>
+                  <div className="px-3 py-3 md:px-4 md:py-4">
+                    <h3 className="text-church-burgundy text-sm md:text-base font-bold serif leading-snug">
+                      {member.name}
+                    </h3>
+                    <p className="mt-1 text-[11px] md:text-xs italic text-[#8B6B3D] leading-snug">
+                      {member.role}
+                    </p>
                   </div>
                 </button>
               ))}
             </div>
           </div>
-
-          {/* Help Finding Ministry CTA */}
-          <div className="mt-8 bg-church-burgundy rounded-3xl p-10 md:p-14 relative overflow-hidden">
-            <div className="absolute top-0 right-0 w-1/3 h-full bg-church-gold/5 -skew-x-12 translate-x-1/2 pointer-events-none"></div>
-            <div className="relative z-10 text-center max-w-2xl mx-auto">
-              <h2 className="text-white text-2xl md:text-3xl font-bold mb-4 serif">Discover Your Giftedness</h2>
-              <p className="text-white/60 text-base mb-8 font-light leading-relaxed">
-                Every member has a unique part to play in the body of Christ. Let us help you find yours.
-              </p>
-              <button
-                type="button"
-                className="bg-church-gold hover:bg-white text-white hover:text-church-burgundy px-8 py-3.5 rounded-full font-bold uppercase tracking-[0.2em] text-[10px] transition-colors duration-300"
-              >
-                Spiritual Gifts Assessment
-              </button>
-            </div>
-          </div>
         </div>
+
+        {/* Discover Your Giftedness — burgundy band with wave top */}
+        <section className="relative mt-4 bg-church-burgundy">
+          <svg
+            className="absolute -top-8 left-0 h-10 w-full text-[#FBF7F0]"
+            viewBox="0 0 1440 40"
+            preserveAspectRatio="none"
+            aria-hidden="true"
+          >
+            <path fill="currentColor" d="M0,24 C240,40 480,0 720,16 C960,32 1200,40 1440,12 L1440,0 L0,0 Z" />
+          </svg>
+          <div className="relative z-10 mx-auto max-w-3xl px-6 py-16 md:py-20 text-center">
+            <h2 className="text-white text-3xl md:text-4xl font-bold serif mb-4">Discover Your Giftedness</h2>
+            <p className="text-white/75 text-base md:text-lg mb-8 font-light leading-relaxed">
+              Use your God-given gifts to serve, lead, and make an eternal impact at AWC.
+            </p>
+            <button
+              type="button"
+              className="inline-flex items-center gap-2 rounded-full bg-church-gold px-8 py-3.5 text-[11px] font-bold uppercase tracking-[0.18em] text-church-burgundy transition hover:bg-white"
+            >
+              Spiritual Gifts Assessment
+              <i className="fa-solid fa-arrow-right text-[10px]" aria-hidden="true" />
+            </button>
+          </div>
+        </section>
       </div>
 
       {selectedLeader && (
