@@ -172,11 +172,11 @@ const Home: React.FC = () => {
                 <div className="flex gap-5 sm:gap-6">
                   <div className="w-[2px] shrink-0 self-stretch bg-gradient-to-b from-[#f6dc8c] via-[#d4af37] to-transparent" aria-hidden="true" />
                   <div className="min-w-0">
-                    <p className="mb-4 text-[11px] sm:text-xs font-bold uppercase tracking-[0.28em] text-[#f0cf72]">
+                    <p className="mb-5 text-[10px] sm:text-xs font-semibold uppercase tracking-[0.18em] sm:tracking-[0.3em] text-[#f0cf72]/90">
                       Welcome to Anointed Worship Center
                     </p>
                     <h1
-                      className="font-serif font-bold text-[2.3rem] leading-[1.08] sm:text-6xl md:text-[3.4rem] lg:text-[4rem] xl:text-[4.4rem] bg-clip-text text-transparent drop-shadow-[0_2px_6px_rgba(0,0,0,0.35)]"
+                      className="font-serif font-bold text-[2.3rem] leading-[1.08] sm:text-6xl md:text-[3.4rem] lg:text-[4rem] xl:text-[4.4rem] bg-clip-text text-transparent drop-shadow-[0_2px_4px_rgba(0,0,0,0.25)]"
                       style={{ backgroundImage: 'linear-gradient(180deg, #fbe7a6 0%, #f0cf72 45%, #c9a03c 100%)' }}
                     >
                       <span className="sm:whitespace-nowrap">Where Everybody</span>
@@ -184,13 +184,12 @@ const Home: React.FC = () => {
                       <span className="whitespace-nowrap">Is Somebody</span>
                     </h1>
 
-                    <p className="mt-5 font-serif text-lg sm:text-xl text-white leading-snug">
-                      Welcome to Anointed Worship Center.
-                      <br />
-                      <em className="text-white/90">A community of faith, family, and purpose.</em>
+                    <div className="mt-6 h-px w-16 bg-gradient-to-r from-[#d4af37] to-transparent" aria-hidden="true" />
+                    <p className="mt-5 max-w-md font-serif text-lg sm:text-xl italic text-white/90 leading-relaxed">
+                      A community of faith, family, and purpose.
                     </p>
 
-                    <div className="mt-8 flex flex-col sm:flex-row gap-3 sm:gap-4">
+                    <div className="mt-9 flex flex-col sm:flex-row gap-3 sm:gap-4">
                       <Link
                         to="/visit"
                         className="inline-flex items-center justify-center rounded-md px-8 py-3.5 font-serif text-base font-bold text-[#3a0610] shadow-[0_8px_20px_-8px_rgba(0,0,0,0.6)] transition hover:brightness-110"
