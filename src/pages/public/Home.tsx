@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { SERVICE_TIMES } from '../../constants';
-import GallerySection from '../../components/ui/GallerySection';
 import ConnectAppPromo from '../../components/ui/ConnectAppPromo';
 import { GivingModal } from '../../components/giving/GivingModal';
 import EventCountdown from '../../components/EventCountdown';
@@ -27,12 +25,6 @@ const CHURCH_STATS = {
   members: '200+',
   ministries: '10',
 } as const;
-
-const HERO_STATS = [
-  { value: CHURCH_STATS.establishedYear, label: CHURCH_STATS.establishedLabel },
-  { value: CHURCH_STATS.members, label: 'Members' },
-  { value: CHURCH_STATS.ministries, label: 'Ministries' },
-] as const;
 
 const Home: React.FC = () => {
   const [isVisible, setIsVisible] = useState(false);
@@ -113,180 +105,135 @@ const Home: React.FC = () => {
   return (
     <div className="flex flex-col w-full">
       <GivingModal isOpen={showGivingModal} onClose={() => setShowGivingModal(false)} />
-      {/* Hero Section - Mobile Optimized */}
-      <section className="relative min-h-[100svh] flex flex-col overflow-hidden pt-20 bg-[#1a0509]">
-        {/* Background Gradient & Effects */}
-        <div className="absolute inset-0 z-0 bg-gradient-to-br from-[#3a0a12] via-[#1a0509] to-black"></div>
-        <div className="absolute inset-0 z-0 bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-church-gold/15 via-transparent to-transparent opacity-50"></div>
-        <div className="absolute inset-0 z-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')]"></div>
+      {/* Hero Banner — mockup: burgundy, left copy, right couple photo */}
+      <section className="relative overflow-hidden pt-20 bg-church-burgundy">
+        <div className="absolute inset-0 bg-gradient-to-r from-church-burgundy via-church-burgundy to-[#3a0606]" aria-hidden="true" />
 
-        {/* Desktop: Pastor & First Lady on the right */}
-        <div className={`hidden md:flex absolute bottom-0 right-0 z-10 h-[90vh] w-[52%] lg:w-[48%] justify-end items-end pointer-events-none transition-all duration-1000 delay-300 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`}>
-          <div className="absolute top-[18%] right-[-8%] w-[640px] h-[640px] bg-church-gold/25 rounded-full blur-[100px]" aria-hidden="true"></div>
-          <img
-            src="/images/pastors-couple-blue-transparent.png"
-            alt="Dr. Kenneth Mutegyeki and First Lady Sania Mutegyeki"
-            className="h-full w-auto max-w-none object-contain object-bottom relative z-10 drop-shadow-2xl"
-            style={{ filter: 'drop-shadow(0 0 36px rgba(0,0,0,0.45))' }}
-          />
-          <div className="absolute inset-y-0 left-0 w-1/3 bg-gradient-to-r from-[#1a0509] to-transparent z-20"></div>
+        {/* Decorative gold swooshes */}
+        <svg
+          className="pointer-events-none absolute -bottom-6 left-0 z-[5] h-[38%] w-[58%] max-w-3xl opacity-90"
+          viewBox="0 0 640 240"
+          fill="none"
+          aria-hidden="true"
+        >
+          <path d="M-20 190 C120 110, 260 70, 420 95 C500 108, 560 140, 640 175" stroke="#D4AF37" strokeWidth="2.5" />
+          <path d="M-20 215 C140 130, 280 95, 430 125 C510 142, 570 168, 640 205" stroke="#D4AF37" strokeWidth="1.5" opacity="0.65" />
+        </svg>
+        <svg
+          className="pointer-events-none absolute bottom-8 right-0 z-[5] hidden h-[28%] w-[28%] opacity-50 md:block"
+          viewBox="0 0 320 160"
+          fill="none"
+          aria-hidden="true"
+        >
+          <path d="M0 130 C80 90, 160 70, 320 95" stroke="#D4AF37" strokeWidth="1.5" />
+        </svg>
+
+        <div className="relative z-10 mx-auto grid min-h-[78vh] max-w-7xl grid-cols-1 items-center gap-6 px-6 py-10 md:min-h-[82vh] md:grid-cols-12 md:gap-8 md:py-14 lg:px-8">
+          {/* Left copy */}
+          <div
+            className={`md:col-span-6 lg:col-span-5 transition-all duration-700 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}`}
+          >
+            <div className="flex gap-4 sm:gap-5">
+              <div className="mt-2 hidden h-auto w-px shrink-0 self-stretch bg-church-gold sm:block" aria-hidden="true" />
+              <div className="min-w-0">
+                <h1 className="font-serif text-4xl font-bold leading-[1.08] text-white sm:text-5xl md:text-5xl lg:text-[3.75rem]">
+                  Where Everybody
+                  <br />
+                  <span className="text-church-gold">Is Somebody</span>
+                </h1>
+
+                <p className="mt-5 max-w-md font-serif text-base italic leading-relaxed text-white/90 sm:text-lg md:mt-6">
+                  Welcome to Anointed Worship Center. A community of faith, family, and purpose.
+                </p>
+
+                <div className="mt-8 flex flex-col gap-3 sm:mt-10 sm:flex-row sm:flex-wrap">
+                  <Link
+                    to="/about"
+                    className="inline-flex items-center justify-center rounded-md bg-gradient-to-b from-church-gold-light to-church-gold px-7 py-3.5 text-[13px] font-bold text-church-burgundy shadow-lg shadow-black/20 transition hover:from-white hover:to-church-gold-light"
+                  >
+                    Plan Your Visit
+                  </Link>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const sermonSection = document.getElementById('sermons-section');
+                      if (sermonSection) {
+                        sermonSection.scrollIntoView({ behavior: 'smooth' });
+                      } else {
+                        window.location.href = '/sermons';
+                      }
+                    }}
+                    className="inline-flex items-center justify-center gap-2.5 rounded-md border border-white/80 bg-transparent px-7 py-3.5 text-[13px] font-semibold text-white transition hover:bg-white hover:text-church-burgundy"
+                  >
+                    <i className="fa-solid fa-play text-[10px]" aria-hidden="true" />
+                    Watch Sermons
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Right couple photo */}
+          <div
+            className={`relative md:col-span-6 lg:col-span-7 transition-all duration-1000 delay-200 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}
+          >
+            <div className="relative mx-auto flex h-[48vh] max-w-lg items-end justify-center md:mx-0 md:ml-auto md:h-[70vh] md:max-w-none">
+              <img
+                src="/images/pastors-couple-blue-transparent.png"
+                alt="Dr. Kenneth Mutegyeki and First Lady Sania Mutegyeki"
+                className="h-full w-auto max-w-full object-contain object-bottom drop-shadow-2xl"
+              />
+            </div>
+          </div>
         </div>
 
-        {/* Content Container — text & CTAs on the left */}
-        <div className="container mx-auto px-6 relative z-20 flex-1 flex flex-col justify-center py-8 md:py-12">
-          <div className="max-w-xl md:max-w-lg lg:max-w-xl">
-            <div className={`transition-all duration-700 delay-100 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}`}>
-              <p className="text-church-gold font-semibold uppercase tracking-[0.28em] text-[10px] sm:text-[11px] mb-4 sm:mb-5">
-                Welcome to Anointed Worship Center
-              </p>
+        {/* Gold bottom rule + Pastoral Leadership tab */}
+        <div className="relative z-20 border-t border-church-gold/80 bg-church-burgundy-dark/40">
+          <div className="mx-auto flex max-w-7xl flex-col gap-3 px-6 py-3 sm:flex-row sm:items-center sm:justify-between lg:px-8">
+            <div className="flex flex-wrap items-center gap-3">
+              <Link
+                to="/ministries"
+                className="inline-flex items-center rounded-md bg-church-gold px-3.5 py-1.5 text-[10px] font-bold uppercase tracking-[0.18em] text-church-burgundy shadow-sm transition hover:bg-white"
+              >
+                Pastoral Leadership
+              </Link>
+              <div className="flex items-center gap-4 text-white/80">
+                <span className="inline-flex items-center gap-1.5 text-xs font-medium">
+                  <i className="fa-solid fa-calendar-day text-church-gold text-[10px]" aria-hidden="true" />
+                  Sun 10 AM
+                </span>
+                <span className="inline-flex items-center gap-1.5 text-xs font-medium">
+                  <i className="fa-solid fa-book-bible text-church-gold text-[10px]" aria-hidden="true" />
+                  Wed 7 PM
+                </span>
+              </div>
             </div>
 
-            <h1 className={`font-serif text-4xl sm:text-5xl md:text-6xl lg:text-[4.25rem] font-bold text-white mb-4 md:mb-5 leading-[1.08] transition-all duration-700 delay-200 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}`}>
-              Where <span className="text-church-gold">Everybody</span>
-              <br />
-              Is <span className="text-church-gold">Somebody</span>
-            </h1>
-
-            <p className={`text-base sm:text-lg md:text-xl text-white/75 font-light mb-6 md:mb-10 max-w-md leading-relaxed transition-all duration-700 delay-300 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}`}>
-              A community of faith, family, and purpose.
-            </p>
-
-            <div className={`flex flex-col sm:flex-row sm:flex-wrap gap-3 mb-6 md:mb-14 transition-all duration-700 delay-400 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}`}>
-              <Link
-                to="/about"
-                className="group bg-church-gold hover:bg-white text-church-burgundy px-6 py-3 rounded-lg font-semibold text-[12px] tracking-wide transition-colors flex items-center justify-center gap-2"
-              >
-                Plan Your Visit
-                <i className="fa-solid fa-arrow-right text-[10px] group-hover:translate-x-0.5 transition-transform"></i>
-              </Link>
+            <div className="flex items-center gap-3">
               <button
                 type="button"
-                onClick={() => {
-                  const sermonSection = document.getElementById('sermons-section');
-                  if (sermonSection) {
-                    sermonSection.scrollIntoView({ behavior: 'smooth' });
-                  } else {
-                    window.location.href = '/sermons';
-                  }
-                }}
-                className="group bg-transparent border border-white/25 text-white hover:bg-white hover:text-church-burgundy px-6 py-3 rounded-lg font-semibold text-[12px] tracking-wide transition-colors flex items-center justify-center gap-2"
-              >
-                <i className="fa-solid fa-play text-[10px]"></i>
-                Watch Sermons
-              </button>
-              <Link
-                to="/giving"
-                className="group bg-transparent border border-church-gold/50 text-church-gold hover:bg-church-gold hover:text-church-burgundy px-6 py-3 rounded-lg font-semibold text-[12px] tracking-wide transition-colors flex items-center justify-center gap-2"
-              >
-                <i className="fa-solid fa-hand-holding-heart text-[10px]"></i>
-                Give
-              </Link>
-            </div>
-
-            <div
-              className={`max-w-md transition-all duration-700 delay-500 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}`}
-            >
-              <div className="grid grid-cols-3 divide-x divide-white/10 rounded-xl border border-white/10 bg-black/20 backdrop-blur-sm">
-                {HERO_STATS.map((stat) => (
-                  <div key={stat.label} className="px-3 py-4 sm:px-5 sm:py-5 text-center">
-                    <div className="text-2xl sm:text-3xl font-bold text-church-gold tabular-nums leading-none">
-                      {stat.value}
-                    </div>
-                    <div className="text-white/50 text-[10px] sm:text-[11px] uppercase tracking-[0.18em] mt-2 font-medium">
-                      {stat.label}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-
-          {/* Mobile: stacked couple portrait so faces stay visible */}
-          <div className={`md:hidden mt-6 -mx-2 transition-all duration-1000 delay-300 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
-            <img
-              src="/images/pastors-couple-blue-transparent.png"
-              alt="Dr. Kenneth Mutegyeki and First Lady Sania Mutegyeki"
-              className="mx-auto h-[46vh] w-auto max-w-full object-contain object-bottom drop-shadow-2xl"
-              style={{ filter: 'drop-shadow(0 0 24px rgba(0,0,0,0.4))' }}
-            />
-          </div>
-        </div>
-
-        {/* Bottom Service Times & Music Player Bar */}
-        <div className="relative z-30 px-4 pb-4 md:pb-6 mt-auto">
-          <div className="mx-auto max-w-5xl bg-black/40 backdrop-blur-md rounded-2xl px-5 py-3.5 md:px-7 border border-white/10">
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 items-center gap-4">
-
-            {/* Service Times */}
-            <div className="flex items-center justify-center sm:justify-start gap-6">
-              <div className="flex items-center gap-2.5">
-                <div className="w-8 h-8 shrink-0 bg-church-gold/15 rounded-full flex items-center justify-center">
-                  <i className="fa-solid fa-calendar-day text-church-gold text-[11px]"></i>
-                </div>
-                <div className="leading-tight">
-                  <span className="block text-[10px] font-semibold text-church-gold uppercase tracking-wider">Sun</span>
-                  <span className="block text-white text-sm font-semibold">10 AM</span>
-                </div>
-              </div>
-              <div className="w-px h-7 bg-white/15"></div>
-              <div className="flex items-center gap-2.5">
-                <div className="w-8 h-8 shrink-0 bg-church-gold/15 rounded-full flex items-center justify-center">
-                  <i className="fa-solid fa-book-bible text-church-gold text-[11px]"></i>
-                </div>
-                <div className="leading-tight">
-                  <span className="block text-[10px] font-semibold text-church-gold uppercase tracking-wider">Wed</span>
-                  <span className="block text-white text-sm font-semibold">7 PM</span>
-                </div>
-              </div>
-            </div>
-
-            {/* Actions */}
-            <a href="https://www.google.com/maps/search/?api=1&query=4+School+St+Acton,+MA+01720" target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-2.5 group">
-              <div className="w-8 h-8 shrink-0 rounded-full bg-church-gold/15 flex items-center justify-center group-hover:bg-church-gold transition-colors">
-                <i className="fa-solid fa-location-dot text-church-gold text-[11px] group-hover:text-church-burgundy"></i>
-              </div>
-              <span className="text-[13px] font-semibold text-white/85 group-hover:text-white transition-colors">4 School St, Acton, MA</span>
-            </a>
-
-            {/* Music Player */}
-            <div className="flex items-center justify-center sm:justify-end gap-3">
-              <button
                 onClick={togglePlay}
-                className={`w-8 h-8 shrink-0 rounded-full flex items-center justify-center transition-colors ${isPlaying ? 'bg-white text-church-burgundy' : 'bg-church-gold text-church-burgundy'}`}
+                className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full transition-colors ${isPlaying ? 'bg-white text-church-burgundy' : 'bg-church-gold text-church-burgundy'}`}
                 aria-label={isPlaying ? 'Pause' : 'Play'}
               >
-                <i className={`fa-solid ${isPlaying ? 'fa-pause' : 'fa-play'} text-[10px]`}></i>
+                <i className={`fa-solid ${isPlaying ? 'fa-pause' : 'fa-play'} text-[10px]`} aria-hidden="true" />
               </button>
-
               <div className="min-w-0">
-                <span className="block text-[13px] font-semibold text-white whitespace-nowrap">
-                  {playlist[currentTrack].title}
-                </span>
-                <span className="block text-[10px] text-white/45">
-                  {isPlaying ? 'Now playing' : 'Paused'}
-                </span>
+                <span className="block truncate text-[12px] font-semibold text-white">{playlist[currentTrack].title}</span>
+                <span className="block text-[10px] text-white/45">{isPlaying ? 'Now playing' : 'Paused'}</span>
               </div>
-
               <button
+                type="button"
                 onClick={nextTrack}
-                className="w-8 h-8 shrink-0 rounded-full border border-white/15 hover:bg-white/10 flex items-center justify-center transition-colors"
+                className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-white/20 transition hover:bg-white/10"
                 aria-label="Next track"
               >
-                <i className="fa-solid fa-forward text-[9px] text-white/80"></i>
+                <i className="fa-solid fa-forward text-[9px] text-white/80" aria-hidden="true" />
               </button>
             </div>
-            </div>
           </div>
         </div>
 
-        {/* Scroll Indicator */}
-        <div className="absolute bottom-28 left-8 animate-bounce hidden 2xl:block z-20 pointer-events-none">
-          <div className="w-6 h-10 border-2 border-white/30 rounded-full flex items-start justify-center p-2">
-            <div className="w-1 h-2 bg-white/50 rounded-full"></div>
-          </div>
-        </div>
-
-        {/* Hidden Audio Element */}
         <audio
           ref={audioRef}
           src={playlist[currentTrack].url}
