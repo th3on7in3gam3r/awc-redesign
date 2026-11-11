@@ -120,49 +120,38 @@ const Home: React.FC = () => {
         <div className="absolute inset-0 z-0 bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-church-gold/15 via-transparent to-transparent opacity-50"></div>
         <div className="absolute inset-0 z-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')]"></div>
 
-        {/* Pastor & First Lady Image */}
-        <div className={`absolute bottom-0 right-0 z-10 h-[50vh] sm:h-[65vh] md:h-[90vh] w-full md:w-auto flex justify-end items-end transition-all duration-1000 delay-300 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`}>
-          <div className="hidden md:block absolute top-[20%] right-[-10%] md:right-[10%] w-[400px] h-[400px] md:w-[800px] md:h-[800px] bg-church-gold/30 rounded-full blur-[100px] animate-pulse-slow"></div>
-
+        {/* Desktop: Pastor & First Lady on the right */}
+        <div className={`hidden md:flex absolute bottom-0 right-0 z-10 h-[90vh] w-[52%] lg:w-[48%] justify-end items-end pointer-events-none transition-all duration-1000 delay-300 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`}>
+          <div className="absolute top-[18%] right-[-8%] w-[640px] h-[640px] bg-church-gold/25 rounded-full blur-[100px]" aria-hidden="true"></div>
           <img
-            src="/images/pastors-hero-transparent.png"
-            alt="Pastor & First Lady"
-            className="h-full w-auto object-contain object-bottom drop-shadow-2xl relative z-10"
-            style={{ filter: 'drop-shadow(0 0 40px rgba(0,0,0,0.5))' }}
+            src="/images/pastors-couple-blue-transparent.png"
+            alt="Dr. Kenneth Mutegyeki and First Lady Sania Mutegyeki"
+            className="h-full w-auto max-w-none object-contain object-bottom relative z-10 drop-shadow-2xl"
+            style={{ filter: 'drop-shadow(0 0 36px rgba(0,0,0,0.45))' }}
           />
-
-          <div className="hidden md:block absolute top-0 right-0 w-full h-full z-20 pointer-events-none mix-blend-soft-light bg-gradient-to-tr from-transparent via-transparent to-white/40 md:to-white/20"></div>
-          <div className="hidden md:block absolute top-[10%] right-[10%] w-[300px] h-[300px] bg-church-gold/20 rounded-full blur-[80px] z-20 mix-blend-screen pointer-events-none"></div>
-
-          <div className="absolute inset-0 bg-gradient-to-t from-black via-black/80 to-transparent md:hidden h-full z-20"></div>
-          <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-transparent to-transparent md:hidden z-20"></div>
+          <div className="absolute inset-y-0 left-0 w-1/3 bg-gradient-to-r from-[#1a0509] to-transparent z-20"></div>
         </div>
 
-        {/* Content Container */}
-        <div className="container mx-auto px-6 relative z-20 flex-1 flex flex-col justify-center py-10 md:py-12">
-          <div className="max-w-3xl">
-            {/* Animated Welcome Badge */}
+        {/* Content Container — text & CTAs on the left */}
+        <div className="container mx-auto px-6 relative z-20 flex-1 flex flex-col justify-center py-8 md:py-12">
+          <div className="max-w-xl md:max-w-lg lg:max-w-xl">
             <div className={`transition-all duration-700 delay-100 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}`}>
-              <div className="inline-flex items-center gap-2.5 bg-white/5 backdrop-blur-sm border border-white/10 rounded-full px-3.5 py-1.5 mb-6 sm:mb-8">
-                <div className="w-1.5 h-1.5 bg-church-gold rounded-full"></div>
-                <span className="text-white/80 text-[11px] font-medium tracking-wide">Welcome to Anointed Worship Center</span>
-              </div>
+              <p className="text-church-gold font-semibold uppercase tracking-[0.28em] text-[10px] sm:text-[11px] mb-4 sm:mb-5">
+                Welcome to Anointed Worship Center
+              </p>
             </div>
 
-            {/* Main Heading */}
-            <h1 className={`font-serif text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-5 leading-[1.08] transition-all duration-700 delay-200 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}`}>
+            <h1 className={`font-serif text-4xl sm:text-5xl md:text-6xl lg:text-[4.25rem] font-bold text-white mb-4 md:mb-5 leading-[1.08] transition-all duration-700 delay-200 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}`}>
               Where <span className="text-church-gold">Everybody</span>
               <br />
               Is <span className="text-church-gold">Somebody</span>
             </h1>
 
-            {/* Subtitle */}
-            <p className={`text-base sm:text-lg md:text-xl text-white/70 font-light mb-8 md:mb-10 max-w-xl leading-relaxed transition-all duration-700 delay-300 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}`}>
-              A vibrant community of faith in Acton, MA. Join us as we grow together to love Christ the Lord.
+            <p className={`text-base sm:text-lg md:text-xl text-white/75 font-light mb-6 md:mb-10 max-w-md leading-relaxed transition-all duration-700 delay-300 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}`}>
+              A community of faith, family, and purpose.
             </p>
 
-            {/* CTA Buttons */}
-            <div className={`flex flex-col sm:flex-row sm:flex-wrap gap-3 mb-10 md:mb-14 transition-all duration-700 delay-400 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}`}>
+            <div className={`flex flex-col sm:flex-row sm:flex-wrap gap-3 mb-6 md:mb-14 transition-all duration-700 delay-400 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}`}>
               <Link
                 to="/about"
                 className="group bg-church-gold hover:bg-white text-church-burgundy px-6 py-3 rounded-lg font-semibold text-[12px] tracking-wide transition-colors flex items-center justify-center gap-2"
@@ -171,6 +160,7 @@ const Home: React.FC = () => {
                 <i className="fa-solid fa-arrow-right text-[10px] group-hover:translate-x-0.5 transition-transform"></i>
               </Link>
               <button
+                type="button"
                 onClick={() => {
                   const sermonSection = document.getElementById('sermons-section');
                   if (sermonSection) {
@@ -193,7 +183,6 @@ const Home: React.FC = () => {
               </Link>
             </div>
 
-            {/* Quick Stats */}
             <div
               className={`max-w-md transition-all duration-700 delay-500 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}`}
             >
@@ -210,6 +199,16 @@ const Home: React.FC = () => {
                 ))}
               </div>
             </div>
+          </div>
+
+          {/* Mobile: stacked couple portrait so faces stay visible */}
+          <div className={`md:hidden mt-6 -mx-2 transition-all duration-1000 delay-300 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+            <img
+              src="/images/pastors-couple-blue-transparent.png"
+              alt="Dr. Kenneth Mutegyeki and First Lady Sania Mutegyeki"
+              className="mx-auto h-[46vh] w-auto max-w-full object-contain object-bottom drop-shadow-2xl"
+              style={{ filter: 'drop-shadow(0 0 24px rgba(0,0,0,0.4))' }}
+            />
           </div>
         </div>
 

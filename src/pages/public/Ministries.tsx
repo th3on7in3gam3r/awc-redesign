@@ -403,6 +403,71 @@ const Ministries: React.FC = () => {
             </div>
           </div>
 
+          {/* Meet Our Pastor & First Lady */}
+          <section className="mb-24 -mx-4 px-4 md:mx-0 md:px-0">
+            <div className="rounded-[1.75rem] md:rounded-[2rem] bg-[#F8F3EA] border border-[#E8DFD0] px-5 py-10 sm:px-8 sm:py-12 md:px-12 md:py-14 overflow-hidden">
+              <div className="grid lg:grid-cols-12 gap-10 lg:gap-12 items-center">
+                <div className="lg:col-span-5 space-y-5">
+                  <span className="text-church-gold font-black tracking-[0.4em] uppercase text-xs block">
+                    Leadership
+                  </span>
+                  <h2 className="text-3xl md:text-4xl font-bold text-church-burgundy serif leading-tight">
+                    Meet Our Pastor &amp; First Lady
+                  </h2>
+                  <p className="text-base md:text-lg text-slate-600 font-light leading-relaxed max-w-md">
+                    Get to know the pastoral couple who shepherd Anointed Worship Center with faith,
+                    warmth, and a heart for every person who walks through our doors.
+                  </p>
+                  <p className="text-sm text-slate-500 leading-relaxed max-w-md">
+                    Tap a portrait to open their full leadership profile.
+                  </p>
+                </div>
+
+                <div className="lg:col-span-7 grid sm:grid-cols-2 gap-4 md:gap-5">
+                  {[
+                    {
+                      leader: LEADER_TEAM[0],
+                      displayName: 'Dr. Kenneth Mutegyeki',
+                      displayRole: 'Senior Pastor',
+                      portraitSrc: '/images/leadership/pastor-kenneth-blue.png',
+                    },
+                    {
+                      leader: LEADER_TEAM[1],
+                      displayName: 'First Lady Sania Mutegyeki',
+                      displayRole: "First Lady · Head of the Women's Ministry",
+                      portraitSrc: '/images/leadership/first-lady-sania-blue.png',
+                    },
+                  ].map(({ leader, displayName, displayRole, portraitSrc }) => (
+                    <button
+                      key={displayName}
+                      type="button"
+                      onClick={() => setSelectedLeader(leader)}
+                      className="group text-left rounded-2xl overflow-hidden bg-black border border-black/10 shadow-sm transition-shadow hover:shadow-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-church-gold focus-visible:ring-offset-2 focus-visible:ring-offset-[#F8F3EA]"
+                      aria-label={`View details for ${displayName}, ${displayRole}`}
+                    >
+                      <div className="aspect-[3/4] overflow-hidden bg-black">
+                        <img
+                          src={portraitSrc}
+                          alt=""
+                          className="h-full w-full object-cover object-top transition-transform duration-500 group-hover:scale-[1.02]"
+                          loading="lazy"
+                        />
+                      </div>
+                      <div className="bg-[#F8F3EA] px-4 py-4 md:px-5 md:py-5 border-t border-[#E8DFD0]">
+                        <h3 className="text-church-burgundy text-lg md:text-xl font-bold serif leading-snug">
+                          {displayName}
+                        </h3>
+                        <p className="mt-1.5 text-church-gold font-semibold text-xs md:text-sm leading-snug">
+                          {displayRole}
+                        </p>
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </section>
+
           {/* Pastoral Leadership Section */}
           <div className="mb-24">
             <div className="text-center mb-10 md:mb-12">
