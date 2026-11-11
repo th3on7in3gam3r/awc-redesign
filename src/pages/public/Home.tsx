@@ -172,16 +172,16 @@ const Home: React.FC = () => {
                 <div className="flex gap-5 sm:gap-6">
                   <div className="w-[2px] shrink-0 self-stretch bg-gradient-to-b from-[#f6dc8c] via-[#d4af37] to-transparent" aria-hidden="true" />
                   <div className="min-w-0">
-                    <p className="mb-5 text-[10px] sm:text-xs font-semibold uppercase tracking-[0.18em] sm:tracking-[0.3em] text-[#f0cf72]/90">
+                    <p className="mb-5 text-[10px] sm:text-xs font-semibold uppercase tracking-[0.18em] lg:tracking-[0.3em] text-[#f0cf72]/90">
                       Welcome to Anointed Worship Center
                     </p>
                     <h1
-                      className="font-serif font-bold text-[2.3rem] leading-[1.08] sm:text-6xl md:text-[3.4rem] lg:text-[4rem] xl:text-[4.4rem] bg-clip-text text-transparent drop-shadow-[0_2px_4px_rgba(0,0,0,0.25)]"
+                      className="font-serif font-bold text-[clamp(2.1rem,calc((100vw-140px)/8.6),3.75rem)] leading-[1.08] md:text-[clamp(2.25rem,calc(5.1vw-4px),4.4rem)] bg-clip-text text-transparent drop-shadow-[0_2px_4px_rgba(0,0,0,0.25)]"
                       style={{ backgroundImage: 'linear-gradient(180deg, #fbe7a6 0%, #f0cf72 45%, #c9a03c 100%)' }}
                     >
-                      <span className="sm:whitespace-nowrap">Where Everybody</span>
+                      <span>Where Everybody</span>
                       <br />
-                      <span className="whitespace-nowrap">Is Somebody</span>
+                      <span>Is Somebody</span>
                     </h1>
 
                     <div className="mt-6 h-px w-16 bg-gradient-to-r from-[#d4af37] to-transparent" aria-hidden="true" />
@@ -189,10 +189,10 @@ const Home: React.FC = () => {
                       A community of faith, family, and purpose.
                     </p>
 
-                    <div className="mt-9 flex flex-col sm:flex-row gap-3 sm:gap-4">
+                    <div className="mt-9 flex flex-col sm:flex-row sm:flex-wrap gap-3 sm:gap-4">
                       <Link
                         to="/visit"
-                        className="inline-flex items-center justify-center rounded-md px-8 py-3.5 font-serif text-base font-bold text-[#3a0610] shadow-[0_8px_20px_-8px_rgba(0,0,0,0.6)] transition hover:brightness-110"
+                        className="inline-flex items-center justify-center whitespace-nowrap rounded-md px-8 md:px-6 lg:px-8 py-3.5 font-serif text-base font-bold text-[#3a0610] shadow-[0_8px_20px_-8px_rgba(0,0,0,0.6)] transition hover:brightness-110"
                         style={{ backgroundImage: 'linear-gradient(180deg, #f6dc8c 0%, #d9b14f 60%, #b88f2f 100%)' }}
                       >
                         Plan Your Visit
@@ -207,7 +207,7 @@ const Home: React.FC = () => {
                             window.location.href = '/sermons';
                           }
                         }}
-                        className="inline-flex items-center justify-center gap-3 rounded-md border border-white/85 px-7 py-3.5 font-serif text-base font-semibold text-white transition hover:bg-white hover:text-[#4a0414]"
+                        className="inline-flex items-center justify-center gap-3 whitespace-nowrap rounded-md border border-white/85 px-7 md:px-5 lg:px-7 py-3.5 font-serif text-base font-semibold text-white transition hover:bg-white hover:text-[#4a0414]"
                       >
                         <i className="fa-solid fa-play text-[12px]" aria-hidden="true"></i>
                         Watch Sermons
