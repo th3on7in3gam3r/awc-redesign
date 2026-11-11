@@ -172,6 +172,9 @@ const Home: React.FC = () => {
                 <div className="flex gap-5 sm:gap-6">
                   <div className="w-[2px] shrink-0 self-stretch bg-gradient-to-b from-[#f6dc8c] via-[#d4af37] to-transparent" aria-hidden="true" />
                   <div className="min-w-0">
+                    <p className="mb-4 text-[11px] sm:text-xs font-bold uppercase tracking-[0.28em] text-[#f0cf72]">
+                      Welcome to Anointed Worship Center
+                    </p>
                     <h1
                       className="font-serif font-bold text-[2.3rem] leading-[1.08] sm:text-6xl md:text-[3.4rem] lg:text-[4rem] xl:text-[4.4rem] bg-clip-text text-transparent drop-shadow-[0_2px_6px_rgba(0,0,0,0.35)]"
                       style={{ backgroundImage: 'linear-gradient(180deg, #fbe7a6 0%, #f0cf72 45%, #c9a03c 100%)' }}
