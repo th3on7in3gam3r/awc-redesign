@@ -143,7 +143,7 @@ const MINISTRY_TEAM: TeamMember[] = [
 
 const FEATURED_LEADERS = [
   {
-    displayName: 'Dr. Kenneth Mutegyeki',
+    displayName: 'Kenneth Mutegyeki MSN APRN PMHNP-BC',
     title: 'Senior Pastor',
     imageUrl: '/images/leadership/pastor-kenneth-feature.png',
     leaderIndex: 0,
