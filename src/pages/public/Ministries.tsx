@@ -152,7 +152,7 @@ const FEATURED_LEADERS = [
   {
     displayName: 'First Lady',
     secondLine: 'Sania Mutegyeki',
-    title: "First Lady · Head of the Women's Ministry",
+    title: "Head of the Women's Ministry",
     imageUrl: '/images/leadership/first-lady-sania-feature.png',
     leaderIndex: 1,
   },
