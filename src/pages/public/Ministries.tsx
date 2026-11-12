@@ -143,13 +143,15 @@ const MINISTRY_TEAM: TeamMember[] = [
 
 const FEATURED_LEADERS = [
   {
-    displayName: 'Kenneth Mutegyeki MSN APRN PMHNP-BC',
+    displayName: 'Kenneth Mutegyeki',
+    secondLine: 'MSN APRN PMHNP-BC',
     title: 'Senior Pastor',
     imageUrl: '/images/leadership/pastor-kenneth-feature.png',
     leaderIndex: 0,
   },
   {
-    displayName: 'First Lady Sania Mutegyeki',
+    displayName: 'First Lady',
+    secondLine: 'Sania Mutegyeki',
     title: "First Lady · Head of the Women's Ministry",
     imageUrl: '/images/leadership/first-lady-sania-feature.png',
     leaderIndex: 1,
@@ -439,18 +441,21 @@ const Ministries: React.FC = () => {
                       type="button"
                       onClick={() => setSelectedLeader(LEADER_TEAM[f.leaderIndex])}
                       className="group relative aspect-[10/9] overflow-hidden bg-gradient-to-b from-[#4a4a4f] via-[#36363a] to-[#232326] focus:outline-none focus-visible:ring-2 focus-visible:ring-church-gold"
-                      aria-label={`View details for ${f.displayName}`}
+                      aria-label={`View details for ${[f.displayName, f.secondLine].filter(Boolean).join(' ')}`}
                     >
                       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_35%,rgba(255,255,255,0.12),transparent_65%)]" aria-hidden="true" />
                       <img
                         src={f.imageUrl}
-                        alt={f.displayName}
+                        alt={[f.displayName, f.secondLine].filter(Boolean).join(' ')}
                         className="relative h-full w-full object-cover object-top transition-transform duration-500 group-hover:scale-[1.03]"
                         loading="lazy"
                       />
                     </button>
                     <div className="flex flex-1 flex-col px-5 pt-4 pb-4">
                       <h3 className="font-serif font-bold text-church-burgundy text-lg md:text-xl leading-snug">{f.displayName}</h3>
+                      {f.secondLine && (
+                        <p className="font-serif font-semibold text-church-burgundy/80 text-sm tracking-wide">{f.secondLine}</p>
+                      )}
                       <p className="mt-0.5 font-serif italic text-[#a8842b] text-sm">{f.title}</p>
                       <div className="mt-4 border-t border-[#ead9b8] pt-3">
                         <button
