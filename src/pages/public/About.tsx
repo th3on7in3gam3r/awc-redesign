@@ -140,6 +140,9 @@ const About: React.FC = () => {
                                 </div>
                                 <h3 className="text-4xl font-bold text-church-burgundy mb-6 serif">Our Vision</h3>
                                 <div className="space-y-6">
+                                    <p className="serif text-2xl md:text-[1.7rem] font-bold text-church-burgundy leading-snug">
+                                        &ldquo;To make Global impact by Advancing God&rsquo;s Kingdom through Empowered Disciples.&rdquo;
+                                    </p>
                                     <div className="bg-church-burgundy/5 rounded-2xl p-6 border-l-4 border-church-gold">
                                         <p className="text-sm font-bold text-church-burgundy mb-2">Matthew 28:18-20 (NIV)</p>
                                         <p className="text-slate-600 text-sm leading-relaxed italic">
@@ -157,8 +160,8 @@ const About: React.FC = () => {
                                     <i className="fa-solid fa-bullseye"></i>
                                 </div>
                                 <h3 className="text-4xl font-bold mb-6 serif">Our Mission Statement</h3>
-                                <p className="text-gray-200 text-lg leading-relaxed">
-                                    Our Mission is to reach the lost with the saving message of Jesus Christ, make devoted disciples, baptized and teach them to obey all Jesus Christ's commands and relying on the authority in His word and presence every step of the way.
+                                <p className="text-gray-100 text-xl md:text-2xl leading-relaxed serif">
+                                    Empowered by Christ&rsquo;s authority, we go to all people making disciples. Baptizing them into God&rsquo;s family to live in full obedience while advancing His Kingdom.
                                 </p>
                             </div>
                         </div>
@@ -230,6 +233,25 @@ const About: React.FC = () => {
                                     <span><strong className="text-church-burgundy">The Church:</strong> We believe the Church is the body of Christ, called to worship, fellowship, discipleship, and evangelism (Ephesians 4:11-16).</span>
                                 </li>
                             </ul>
+
+                            {/* Marriage */}
+                            <div className="border-t border-gray-200 pt-8">
+                                <div className="flex items-center gap-3 mb-4">
+                                    <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-church-gold/10 text-church-gold">
+                                        <i className="fa-solid fa-ring" aria-hidden="true"></i>
+                                    </span>
+                                    <h3 className="text-3xl font-bold text-church-burgundy serif">Marriage</h3>
+                                </div>
+                                <p className="text-base md:text-lg">
+                                    At Anointed Worship Center, we believe and acknowledge that Marriage is only between a man and a woman, according to Matthew 19:4&ndash;5:
+                                </p>
+                                <blockquote className="mt-5 bg-church-burgundy/5 rounded-2xl p-6 border-l-4 border-church-gold">
+                                    <p className="text-slate-700 italic leading-relaxed">
+                                        &ldquo;He answered, &lsquo;Have you not read that he who made them from the beginning made them male and female,&rsquo; and said, &lsquo;For this reason a man shall leave his father and mother and be joined to his wife, and the two shall become one?&rsquo;&rdquo;
+                                    </p>
+                                    <p className="mt-3 text-sm font-bold text-church-burgundy">Matthew 19:4&ndash;5</p>
+                                </blockquote>
+                            </div>
                         </div>
                     </div>
                 </div>

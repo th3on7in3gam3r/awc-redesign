@@ -303,7 +303,7 @@ const Home: React.FC = () => {
                     </h3>
                   </div>
                   <p className="text-slate-600 text-sm md:text-[15px] leading-relaxed">
-                    Empowering every believer through the uncompromising Word of God.
+                    &ldquo;To make Global impact by Advancing God&rsquo;s Kingdom through Empowered Disciples.&rdquo; <span className="block mt-2 text-xs font-semibold text-church-burgundy">Matthew 28:18&ndash;20</span>
                   </p>
                 </div>
 
@@ -317,7 +317,7 @@ const Home: React.FC = () => {
                     </h3>
                   </div>
                   <p className="text-slate-600 text-sm md:text-[15px] leading-relaxed">
-                    Transforming lives locally and globally through active service.
+                    Empowered by Christ&rsquo;s authority, we go to all people making disciples. Baptizing them into God&rsquo;s family to live in full obedience while advancing His Kingdom.
                   </p>
                 </div>
               </div>
