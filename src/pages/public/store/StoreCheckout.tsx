@@ -211,7 +211,6 @@ const StoreCheckout: React.FC = () => {
                 {(
                   [
                     { id: 'pickup', label: 'Pay at Church Pickup' },
-                    { id: 'cashapp', label: 'Cash App' },
                     { id: 'zelle', label: 'Zelle' },
                   ] as const
                 ).map((opt) => (

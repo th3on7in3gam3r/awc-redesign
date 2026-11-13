@@ -10,11 +10,16 @@ import {
   Landmark,
   Receipt,
   Mail,
+  MessageSquareText,
 } from 'lucide-react';
+
+/** The church's own text-to-give number (AWC Tithe). Texting GIVE replies with the giving link. */
+const TEXT_GIVE_DISPLAY = '(855) 297-1920';
+const TEXT_GIVE_SMS = 'sms:+18552971920?&body=GIVE';
 
 /**
  * Online giving runs on AWC Tithe so every gift is confirmed (by Stripe, or
- * by Finance for Zelle / Venmo / Cash App) and recorded in the church's
+ * by Finance for Zelle / Venmo) and recorded in the church's
  * Digital Contribution Book. This page explains and links to it.
  */
 const DEFAULT_TITHE_URL = 'https://awc-tithe.onrender.com';
@@ -43,7 +48,6 @@ const METHODS: Array<{ id: Method; title: string; note: string; icon: React.Reac
   { id: 'card', title: 'Card, Apple Pay or Google Pay', note: 'One-time, weekly or monthly', icon: <CreditCard className="w-5 h-5" /> },
   { id: 'bank', title: 'Bank account', note: 'Lowest fee for the church', icon: <Landmark className="w-5 h-5" /> },
   { id: 'zelle', title: 'Zelle', note: 'From your bank’s app', icon: <span className="font-black text-sm">Z</span> },
-  { id: 'cashapp', title: 'Cash App', note: '$awcgiveplus', icon: <span className="font-black text-lg leading-none">$</span> },
   { id: 'venmo', title: 'Venmo', note: 'Church business profile', icon: <span className="font-black text-sm">V</span> },
 ];
 
@@ -57,7 +61,7 @@ const FAQ = [
     a: 'Yes. Choose weekly, every two weeks, monthly or yearly when you give by card or bank account. You can change or stop it any time from My giving.',
   },
   {
-    q: 'How do Zelle, Cash App and Venmo gifts work?',
+    q: 'How do Zelle and Venmo gifts work?',
     a: 'The giving page gives you a short code (like AWC-7K3Q) to put in your payment note. Our Finance team uses it to match your gift, usually within 2 business days, and then emails your receipt.',
   },
   {
@@ -69,8 +73,8 @@ const FAQ = [
     a: 'No. Just enter your name and email when you give. To see past gifts later, open My giving and sign in with a code sent to that email.',
   },
   {
-    q: 'I already give through Vanco. Do I need to change anything?',
-    a: 'Your Vanco recurring gift keeps working. You can manage it on Vanco, or set up a new gift here and cancel the Vanco one when you are ready.',
+    q: 'How does text to give work?',
+    a: `Text GIVE to ${TEXT_GIVE_DISPLAY} and we reply with a link to give. After a one-time setup, you can simply text an amount (like 50) to give again, and we text your receipt.`,
   },
 ];
 
@@ -147,17 +151,25 @@ const Giving: React.FC = () => {
             <Mail className="w-4 h-4 mt-0.5 text-slate-400 shrink-0" />
             <span>By check, mailed to 4 School St, Acton, MA 01720</span>
           </li>
-          <li className="px-5 py-4">
-            Already set up with Vanco?{' '}
-            <a
-              href="https://secure.myvanco.com/YKB0/campaign/C-1218F?access=tile_direct"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-church-burgundy font-semibold underline underline-offset-2"
-            >
-              Manage your Vanco gift
-            </a>{' '}
-            or text to give at 855-625-4703.
+          <li className="px-5 py-4 flex items-center gap-4">
+            <img
+              src="/text-to-give-qr.svg"
+              alt={`QR code: text GIVE to ${TEXT_GIVE_DISPLAY}`}
+              width={96}
+              height={96}
+              className="w-24 h-24 shrink-0 rounded-lg border border-stone-200"
+            />
+            <span className="min-w-0">
+              <span className="flex items-center gap-2 font-semibold text-slate-900">
+                <MessageSquareText className="w-4 h-4 text-church-burgundy" /> Text to give
+              </span>
+              <a href={TEXT_GIVE_SMS} className="block text-lg font-bold text-church-burgundy mt-0.5">
+                {TEXT_GIVE_DISPLAY}
+              </a>
+              <span className="block text-slate-500 mt-0.5">
+                Text <strong className="text-slate-700">GIVE</strong> or an amount (like <strong className="text-slate-700">50</strong>). Scan the code with your phone camera to start a text.
+              </span>
+            </span>
           </li>
         </ul>
       </section>
