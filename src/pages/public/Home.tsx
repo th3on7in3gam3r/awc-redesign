@@ -189,7 +189,7 @@ const Home: React.FC = () => {
               className={`relative md:col-span-5 lg:col-span-6 flex items-end justify-center md:justify-end mt-10 md:mt-0 transition-all duration-1000 delay-150 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}`}
             >
               <img
-                src="/images/pastors-couple-blue-transparent.png"
+                src="/images/pastors-couple-blue.webp"
                 alt="Dr. Kenneth Mutegyeki and First Lady Sania Mutegyeki"
                 className="relative z-10 h-[380px] sm:h-[460px] md:absolute md:bottom-0 md:right-0 md:h-[72%] lg:h-[94%] w-auto max-w-none object-contain object-bottom"
                 style={{ filter: 'drop-shadow(0 20px 40px rgba(0,0,0,0.45))' }}
